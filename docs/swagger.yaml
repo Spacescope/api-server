@@ -1,0 +1,4529 @@
+basePath: /
+definitions:
+  busi.CirculatingSupply:
+    properties:
+      burnt_fil:
+        type: number
+      burnt_fil_increase:
+        type: number
+      circulating_fil:
+        type: number
+      circulating_fil_increase:
+        type: number
+      locked_fil:
+        type: number
+      locked_fil_increase:
+        type: number
+      mined_fil:
+        type: number
+      mined_fil_increase:
+        type: number
+      reserve_disbursed_fil:
+        type: number
+      reserve_disbursed_fil_increase:
+        type: number
+      stat_date:
+        type: string
+      vested_fil:
+        type: number
+      vested_fil_increase:
+        type: number
+    type: object
+  busi.CirculatingSupplyV2:
+    properties:
+      burnt_fil:
+        description: LockedFilIncrease           float64   `json:"-"`
+        type: number
+      circulating_fil:
+        description: |-
+          Height                      uint64    `json:"-"`
+          ValueHeight                 uint64    `json:"-"`
+        type: number
+      locked_fil:
+        description: ReserveDisbursedFilIncrease float64   `json:"-"`
+        type: number
+      mined_fil:
+        description: CirculatingFilIncrease      float64   `json:"-"`
+        type: number
+      reserve_disbursed_fil:
+        description: VestedFilIncrease           float64   `json:"-"`
+        type: number
+      stat_date:
+        type: string
+      vested_fil:
+        description: MinedFilIncrease            float64   `json:"-"`
+        type: number
+    type: object
+  busi.CommitAndExpirePledge:
+    properties:
+      commit_pct_qa_adj:
+        type: number
+      commit_pledge:
+        type: number
+      commit_pledge_per_bytes:
+        type: number
+      commit_pledge_per_qap:
+        type: number
+      expire_pct_qa_adj:
+        type: number
+      expire_pledge:
+        type: number
+      expire_pledge_per_bytes:
+        type: number
+      expire_pledge_per_qap:
+        type: number
+      raw_bytes_gb:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.DealClientHeadcount:
+    properties:
+      stat_date:
+        type: string
+      total_clients:
+        type: integer
+      total_clients_verified:
+        type: integer
+      total_clients_verified_ratio:
+        type: number
+    type: object
+  busi.DealStatesAggregateDaily:
+    properties:
+      activated_deals_regular_bytes:
+        type: number
+      activated_deals_regular_count:
+        type: integer
+      activated_deals_verified_bytes:
+        type: number
+      activated_deals_verified_count:
+        type: integer
+      active_deals_regular_bytes:
+        type: number
+      active_deals_regular_bytes_increase:
+        type: number
+      active_deals_regular_count:
+        type: integer
+      active_deals_regular_provider_collateral:
+        type: number
+      active_deals_verified_bytes:
+        type: number
+      active_deals_verified_bytes_increase:
+        type: number
+      active_deals_verified_count:
+        type: integer
+      active_deals_verified_provider_collateral:
+        type: number
+      expired_deals_regular_bytes:
+        type: number
+      expired_deals_regular_count:
+        type: integer
+      expired_deals_verified_bytes:
+        type: number
+      expired_deals_verified_count:
+        type: integer
+      new_deals_regular_bytes:
+        type: number
+      new_deals_regular_count:
+        type: integer
+      new_deals_verified_bytes:
+        type: number
+      new_deals_verified_count:
+        type: integer
+      slashed_deals_regular_bytes:
+        type: number
+      slashed_deals_regular_count:
+        type: integer
+      slashed_deals_verified_bytes:
+        type: number
+      slashed_deals_verified_count:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  busi.DealSummaryStatisticsDaily:
+    properties:
+      avg_regular_deal_bytes:
+        type: number
+      avg_regular_deal_duration_days:
+        type: number
+      avg_regular_deal_provider_collateral:
+        type: number
+      avg_verified_deal_bytes:
+        type: number
+      avg_verified_deal_duration_days:
+        type: number
+      avg_verified_deal_provider_collateral:
+        type: number
+      max_regular_deal_price_last_week:
+        type: number
+      max_verified_deal_price_last_week:
+        type: number
+      median_regular_deal_price:
+        type: number
+      median_verified_deal_price:
+        type: number
+      min_regular_deal_price_last_week:
+        type: number
+      min_verified_deal_price_last_week:
+        type: number
+      new_deal_bytes_regular_last_week:
+        type: number
+      new_deal_bytes_verified_last_week:
+        type: number
+      percent_regular_deal_fee:
+        description: typo
+        type: number
+      percent_verified_deal_fee:
+        description: typo
+        type: number
+      stat_date:
+        type: string
+      total_regular_deal_bytes:
+        type: number
+      total_regular_deal_count:
+        type: integer
+      total_regular_deal_duration:
+        type: number
+      total_regular_deal_provider_collateral:
+        type: number
+      total_verified_deal_bytes:
+        type: number
+      total_verified_deal_count:
+        type: integer
+      total_verified_deal_duration:
+        type: number
+      total_verified_deal_provider_collateral:
+        type: number
+    type: object
+  busi.EconomicsSectorPledgesReturns32gD:
+    properties:
+      initial_pledge:
+        type: number
+      post_gas_return:
+        type: number
+      post_gas_return_agg:
+        type: number
+      precommit_agg_fil:
+        type: number
+      precommit_fil:
+        type: number
+      profit:
+        type: number
+      profit_agg:
+        type: number
+      provecommit_agg_fil:
+        type: number
+      provecommit_fil:
+        type: number
+      reward_pledge_return:
+        type: number
+      rewards:
+        type: number
+      stat_date:
+        type: string
+      window_fil:
+        type: number
+    type: object
+  busi.EconomicsSectorPledgesReturns64gD:
+    properties:
+      initial_pledge:
+        type: number
+      post_gas_return:
+        type: number
+      post_gas_return_agg:
+        type: number
+      precommit_agg_fil:
+        type: number
+      precommit_fil:
+        type: number
+      profit:
+        type: number
+      profit_agg:
+        type: number
+      provecommit_agg_fil:
+        type: number
+      provecommit_fil:
+        type: number
+      reward_pledge_return:
+        type: number
+      rewards:
+        type: number
+      stat_date:
+        type: string
+      window_fil:
+        type: number
+    type: object
+  busi.GasDetailMessageD:
+    properties:
+      actor_family:
+        type: string
+      base_fee_burn:
+        type: number
+      base_fee_burn_pct:
+        type: number
+      gas_used:
+        type: number
+      gas_used_pct:
+        type: number
+      message_count:
+        type: integer
+      message_count_pct:
+        type: number
+      method:
+        type: integer
+      method_name:
+        type: string
+      miner_tip:
+        type: number
+      miner_tip_pct:
+        type: number
+      over_estimation_burn:
+        type: number
+      over_estimation_burn_pct:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.GasDistributionD:
+    properties:
+      distribution_key:
+        type: string
+      distribution_value:
+        type: number
+      metric_type:
+        type: string
+      stat_date:
+        type: string
+    type: object
+  busi.GasFeeOverviewD:
+    properties:
+      avg_pre_agg_count:
+        type: number
+      avg_prove_agg_count:
+        type: number
+      gas_sector_sealing:
+        type: number
+      gas_storage_deal_publishing:
+        type: number
+      miner_tip_per_message:
+        type: number
+      overestimation:
+        type: number
+      precommit_batch_cost:
+        type: number
+      precommit_cost:
+        type: number
+      provecommit_batch_cost:
+        type: number
+      provecommit_cost:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.GasFeeOverviewDV2:
+    properties:
+      avg_miner_tip_per_message:
+        type: number
+      avg_overestimation_fee_per_message:
+        type: number
+      avg_precommit_batch_fee_per_sector:
+        type: number
+      avg_precommit_fee_per_message:
+        type: number
+      avg_provecommit_batch_fee_per_sector:
+        type: number
+      avg_provecommit_fee_per_message:
+        type: number
+      avg_sealing_cost_per_sector:
+        type: number
+      avg_storage_deal_publishing_fee_per_message:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.GasFeeOverviewH:
+    properties:
+      avg_pre_agg_count:
+        type: number
+      avg_prove_agg_count:
+        type: number
+      base_fee:
+        type: number
+      hour_date:
+        type: string
+      pre_batch_cost_sector:
+        type: number
+      precommit_cost_sector:
+        type: number
+      prove_batch_cost_sector:
+        type: number
+      provecommit_cost_sector:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.GasFeeOverviewHV2:
+    properties:
+      hour_date:
+        description: StatDate              time.Time `json:"-"`
+        type: string
+      unit_base_fee:
+        description: |-
+          PrecommitCostSector   float64   `json:"-"`
+          ProvecommitCostSector float64   `json:"-"`
+          PreBatchCostSector    float64   `json:"-"`
+          ProveBatchCostSector  float64   `json:"-"`
+        type: number
+    type: object
+  busi.GasTopStorageProviderD:
+    properties:
+      gas_used:
+        type: number
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+    type: object
+  busi.GasUsageDetailMessageD:
+    properties:
+      actor_family:
+        type: string
+      base_fee_burn:
+        type: number
+      gas_limit:
+        type: number
+      gas_used:
+        type: number
+      method:
+        type: integer
+      method_name:
+        type: string
+      miner_tip:
+        type: number
+      over_estimation_burn:
+        type: number
+      over_estimation_rate:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.GasUsageMsgD:
+    properties:
+      pre_commit_sector:
+        type: number
+      pre_commit_sectorbatch:
+        type: number
+      prove_commit_aggregate:
+        type: number
+      prove_commit_sector:
+        type: number
+      publish_storage_deals:
+        type: number
+      stat_date:
+        type: string
+      submit_windowed_post:
+        type: number
+      total_gas_used:
+        type: number
+    type: object
+  busi.GasUsageMsgDV2:
+    properties:
+      precommit_sector_batch_gas_used:
+        type: number
+      precommit_sector_gas_used:
+        type: number
+      provecommit_aggregate_gas_used:
+        type: number
+      provecommit_sector_gas_used:
+        type: number
+      publish_storage_deals_gas_used:
+        type: number
+      stat_date:
+        type: string
+      submit_windowed_post_gas_used:
+        type: number
+      total_gas_used:
+        type: number
+    type: object
+  busi.MinerBasicInfo:
+    properties:
+      miner_id:
+        type: string
+      onboarding_at:
+        type: string
+      sector_size:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.MinerBasicInfoDailyPower:
+    properties:
+      miner_id:
+        type: string
+      quality_adj_power:
+        type: number
+      raw_byte_power:
+        description: OnboardingAt       time.Time `json:"onboarding_at"`
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.MinerBasicInfoDailyRewards:
+    properties:
+      blocks_mined:
+        description: |-
+          OnboardingAt       time.Time `json:"onboarding_at"`
+          RawBytePower       float64   `json:"raw_byte_power"`
+          QualityAdjPower    float64   `json:"quality_adj_power"`
+        type: integer
+      miner_id:
+        type: string
+      rewards:
+        type: number
+      stat_date:
+        type: string
+      win_count:
+        type: integer
+    type: object
+  busi.MinerBasicInfoDailyTokenBalance:
+    properties:
+      balance:
+        description: |-
+          OnboardingAt       time.Time `json:"onboarding_at"`
+          RawBytePower       float64   `json:"raw_byte_power"`
+          QualityAdjPower    float64   `json:"quality_adj_power"`
+          BlocksMined        uint64    `json:"blocks_mined"`
+          WinCount           uint64    `json:"win_count"`
+          Rewards            float64   `json:"rewards"`
+        type: number
+      fee_debt:
+        type: number
+      initial_pledge:
+        type: number
+      locked_funds:
+        type: number
+      miner_id:
+        type: string
+      pre_commit_deposits:
+        type: number
+      provider_collateral:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.MinerDealsDailyClientCount:
+    properties:
+      active_regular_deal_client_count:
+        description: |-
+          TotalRegularDealCount               uint64    `json:"total_regular_deal_count"`
+          TotalVerifiedDealCount              uint64    `json:"total_verified_deal_count"`
+          TotalRegularDealBytes               float64   `json:"total_regular_deal_bytes"`
+          TotalVerifiedDealBytes              float64   `json:"total_verified_deal_bytes"`
+          AvgRegularDealBytes                 float64   `json:"avg_regular_deal_bytes"`
+          AvgVerifiedDealBytes                float64   `json:"avg_verified_deal_bytes"`
+          AvgRegularDealDurationDays          float64   `json:"avg_regular_deal_duration_days"`
+          AvgVerifiedDealDurationDays         float64   `json:"avg_verified_deal_duration_days"`
+          TotalRegularDealStoragePrice        float64   `json:"total_regular_deal_storage_price"`
+          TotalVerifiedDealStoragePrice       float64   `json:"total_verified_deal_storage_price"`
+          RegularDealStoragePricePerTb        float64   `json:"regular_deal_storage_price_per_tb"`
+          VerifiedDealStoragePricePerTb       float64   `json:"verified_deal_storage_price_per_tb"`
+          TotalRegularDealFreeCount           uint64    `json:"total_regular_deal_free_count"`
+          TotalVerifiedDealFreeCount          uint64    `json:"total_verified_deal_free_count"`
+          TotalRegularDealProviderCollateral  float64   `json:"total_regular_deal_provider_collateral"`
+          TotalVerifiedDealProviderCollateral float64   `json:"total_verified_deal_provider_collateral"`
+          AvgRegularDealProviderCollateral    float64   `json:"avg_regular_deal_provider_collateral"`
+          AvgVerifiedDealProviderCollateral   float64   `json:"avg_verified_deal_provider_collateral"`
+        type: integer
+      active_verified_deal_client_count:
+        type: integer
+      daily_new_regular_deal_client_count:
+        description: |-
+          ActiveRegularDealCount              uint64    `json:"active_regular_deal_count"`
+          ActiveVerifiedDealCount             uint64    `json:"active_verified_deal_count"`
+          ActiveRegularDealBytes              float64   `json:"active_regular_deal_bytes"`
+          ActiveVerifiedDealBytes             float64   `json:"active_verified_deal_bytes"`
+        type: integer
+      daily_new_verified_deal_client_count:
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_regular_deal_client_count:
+        type: integer
+      total_verified_deal_client_count:
+        type: integer
+    type: object
+  busi.MinerDealsDailyDealCollateral:
+    properties:
+      avg_regular_deal_provider_collateral:
+        type: number
+      avg_verified_deal_provider_collateral:
+        type: number
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_regular_deal_provider_collateral:
+        description: |-
+          TotalRegularDealClientCount         uint64    `json:"total_regular_deal_client_count"`
+          TotalVerifiedDealClientCount        uint64    `json:"total_verified_deal_client_count"`
+          TotalRegularDealCount               uint64    `json:"total_regular_deal_count"`
+          TotalVerifiedDealCount              uint64    `json:"total_verified_deal_count"`
+          TotalRegularDealBytes               float64   `json:"total_regular_deal_bytes"`
+          TotalVerifiedDealBytes              float64   `json:"total_verified_deal_bytes"`
+          AvgRegularDealBytes                 float64   `json:"avg_regular_deal_bytes"`
+          AvgVerifiedDealBytes                float64   `json:"avg_verified_deal_bytes"`
+          AvgRegularDealDurationDays          float64   `json:"avg_regular_deal_duration_days"`
+          AvgVerifiedDealDurationDays         float64   `json:"avg_verified_deal_duration_days"`
+          TotalRegularDealStoragePrice        float64   `json:"total_regular_deal_storage_price"`
+          TotalVerifiedDealStoragePrice       float64   `json:"total_verified_deal_storage_price"`
+          RegularDealStoragePricePerTb        float64   `json:"regular_deal_storage_price_per_tb"`
+          VerifiedDealStoragePricePerTb       float64   `json:"verified_deal_storage_price_per_tb"`
+          TotalRegularDealFreeCount           uint64    `json:"total_regular_deal_free_count"`
+          TotalVerifiedDealFreeCount          uint64    `json:"total_verified_deal_free_count"`
+        type: number
+      total_verified_deal_provider_collateral:
+        type: number
+    type: object
+  busi.MinerDealsDailyDealCount:
+    properties:
+      active_regular_deal_count:
+        description: |-
+          TotalRegularDealProviderCollateral  float64   `json:"total_regular_deal_provider_collateral"`
+          TotalVerifiedDealProviderCollateral float64   `json:"total_verified_deal_provider_collateral"`
+          AvgRegularDealProviderCollateral    float64   `json:"avg_regular_deal_provider_collateral"`
+          AvgVerifiedDealProviderCollateral   float64   `json:"avg_verified_deal_provider_collateral"`
+          ActiveRegularDealClientCount        uint64    `json:"active_regular_deal_client_count"`
+          ActiveVerifiedDealClientCount       uint64    `json:"active_verified_deal_client_count"`
+        type: integer
+      active_verified_deal_count:
+        type: integer
+      daily_new_regular_deal_count:
+        description: |-
+          ActiveRegularDealBytes              float64   `json:"active_regular_deal_bytes"`
+          ActiveVerifiedDealBytes             float64   `json:"active_verified_deal_bytes"`
+          NewRegularDealClientCount           uint64    `json:"new_regular_deal_client_count"`
+          NewVerifiedDealClientCount          uint64    `json:"new_verified_deal_client_count"`
+        type: integer
+      daily_new_verified_deal_count:
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_regular_deal_count:
+        description: |-
+          TotalRegularDealClientCount         uint64    `json:"total_regular_deal_client_count"`
+          TotalVerifiedDealClientCount        uint64    `json:"total_verified_deal_client_count"`
+        type: integer
+      total_regular_deal_free_count:
+        description: |-
+          TotalRegularDealBytes               float64   `json:"total_regular_deal_bytes"`
+          TotalVerifiedDealBytes              float64   `json:"total_verified_deal_bytes"`
+          AvgRegularDealBytes                 float64   `json:"avg_regular_deal_bytes"`
+          AvgVerifiedDealBytes                float64   `json:"avg_verified_deal_bytes"`
+          AvgRegularDealDurationDays          float64   `json:"avg_regular_deal_duration_days"`
+          AvgVerifiedDealDurationDays         float64   `json:"avg_verified_deal_duration_days"`
+          TotalRegularDealStoragePrice        float64   `json:"total_regular_deal_storage_price"`
+          TotalVerifiedDealStoragePrice       float64   `json:"total_verified_deal_storage_price"`
+          RegularDealStoragePricePerTb        float64   `json:"regular_deal_storage_price_per_tb"`
+          VerifiedDealStoragePricePerTb       float64   `json:"verified_deal_storage_price_per_tb"`
+        type: integer
+      total_verified_deal_count:
+        type: integer
+      total_verified_deal_free_count:
+        type: integer
+    type: object
+  busi.MinerDealsDailyDealDuration:
+    properties:
+      avg_regular_deal_duration_days:
+        description: |-
+          TotalRegularDealClientCount         uint64    `json:"total_regular_deal_client_count"`
+          TotalVerifiedDealClientCount        uint64    `json:"total_verified_deal_client_count"`
+          TotalRegularDealCount               uint64    `json:"total_regular_deal_count"`
+          TotalVerifiedDealCount              uint64    `json:"total_verified_deal_count"`
+          TotalRegularDealBytes               float64   `json:"total_regular_deal_bytes"`
+          TotalVerifiedDealBytes              float64   `json:"total_verified_deal_bytes"`
+          AvgRegularDealBytes                 float64   `json:"avg_regular_deal_bytes"`
+          AvgVerifiedDealBytes                float64   `json:"avg_verified_deal_bytes"`
+        type: number
+      avg_verified_deal_duration_days:
+        type: number
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+    type: object
+  busi.MinerDealsDailyDealPrice:
+    properties:
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_regular_deal_revenue:
+        description: |-
+          TotalRegularDealClientCount         uint64    `json:"total_regular_deal_client_count"`
+          TotalVerifiedDealClientCount        uint64    `json:"total_verified_deal_client_count"`
+          TotalRegularDealCount               uint64    `json:"total_regular_deal_count"`
+          TotalVerifiedDealCount              uint64    `json:"total_verified_deal_count"`
+          TotalRegularDealBytes               float64   `json:"total_regular_deal_bytes"`
+          TotalVerifiedDealBytes              float64   `json:"total_verified_deal_bytes"`
+          AvgRegularDealBytes                 float64   `json:"avg_regular_deal_bytes"`
+          AvgVerifiedDealBytes                float64   `json:"avg_verified_deal_bytes"`
+          AvgRegularDealDurationDays          float64   `json:"avg_regular_deal_duration_days"`
+          AvgVerifiedDealDurationDays         float64   `json:"avg_verified_deal_duration_days"`
+        type: number
+      total_verified_deal_revenue:
+        type: number
+    type: object
+  busi.MinerDealsDailyDealSize:
+    properties:
+      active_regular_deal_bytes:
+        description: |-
+          AvgRegularDealDurationDays          float64   `json:"avg_regular_deal_duration_days"`
+          AvgVerifiedDealDurationDays         float64   `json:"avg_verified_deal_duration_days"`
+          TotalRegularDealStoragePrice        float64   `json:"total_regular_deal_storage_price"`
+          TotalVerifiedDealStoragePrice       float64   `json:"total_verified_deal_storage_price"`
+          RegularDealStoragePricePerTb        float64   `json:"regular_deal_storage_price_per_tb"`
+          VerifiedDealStoragePricePerTb       float64   `json:"verified_deal_storage_price_per_tb"`
+          TotalRegularDealFreeCount           uint64    `json:"total_regular_deal_free_count"`
+          TotalVerifiedDealFreeCount          uint64    `json:"total_verified_deal_free_count"`
+          TotalRegularDealProviderCollateral  float64   `json:"total_regular_deal_provider_collateral"`
+          TotalVerifiedDealProviderCollateral float64   `json:"total_verified_deal_provider_collateral"`
+          AvgRegularDealProviderCollateral    float64   `json:"avg_regular_deal_provider_collateral"`
+          AvgVerifiedDealProviderCollateral   float64   `json:"avg_verified_deal_provider_collateral"`
+          ActiveRegularDealClientCount        uint64    `json:"active_regular_deal_client_count"`
+          ActiveVerifiedDealClientCount       uint64    `json:"active_verified_deal_client_count"`
+          ActiveRegularDealCount  uint64 `json:"active_regular_deal_count"`
+          ActiveVerifiedDealCount uint64 `json:"active_verified_deal_count"`
+        type: number
+      active_verified_deal_bytes:
+        type: number
+      avg_regular_deal_bytes:
+        type: number
+      avg_verified_deal_bytes:
+        type: number
+      daily_new_regular_deal_bytes:
+        description: |-
+          NewRegularDealClientCount           uint64    `json:"new_regular_deal_client_count"`
+          NewVerifiedDealClientCount          uint64    `json:"new_verified_deal_client_count"`
+          NewRegularDealCount                 uint64    `json:"new_regular_deal_count"`
+          NewVerifiedDealCount                uint64    `json:"new_verified_deal_count"`
+        type: number
+      daily_new_verified_deal_bytes:
+        type: number
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_regular_deal_bytes:
+        description: |-
+          TotalRegularDealClientCount         uint64    `json:"total_regular_deal_client_count"`
+          TotalVerifiedDealClientCount        uint64    `json:"total_verified_deal_client_count"`
+          TotalRegularDealCount               uint64    `json:"total_regular_deal_count"`
+          TotalVerifiedDealCount              uint64    `json:"total_verified_deal_count"`
+        type: number
+      total_verified_deal_bytes:
+        type: number
+    type: object
+  busi.MinerGasFeesDailyCommitFee:
+    properties:
+      miner_id:
+        type: string
+      precommit_batch_fee:
+        type: number
+      precommit_batch_gas_fee:
+        description: |-
+          PrecommitBatchSectorCount      float64   `json:"precommit_batch_sector_count"`
+          AvgPrecommitBatchSectorCount   float64   `json:"avg_precommit_batch_sector_count"`
+          PrecommitBatchSectorSize       float64   `json:"precommit_batch_sector_size"`
+          PrecommitBatchSectorSizeQap    float64   `json:"precommit_batch_sector_size_qap"`
+        type: number
+      precommit_gas_fee:
+        description: |-
+          PrecommitSectorCount           float64   `json:"precommit_sector_count"`
+          PrecommitSectorSize            float64   `json:"precommit_sector_size"`
+          PrecommitSectorSizeQap         float64   `json:"precommit_sector_size_qap"`
+        type: number
+      provecommit_batch_fee:
+        type: number
+      provecommit_batch_gas_fee:
+        description: |-
+          ProvecommitBatchSectorCount    float64   `json:"provecommit_batch_sector_count"`
+          AvgProvecommitBatchSectorCount float64   `json:"avg_provecommit_batch_sector_count"`
+          ProvecommitBatchSectorSize     float64   `json:"provecommit_batch_sector_size"`
+        type: number
+      provecommit_gas_fee:
+        description: |-
+          ProvecommitSectorCount         float64   `json:"provecommit_sector_count"`
+          ProvecommitSectorSize          float64   `json:"provecommit_sector_size"`
+          ProvecommitSectorSizeQap       float64   `json:"provecommit_sector_size_qap"`
+        type: number
+      stat_date:
+        type: string
+      total_sealing_gas_fee:
+        description: |-
+          SectorSize float64   `json:"sector_size"`
+          BaseTxFee                      float64   `json:"base_tx_fee"`
+          OverEstimationBurn             float64   `json:"over_estimation_burn"`
+          BatchFee                       float64   `json:"batch_fee"`
+          MinerTip                       float64   `json:"miner_tip"`
+          TotalSealedSectorCount         float64   `json:"total_sealed_sector_count"`
+        type: number
+    type: object
+  busi.MinerGasFeesDailyCommitSectorCount:
+    properties:
+      avg_precommit_batch_sector_count:
+        type: number
+      avg_provecommit_batch_sector_count:
+        type: number
+      miner_id:
+        type: string
+      precommit_batch_sector_count:
+        description: |-
+          PrecommitSectorSize            float64   `json:"precommit_sector_size"`
+          PrecommitSectorSizeQap         float64   `json:"precommit_sector_size_qap"`
+          PrecommitGasFee                float64   `json:"precommit_gas_fee"`
+        type: number
+      precommit_sector_count:
+        description: TotalSealingGasFee             float64   `json:"total_sealing_gas_fee"`
+        type: number
+      provecommit_batch_sector_count:
+        description: |-
+          ProvecommitSectorSize          float64   `json:"provecommit_sector_size"`
+          ProvecommitSectorSizeQap       float64   `json:"provecommit_sector_size_qap"`
+          ProvecommitGasFee              float64   `json:"provecommit_gas_fee"`
+        type: number
+      provecommit_sector_count:
+        description: |-
+          PrecommitBatchSectorSize       float64   `json:"precommit_batch_sector_size"`
+          PrecommitBatchSectorSizeQap    float64   `json:"precommit_batch_sector_size_qap"`
+          PrecommitBatchGasFee           float64   `json:"precommit_batch_gas_fee"`
+          PrecommitBatchFee              float64   `json:"precommit_batch_fee"`
+        type: number
+      stat_date:
+        type: string
+      total_sealed_sector_count:
+        description: |-
+          SectorSize float64   `json:"sector_size"`
+          BaseTxFee                      float64   `json:"base_tx_fee"`
+          OverEstimationBurn             float64   `json:"over_estimation_burn"`
+          BatchFee                       float64   `json:"batch_fee"`
+          MinerTip                       float64   `json:"miner_tip"`
+        type: number
+    type: object
+  busi.MinerGasFeesDailyCommitSectorSize:
+    properties:
+      miner_id:
+        type: string
+      precommit_batch_sector_qap:
+        type: number
+      precommit_batch_sector_rbp:
+        description: |-
+          PrecommitGasFee                float64   `json:"precommit_gas_fee"`
+          PrecommitBatchSectorCount      float64   `json:"precommit_batch_sector_count"`
+          AvgPrecommitBatchSectorCount   float64   `json:"avg_precommit_batch_sector_count"`
+        type: number
+      precommit_sector_qap:
+        type: number
+      precommit_sector_rbp:
+        description: |-
+          SectorSize float64   `json:"sector_size"`
+          BaseTxFee                      float64   `json:"base_tx_fee"`
+          OverEstimationBurn             float64   `json:"over_estimation_burn"`
+          BatchFee                       float64   `json:"batch_fee"`
+          MinerTip                       float64   `json:"miner_tip"`
+          TotalSealedSectorCount         float64   `json:"total_sealed_sector_count"`
+          TotalSealingGasFee             float64   `json:"total_sealing_gas_fee"`
+          PrecommitSectorCount           float64   `json:"precommit_sector_count"`
+        type: number
+      provecommit_batch_sector_rbp:
+        description: |-
+          ProvecommitGasFee              float64   `json:"provecommit_gas_fee"`
+          ProvecommitBatchSectorCount    float64   `json:"provecommit_batch_sector_count"`
+          AvgProvecommitBatchSectorCount float64 `json:"avg_provecommit_batch_sector_count"`
+        type: number
+      provecommit_sector_qap:
+        type: number
+      provecommit_sector_rbp:
+        description: |-
+          PrecommitBatchGasFee           float64   `json:"precommit_batch_gas_fee"`
+          PrecommitBatchFee              float64   `json:"precommit_batch_fee"`
+          ProvecommitSectorCount         float64   `json:"provecommit_sector_count"`
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.MinerGasFeesDailyNetworkFee:
+    properties:
+      base_tx_fee:
+        description: SectorSize float64   `json:"sector_size"`
+        type: number
+      batch_fee:
+        type: number
+      miner_id:
+        type: string
+      miner_tip:
+        type: number
+      over_estimation_burn:
+        type: number
+      stat_date:
+        type: string
+      windowpost_gas_fee:
+        description: |-
+          TotalSealedSectorCount         float64   `json:"total_sealed_sector_count"`
+          TotalSealingGasFee             float64   `json:"total_sealing_gas_fee"`
+          PrecommitSectorCount           float64   `json:"precommit_sector_count"`
+          PrecommitSectorSize            float64   `json:"precommit_sector_size"`
+          PrecommitSectorSizeQap         float64   `json:"precommit_sector_size_qap"`
+          PrecommitGasFee                float64   `json:"precommit_gas_fee"`
+          PrecommitBatchSectorCount      float64   `json:"precommit_batch_sector_count"`
+          AvgPrecommitBatchSectorCount   float64   `json:"avg_precommit_batch_sector_count"`
+          PrecommitBatchSectorSize       float64   `json:"precommit_batch_sector_size"`
+          PrecommitBatchSectorSizeQap    float64   `json:"precommit_batch_sector_size_qap"`
+          PrecommitBatchGasFee           float64   `json:"precommit_batch_gas_fee"`
+          PrecommitBatchFee              float64   `json:"precommit_batch_fee"`
+          ProvecommitSectorCount         float64   `json:"provecommit_sector_count"`
+          ProvecommitSectorSize          float64   `json:"provecommit_sector_size"`
+          ProvecommitSectorSizeQap       float64   `json:"provecommit_sector_size_qap"`
+          ProvecommitGasFee              float64   `json:"provecommit_gas_fee"`
+          ProvecommitBatchSectorCount    float64   `json:"provecommit_batch_sector_count"`
+          AvgProvecommitBatchSectorCount float64   `json:"avg_provecommit_batch_sector_count"`
+          ProvecommitBatchSectorSize     float64   `json:"provecommit_batch_sector_size"`
+          ProvecommitBatchGasFee         float64   `json:"provecommit_batch_gas_fee"`
+          ProvecommitBatchFee            float64   `json:"provecommit_batch_fee"`
+        type: number
+    type: object
+  busi.MinerSectorsStatusDailyExpire:
+    properties:
+      daily_new_expire_qap:
+        type: number
+      daily_new_expire_rbp:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+          TerminateSize                uint64    `json:"terminate_size"`
+          TerminateSizeQap             float64   `json:"terminate_size_qap"`
+          TotalNumTerminate            uint64    `json:"total_num_terminate"`
+          TotalTerminateSize           uint64    `json:"total_terminate_size"`
+          TotalTerminateSizeQap        float64   `json:"total_terminate_size_qap"`
+          NumActiveTerminate           uint64    `json:"num_active_terminate"`
+          ActiveTerminateSize          uint64    `json:"active_terminate_size"`
+          ActiveTerminateSizeQap       float64   `json:"active_terminate_size_qap"`
+          TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+          TotalActiveTerminateSize     uint64    `json:"total_active_terminate_size"`
+          TotalActiveTerminateSizeQap  float64   `json:"total_active_terminate_size_qap"`
+          NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+          PassiveTerminateSize         uint64    `json:"passive_terminate_size"`
+          PassiveTerminateSizeQap      float64   `json:"passive_terminate_size_qap"`
+          TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+          TotalPassiveTerminateSize    uint64    `json:"total_passive_terminate_size"`
+          TotalPassiveTerminateSizeQap float64   `json:"total_passive_terminate_size_qap"`
+          NumFault                     uint64    `json:"num_fault"`
+          FaultSize                    uint64    `json:"fault_size"`
+          FaultSizeQap                 float64   `json:"fault_size_qap"`
+          TotalNumFault                uint64    `json:"total_num_fault"`
+          TotalFaultSize               uint64    `json:"total_fault_size"`
+          TotalFaultSizeQap            float64   `json:"total_fault_size_qap"`
+          NumActiveFault               uint64    `json:"num_active_fault"`
+          ActiveFaultSize              uint64    `json:"active_fault_size"`
+          ActiveFaultSizeQap           float64   `json:"active_fault_size_qap"`
+          NumRecover                   uint64    `json:"num_recover"`
+          RecoverSize                  uint64    `json:"recover_size"`
+          RecoverSizeQap               float64   `json:"recover_size_qap"`
+          TotalNumRecover              uint64    `json:"total_num_recover"`
+          TotalRecoverSize             uint64    `json:"total_recover_size"`
+          TotalRecoverSizeQap          float64   `json:"total_recover_size_qap"`
+          NumExpire                    uint64    `json:"num_expire"`
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_expire_qap:
+        type: number
+      total_expire_rbp:
+        description: TotalNumExpire               uint64    `json:"total_num_expire"`
+        type: integer
+    type: object
+  busi.MinerSectorsStatusDailyExtend:
+    properties:
+      daily_new_extend_qap:
+        type: number
+      daily_new_extend_rbp:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+          TerminateSize                uint64    `json:"terminate_size"`
+          TerminateSizeQap             float64   `json:"terminate_size_qap"`
+          TotalNumTerminate            uint64    `json:"total_num_terminate"`
+          TotalTerminateSize           uint64    `json:"total_terminate_size"`
+          TotalTerminateSizeQap        float64   `json:"total_terminate_size_qap"`
+          NumActiveTerminate           uint64    `json:"num_active_terminate"`
+          ActiveTerminateSize          uint64    `json:"active_terminate_size"`
+          ActiveTerminateSizeQap       float64   `json:"active_terminate_size_qap"`
+          TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+          TotalActiveTerminateSize     uint64    `json:"total_active_terminate_size"`
+          TotalActiveTerminateSizeQap  float64   `json:"total_active_terminate_size_qap"`
+          NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+          PassiveTerminateSize         uint64    `json:"passive_terminate_size"`
+          PassiveTerminateSizeQap      float64   `json:"passive_terminate_size_qap"`
+          TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+          TotalPassiveTerminateSize    uint64    `json:"total_passive_terminate_size"`
+          TotalPassiveTerminateSizeQap float64   `json:"total_passive_terminate_size_qap"`
+          NumFault                     uint64    `json:"num_fault"`
+          FaultSize                    uint64    `json:"fault_size"`
+          FaultSizeQap                 float64   `json:"fault_size_qap"`
+          TotalNumFault                uint64    `json:"total_num_fault"`
+          TotalFaultSize               uint64    `json:"total_fault_size"`
+          TotalFaultSizeQap            float64   `json:"total_fault_size_qap"`
+          NumActiveFault               uint64    `json:"num_active_fault"`
+          ActiveFaultSize              uint64    `json:"active_fault_size"`
+          ActiveFaultSizeQap           float64   `json:"active_fault_size_qap"`
+          NumRecover                   uint64    `json:"num_recover"`
+          RecoverSize                  uint64    `json:"recover_size"`
+          RecoverSizeQap               float64   `json:"recover_size_qap"`
+          TotalNumRecover              uint64    `json:"total_num_recover"`
+          TotalRecoverSize             uint64    `json:"total_recover_size"`
+          TotalRecoverSizeQap          float64   `json:"total_recover_size_qap"`
+          NumExpire                    uint64    `json:"num_expire"`
+          ExpireSize                   uint64    `json:"expire_size"`
+          ExpireSizeQap                float64   `json:"expire_size_qap"`
+          TotalNumExpire               uint64    `json:"total_num_expire"`
+          TotalExpireSize              uint64    `json:"total_expire_size"`
+          TotalExpireSizeQap           float64   `json:"total_expire_size_qap"`
+          NumExtend                    uint64    `json:"num_extend"`
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+    type: object
+  busi.MinerSectorsStatusDailyFault:
+    properties:
+      active_fault_qap:
+        type: number
+      active_fault_rbp:
+        description: |-
+          TotalNumFault                uint64    `json:"total_num_fault"`
+          TotalFaultSize               uint64    `json:"total_fault_size"`
+          TotalFaultSizeQap            float64   `json:"total_fault_size_qap"`
+          NumActiveFault               uint64    `json:"num_active_fault"`
+        type: integer
+      daily_new_fault_qap:
+        type: number
+      daily_new_fault_rbp:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+          TerminateSize                uint64    `json:"terminate_size"`
+          TerminateSizeQap             float64   `json:"terminate_size_qap"`
+          TotalNumTerminate            uint64    `json:"total_num_terminate"`
+          TotalTerminateSize           uint64    `json:"total_terminate_size"`
+          TotalTerminateSizeQap        float64   `json:"total_terminate_size_qap"`
+          NumActiveTerminate           uint64    `json:"num_active_terminate"`
+          ActiveTerminateSize          uint64    `json:"active_terminate_size"`
+          ActiveTerminateSizeQap       float64   `json:"active_terminate_size_qap"`
+          TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+          TotalActiveTerminateSize     uint64    `json:"total_active_terminate_size"`
+          TotalActiveTerminateSizeQap  float64   `json:"total_active_terminate_size_qap"`
+          NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+          PassiveTerminateSize         uint64    `json:"passive_terminate_size"`
+          PassiveTerminateSizeQap      float64   `json:"passive_terminate_size_qap"`
+          TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+          TotalPassiveTerminateSize    uint64    `json:"total_passive_terminate_size"`
+          TotalPassiveTerminateSizeQap float64   `json:"total_passive_terminate_size_qap"`
+          NumFault                     uint64    `json:"num_fault"`
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+    type: object
+  busi.MinerSectorsStatusDailyRecover:
+    properties:
+      daily_new_recover_qap:
+        type: number
+      daily_new_recover_rbp:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+          TerminateSize                uint64    `json:"terminate_size"`
+          TerminateSizeQap             float64   `json:"terminate_size_qap"`
+          TotalNumTerminate            uint64    `json:"total_num_terminate"`
+          TotalTerminateSize           uint64    `json:"total_terminate_size"`
+          TotalTerminateSizeQap        float64   `json:"total_terminate_size_qap"`
+          NumActiveTerminate           uint64    `json:"num_active_terminate"`
+          ActiveTerminateSize          uint64    `json:"active_terminate_size"`
+          ActiveTerminateSizeQap       float64   `json:"active_terminate_size_qap"`
+          TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+          TotalActiveTerminateSize     uint64    `json:"total_active_terminate_size"`
+          TotalActiveTerminateSizeQap  float64   `json:"total_active_terminate_size_qap"`
+          NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+          PassiveTerminateSize         uint64    `json:"passive_terminate_size"`
+          PassiveTerminateSizeQap      float64   `json:"passive_terminate_size_qap"`
+          TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+          TotalPassiveTerminateSize    uint64    `json:"total_passive_terminate_size"`
+          TotalPassiveTerminateSizeQap float64   `json:"total_passive_terminate_size_qap"`
+          NumFault                     uint64    `json:"num_fault"`
+          FaultSize                    uint64    `json:"fault_size"`
+          FaultSizeQap                 float64   `json:"fault_size_qap"`
+          TotalNumFault                uint64    `json:"total_num_fault"`
+          TotalFaultSize               uint64    `json:"total_fault_size"`
+          TotalFaultSizeQap            float64   `json:"total_fault_size_qap"`
+          NumActiveFault               uint64    `json:"num_active_fault"`
+          ActiveFaultSize              uint64    `json:"active_fault_size"`
+          ActiveFaultSizeQap           float64   `json:"active_fault_size_qap"`
+          NumRecover                   uint64    `json:"num_recover"`
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+    type: object
+  busi.MinerSectorsStatusDailySectorDuration:
+    properties:
+      avg_active_sector_duration_days:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+          TerminateSize                uint64    `json:"terminate_size"`
+          TerminateSizeQap             float64   `json:"terminate_size_qap"`
+          TotalNumTerminate            uint64    `json:"total_num_terminate"`
+          TotalTerminateSize           uint64    `json:"total_terminate_size"`
+          TotalTerminateSizeQap        float64   `json:"total_terminate_size_qap"`
+          NumActiveTerminate           uint64    `json:"num_active_terminate"`
+          ActiveTerminateSize          uint64    `json:"active_terminate_size"`
+          ActiveTerminateSizeQap       float64   `json:"active_terminate_size_qap"`
+          TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+          TotalActiveTerminateSize     uint64    `json:"total_active_terminate_size"`
+          TotalActiveTerminateSizeQap  float64   `json:"total_active_terminate_size_qap"`
+          NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+          PassiveTerminateSize         uint64    `json:"passive_terminate_size"`
+          PassiveTerminateSizeQap      float64   `json:"passive_terminate_size_qap"`
+          TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+          TotalPassiveTerminateSize    uint64    `json:"total_passive_terminate_size"`
+          TotalPassiveTerminateSizeQap float64   `json:"total_passive_terminate_size_qap"`
+          NumFault                     uint64    `json:"num_fault"`
+          FaultSize                    uint64    `json:"fault_size"`
+          FaultSizeQap                 float64   `json:"fault_size_qap"`
+          TotalNumFault                uint64    `json:"total_num_fault"`
+          TotalFaultSize               uint64    `json:"total_fault_size"`
+          TotalFaultSizeQap            float64   `json:"total_fault_size_qap"`
+          NumActiveFault               uint64    `json:"num_active_fault"`
+          ActiveFaultSize              uint64    `json:"active_fault_size"`
+          ActiveFaultSizeQap           float64   `json:"active_fault_size_qap"`
+          NumRecover                   uint64    `json:"num_recover"`
+          RecoverSize                  uint64    `json:"recover_size"`
+          RecoverSizeQap               float64   `json:"recover_size_qap"`
+          TotalNumRecover              uint64    `json:"total_num_recover"`
+          TotalRecoverSize             uint64    `json:"total_recover_size"`
+          TotalRecoverSizeQap          float64   `json:"total_recover_size_qap"`
+          NumExpire                    uint64    `json:"num_expire"`
+          ExpireSize                   uint64    `json:"expire_size"`
+          ExpireSizeQap                float64   `json:"expire_size_qap"`
+          TotalNumExpire               uint64    `json:"total_num_expire"`
+          TotalExpireSize              uint64    `json:"total_expire_size"`
+          TotalExpireSizeQap           float64   `json:"total_expire_size_qap"`
+          NumExtend                    uint64    `json:"num_extend"`
+          ExtendSize                   uint64    `json:"extend_size"`
+          ExtendSizeQap                float64   `json:"extend_size_qap"`
+          TotalNumExtend               uint64    `json:"total_num_extend"`
+          TotalExtendSize              uint64    `json:"total_extend_size"`
+          TotalExtendSizeQap           float64   `json:"total_extend_size_qap"`
+          NumSnap                      uint64    `json:"num_snap"`
+          SnapSize                     uint64    `json:"snap_size"`
+          SnapSizeQap                  float64   `json:"snap_size_qap"`
+          TotalNumSnap                 uint64    `json:"total_num_snap"`
+          TotalSnapSize                uint64    `json:"total_snap_size"`
+          TotalSnapSizeQap             float64   `json:"total_snap_size_qap"`
+        type: number
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      std_active_sector_duration_days:
+        type: number
+    type: object
+  busi.MinerSectorsStatusDailySnap:
+    properties:
+      daily_new_snap_qap:
+        type: number
+      daily_new_snap_rbp:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+          TerminateSize                uint64    `json:"terminate_size"`
+          TerminateSizeQap             float64   `json:"terminate_size_qap"`
+          TotalNumTerminate            uint64    `json:"total_num_terminate"`
+          TotalTerminateSize           uint64    `json:"total_terminate_size"`
+          TotalTerminateSizeQap        float64   `json:"total_terminate_size_qap"`
+          NumActiveTerminate           uint64    `json:"num_active_terminate"`
+          ActiveTerminateSize          uint64    `json:"active_terminate_size"`
+          ActiveTerminateSizeQap       float64   `json:"active_terminate_size_qap"`
+          TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+          TotalActiveTerminateSize     uint64    `json:"total_active_terminate_size"`
+          TotalActiveTerminateSizeQap  float64   `json:"total_active_terminate_size_qap"`
+          NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+          PassiveTerminateSize         uint64    `json:"passive_terminate_size"`
+          PassiveTerminateSizeQap      float64   `json:"passive_terminate_size_qap"`
+          TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+          TotalPassiveTerminateSize    uint64    `json:"total_passive_terminate_size"`
+          TotalPassiveTerminateSizeQap float64   `json:"total_passive_terminate_size_qap"`
+          NumFault                     uint64    `json:"num_fault"`
+          FaultSize                    uint64    `json:"fault_size"`
+          FaultSizeQap                 float64   `json:"fault_size_qap"`
+          TotalNumFault                uint64    `json:"total_num_fault"`
+          TotalFaultSize               uint64    `json:"total_fault_size"`
+          TotalFaultSizeQap            float64   `json:"total_fault_size_qap"`
+          NumActiveFault               uint64    `json:"num_active_fault"`
+          ActiveFaultSize              uint64    `json:"active_fault_size"`
+          ActiveFaultSizeQap           float64   `json:"active_fault_size_qap"`
+          NumRecover                   uint64    `json:"num_recover"`
+          RecoverSize                  uint64    `json:"recover_size"`
+          RecoverSizeQap               float64   `json:"recover_size_qap"`
+          TotalNumRecover              uint64    `json:"total_num_recover"`
+          TotalRecoverSize             uint64    `json:"total_recover_size"`
+          TotalRecoverSizeQap          float64   `json:"total_recover_size_qap"`
+          NumExpire                    uint64    `json:"num_expire"`
+          ExpireSize                   uint64    `json:"expire_size"`
+          ExpireSizeQap                float64   `json:"expire_size_qap"`
+          TotalNumExpire               uint64    `json:"total_num_expire"`
+          TotalExpireSize              uint64    `json:"total_expire_size"`
+          TotalExpireSizeQap           float64   `json:"total_expire_size_qap"`
+          NumExtend                    uint64    `json:"num_extend"`
+          ExtendSize                   uint64    `json:"extend_size"`
+          ExtendSizeQap                float64   `json:"extend_size_qap"`
+          TotalNumExtend               uint64    `json:"total_num_extend"`
+          TotalExtendSize              uint64    `json:"total_extend_size"`
+          TotalExtendSizeQap           float64   `json:"total_extend_size_qap"`
+          NumSnap                      uint64    `json:"num_snap"`
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_snap_qap:
+        type: number
+      total_snap_rbp:
+        description: TotalNumSnap                 uint64    `json:"total_num_snap"`
+        type: integer
+    type: object
+  busi.MinerSectorsStatusDailyTerminate:
+    properties:
+      daily_new_active_terminate_qap:
+        type: number
+      daily_new_active_terminate_rbp:
+        description: NumActiveTerminate           uint64    `json:"num_active_terminate"`
+        type: integer
+      daily_new_passive_terminate_qap:
+        type: number
+      daily_new_passive_terminate_rbp:
+        description: NumPassiveTerminate          uint64    `json:"num_passive_terminate"`
+        type: integer
+      daily_new_terminate_qap:
+        type: number
+      daily_new_terminate_rbp:
+        description: |-
+          NumOnboarding                uint64    `json:"num_onboarding"`
+          OnboardingSize               uint64    `json:"onboarding_size"`
+          OnboardingSizeQap            float64   `json:"onboarding_size_qap"`
+          TotalNumSector               uint64    `json:"total_num_sector"`
+          TotalSectorSize              uint64    `json:"total_sector_size"`
+          TotalSectorSizeQap           float64   `json:"total_sector_size_qap"`
+          NumTerminate                 uint64    `json:"num_terminate"`
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_active_terminate_qap:
+        type: number
+      total_active_terminate_rbp:
+        description: TotalNumActiveTerminate      uint64    `json:"total_num_active_terminate"`
+        type: integer
+      total_passive_terminate_qap:
+        type: number
+      total_passive_terminate_rbp:
+        description: TotalNumPassiveTerminate     uint64    `json:"total_num_passive_terminate"`
+        type: integer
+      total_terminate_qap:
+        type: number
+      total_terminate_rbp:
+        description: TotalNumTerminate            uint64    `json:"total_num_terminate"`
+        type: integer
+    type: object
+  busi.MinerSectorsStatusDailyTotal:
+    properties:
+      daily_sector_onboarding_count:
+        type: integer
+      daily_sector_onboarding_qap:
+        type: number
+      daily_sector_onboarding_rbp:
+        type: integer
+      miner_id:
+        type: string
+      stat_date:
+        type: string
+      total_num_sector:
+        type: integer
+      total_sector_qap:
+        type: number
+      total_sector_rbp:
+        type: integer
+    type: object
+  busi.NetworkBlockReward:
+    properties:
+      reward_per_wincount:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.NetworkBlockRewardV2:
+    properties:
+      reward_per_wincount:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.NetworkFeeBreakdown:
+    properties:
+      base_fee_burn:
+        type: number
+      miner_tip:
+        type: number
+      overestimation_fee:
+        type: number
+      penalty_fee:
+        type: number
+      penalty_fee_v2:
+        type: number
+      pre_commit_batch_fee:
+        type: number
+      protocol_revenue:
+        type: number
+      prove_commit_batch_fee:
+        type: number
+      stat_date:
+        type: string
+      total_fee:
+        type: number
+      total_fee_increase:
+        type: number
+      total_protocol_revenue:
+        type: number
+    type: object
+  busi.NetworkFeeBreakdownV2:
+    properties:
+      base_fee_burn:
+        type: number
+      miner_tip:
+        type: number
+      overestimation_burn:
+        type: number
+      penalty_fee_burn:
+        type: number
+      precommit_batch_fee_burn:
+        type: number
+      provecommit_batch_fee_burn:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.NetworkLockedFilBreakdown:
+    properties:
+      new_initial_pledge:
+        type: number
+      new_reward_locked:
+        type: number
+      new_reward_released:
+        type: number
+      stat_date:
+        type: string
+      total_initial_pledge:
+        type: number
+      total_locked_funds:
+        type: number
+      total_locked_funds_increase:
+        type: number
+    type: object
+  busi.NetworkLockedFilBreakdownV2:
+    properties:
+      daily_new_initial_pledge:
+        description: TotalLockedFundsIncrease float64   `json:"-"`
+        type: number
+      daily_new_reward_locked:
+        type: number
+      daily_new_reward_released:
+        type: number
+      stat_date:
+        type: string
+      total_initial_pledge:
+        type: number
+      total_locked_funds:
+        type: number
+    type: object
+  busi.NetworkStorageCapacity:
+    properties:
+      new_baseline_power:
+        type: number
+      stat_date:
+        type: string
+      total_qa_bytes_power:
+        type: number
+      total_qa_bytes_power_increase:
+        type: number
+      total_raw_bytes_power:
+        type: number
+      total_raw_bytes_power_increase:
+        type: number
+    type: object
+  busi.NetworkStorageCapacityV2:
+    properties:
+      baseline_power:
+        description: TotalRawBytesPowerIncrease float64   `json:"-"`
+        type: number
+      stat_date:
+        type: string
+      total_qa_bytes_power:
+        description: ValueHeight                uint64    `json:"-"`
+        type: number
+      total_raw_bytes_power:
+        description: TotalQaBytesPowerIncrease  float64   `json:"-"`
+        type: number
+    type: object
+  busi.ProveCommitSplitDV2:
+    properties:
+      half_size_byte:
+        type: number
+      half_size_byte_qap:
+        type: number
+      size_byte:
+        type: number
+      size_byte_qap:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.ProveCommitSplitDV2V2:
+    properties:
+      commit_qap_32gib:
+        type: number
+      commit_qap_64gib:
+        type: number
+      commit_rbp_32gib:
+        type: number
+      commit_rbp_64gib:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.SectorOnboardingByMethod:
+    properties:
+      pre_commit_sector_batch_size:
+        type: number
+      pre_commit_sector_size:
+        type: number
+      pre_commit_total_size:
+        type: number
+      prove_commit_aggregate_size:
+        type: number
+      prove_commit_sector_size:
+        type: number
+      prove_commit_total_size:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.SectorOnboardingByMethodV2:
+    properties:
+      pre_commit_sector_batch_rbp:
+        type: number
+      pre_commit_sector_rbp:
+        type: number
+      prove_commit_sector_agg_rbp:
+        type: number
+      prove_commit_sector_rbp:
+        description: PreCommitTotalSize       float64   `json:"-"`
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.SectorsScheduleExpiration:
+    properties:
+      expired_bytes:
+        type: integer
+      expired_bytes_qap:
+        type: number
+      expired_pledge:
+        type: number
+      extended_bytes:
+        type: integer
+      extended_bytes_qap:
+        type: number
+      extended_pledge:
+        type: number
+      interest_date:
+        type: string
+      potential_expire_bytes:
+        type: integer
+      potential_expire_bytes_qap:
+        type: number
+      potential_expire_pledge:
+        type: number
+      schedule_expire_bytes:
+        type: integer
+      schedule_expire_bytes_qap:
+        type: number
+      schedule_expire_pledge:
+        type: number
+      stat_date:
+        type: string
+      terminated_bytes:
+        type: integer
+      terminated_bytes_qap:
+        type: number
+      terminated_pledge:
+        type: number
+    type: object
+  busi.StorageStateD:
+    properties:
+      active_fault:
+        type: number
+      active_fault_avg_d:
+        type: number
+      active_fault_increase:
+        type: number
+      active_term_d:
+        type: number
+      active_term_m:
+        type: number
+      active_term_m_increase:
+        type: number
+      extend_size:
+        type: number
+      extend_size_increase:
+        type: number
+      extend_size_qap:
+        type: number
+      extend_size_qap_increase:
+        type: number
+      fault_d:
+        type: number
+      net_fault_d:
+        type: number
+      passive_term_d:
+        type: number
+      recover_d:
+        type: number
+      stat_date:
+        type: string
+      term_d:
+        type: number
+      term_d_increase:
+        type: number
+    type: object
+  busi.StorageStateDV2:
+    properties:
+      active_fault_rbp:
+        type: number
+      avg_days_active_fault:
+        description: ActiveFaultIncrease   float64   `json:"-"`
+        type: number
+      daily_new_active_terminate_rbp:
+        description: |-
+          TermDIncrease         float64   `json:"-"`
+          NetFaultD             float64   `json:"-"`
+        type: number
+      daily_new_extend_qap:
+        type: number
+      daily_new_extend_rbp:
+        type: number
+      daily_new_fault_rbp:
+        type: number
+      daily_new_passive_terminate_rbp:
+        description: |-
+          ActiveTermM           float64   `json:"-"`
+          ActiveTermMIncrease   float64   `json:"-"`
+        type: number
+      daily_new_recover_rbp:
+        type: number
+      daily_new_terminate_rbp:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ClientsByActiveDealBytes:
+    properties:
+      active_deal_bytes:
+        type: number
+      client_id:
+        type: string
+      client_rank:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ClientsByActiveDealCount:
+    properties:
+      active_deal_count:
+        type: number
+      client_id:
+        type: string
+      client_rank:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ClientsByNewDealBytes:
+    properties:
+      client_id:
+        type: string
+      client_rank:
+        type: integer
+      new_deal_bytes:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ClientsByNewDealCount:
+    properties:
+      client_id:
+        type: string
+      client_rank:
+        type: integer
+      new_deal_count:
+        type: number
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ProvidersByActiveDealBytes:
+    properties:
+      active_deal_bytes:
+        type: number
+      provider_id:
+        type: string
+      provider_rank:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ProvidersByActiveDealCount:
+    properties:
+      active_deal_count:
+        type: integer
+      provider_id:
+        type: string
+      provider_rank:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ProvidersByNewDealBytes:
+    properties:
+      new_deal_bytes:
+        type: number
+      provider_id:
+        type: string
+      provider_rank:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  busi.Top10ProvidersByNewDealCount:
+    properties:
+      new_deal_count:
+        type: integer
+      provider_id:
+        type: string
+      provider_rank:
+        type: integer
+      stat_date:
+        type: string
+    type: object
+  utils.ResponseWithRequestId:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+      request_id:
+        type: string
+    type: object
+host: api-test.spacescope.io
+info:
+  contact:
+    email: xueyou@starboardventures.io
+    name: xueyouchen
+  description: starboard data infra api backend
+  termsOfService: http://swagger.io/terms/
+  title: starboard data infra api backend
+  version: "1.0"
+paths:
+  /api/v1/ping:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: Healthy examination
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+        "500":
+          description: error:...
+          schema:
+            type: string
+      tags:
+      - Sys
+  /v1/network_core/capacity-services/commit_and_expire_pledge:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table commit_and_expire_pledge
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.CommitAndExpirePledge'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/economics_sector_pledges_returns_32g_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table economics_sector_pledges_returns_32g_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.EconomicsSectorPledgesReturns32gD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/economics_sector_pledges_returns_64g_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table economics_sector_pledges_returns_64g_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.EconomicsSectorPledgesReturns64gD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/network_block_reward:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_block_reward
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkBlockReward'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/network_storage_capacity:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_storage_capacity
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkStorageCapacity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/prove_commit_split_d_v2:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table prove_commit_split_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.ProveCommitSplitDV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/sector_onboarding_by_method:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table sector_onboarding_by_method
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.SectorOnboardingByMethod'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/sectors_schedule_expiration:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table sectors_schedule_expiration
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.SectorsScheduleExpiration'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/capacity-services/storage_state_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table storage_state_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.StorageStateD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/circulating-supply/circulating_supply:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table circulating_supply
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.CirculatingSupply'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/circulating-supply/network_locked_fil_breakdown:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_locked_fil_breakdown
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkLockedFilBreakdown'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/deal_client_headcount:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table deal_client_headcount
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.DealClientHeadcount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/deal_states_aggregate_daily:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table deal_states_aggregate_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.DealStatesAggregateDaily'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/deal_summary_statistics_daily:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table deal_summary_statistics_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.DealSummaryStatisticsDaily'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_clients_by_active_deal_bytes:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_clients_by_active_deal_bytes
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ClientsByActiveDealBytes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_clients_by_active_deal_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_clients_by_active_deal_count
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ClientsByActiveDealCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_clients_by_new_deal_bytes:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_clients_by_new_deal_bytes
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ClientsByNewDealBytes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_clients_by_new_deal_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_clients_by_new_deal_count
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ClientsByNewDealCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_providers_by_active_deal_bytes:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_providers_by_active_deal_bytes
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ProvidersByActiveDealBytes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_providers_by_active_deal_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_providers_by_active_deal_count
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ProvidersByActiveDealCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_providers_by_new_deal_bytes:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_providers_by_new_deal_bytes
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ProvidersByNewDealBytes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/market-deals/top10_providers_by_new_deal_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table top10_providers_by_new_deal_count
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.Top10ProvidersByNewDealCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_detail_message_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_detail_message_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasDetailMessageD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_distribution_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_distribution_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasDistributionD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_fee_overview_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_fee_overview_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasFeeOverviewD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_fee_overview_h:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_fee_over_view_h
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01T15:04:05Z"
+        in: query
+        name: end_hour
+        type: string
+      - description: |-
+          https://pkg.go.dev/time#Parse
+          https://datatracker.ietf.org/doc/html/rfc3339
+        example: "2022-06-01T15:04:05Z"
+        in: query
+        name: start_hour
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasFeeOverviewH'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_top_storage_provider_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_top_storage_provider_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasTopStorageProviderD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_usage_detail_message_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_usage_detail_message_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasUsageDetailMessageD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/gas_usage_msg_d:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_usage_msg_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasUsageMsgD'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v1/network_core/transactions-usage/network_fee_breakdown:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_fee_breakdown
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkFeeBreakdown'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /v2/circulating_supply/circulating_supply:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table circulating_supply
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.CirculatingSupplyV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/circulating_supply/network_locked_fil_breakdown:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_locked_fil_breakdown
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkLockedFilBreakdownV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/deals/deal_collateral:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table deal_summary_statistics_daily deal_states_aggregate_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/deals/deal_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table deal_summary_statistics_daily deal_states_aggregate_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/deals/deal_size:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table deal_summary_statistics_daily deal_states_aggregate_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/economics/block_reward:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_block_reward
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkBlockRewardV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/economics/sector_economics:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table economics_sector_pledges_returns_32g_d economics_sector_pledges_returns_64g_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/gas/daily_gas_usage_in_units:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_usage_msg_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasUsageMsgDV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/gas/daily_network_fee_breakdown:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_fee_breakdown
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkFeeBreakdownV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/gas/network_base_fee:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_fee_over_view_h
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01T15:04:05Z"
+        in: query
+        name: end_hour
+        type: string
+      - description: |-
+          https://pkg.go.dev/time#Parse
+          https://datatracker.ietf.org/doc/html/rfc3339
+        example: "2022-06-01T15:04:05Z"
+        in: query
+        name: start_hour
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasFeeOverviewHV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/gas/network_fee_per_message:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table gas_fee_overview_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.GasFeeOverviewDV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/power/daily_power_onboarding_by_method:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table sector_onboarding_by_method
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.SectorOnboardingByMethodV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/power/daily_power_onboarding_by_sector_size:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table prove_commit_split_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.ProveCommitSplitDV2V2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/power/network_storage_capacity:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table network_storage_capacity
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.NetworkStorageCapacityV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/power/storage_state:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table storage_state_d
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: end_date
+        type: string
+      - example: "2022-06-01"
+        in: query
+        name: start_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.StorageStateDV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/basic_info:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_basic_info_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerBasicInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/deals/client_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_deals_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerDealsDailyClientCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/deals/deal_collateral:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_deals_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerDealsDailyDealCollateral'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/deals/deal_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_deals_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerDealsDailyDealCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/deals/deal_duration:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_deals_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerDealsDailyDealDuration'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/deals/deal_revenue:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_deals_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerDealsDailyDealPrice'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/deals/deal_size:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_deals_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerDealsDailyDealSize'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/gas/commit_fee:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_gas_fees_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerGasFeesDailyCommitFee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/gas/network_fee:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_gas_fees_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerGasFeesDailyNetworkFee'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/power:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_basic_info_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerBasicInfoDailyPower'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/rewards:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_basic_info_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerBasicInfoDailyRewards'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/commit_sector_count:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_gas_fees_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerGasFeesDailyCommitSectorCount'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/commit_sector_size:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_gas_fees_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerGasFeesDailyCommitSectorSize'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/expire:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailyExpire'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/extend:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailyExtend'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/fault:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailyFault'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/recover:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailyRecover'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/sector_duration:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailySectorDuration'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/snap:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailySnap'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/terminate:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailyTerminate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/sector/total:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_sectors_status_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerSectorsStatusDailyTotal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+  /v2/storage_provider/token_balance:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List table miner_basic_info_daily
+      parameters:
+      - description: user_id
+        in: header
+        name: user_id
+        required: true
+        type: string
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - in: query
+        name: miner_id
+        type: string
+      - example: "2022-07-01"
+        in: query
+        name: state_date
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.MinerBasicInfoDailyTokenBalance'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V2
+swagger: "2.0"

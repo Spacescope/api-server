@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.data-infra.io/name: api-server-server
+  name: api-server-server
+  namespace: starboard-data-infra
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app.data-infra.io/name: api-server-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.data-infra.io/name: api-server-server
+  name: api-server-server
+  namespace: starboard-data-infra
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.data-infra.io/name: api-server-server
+  template:
+    metadata:
+      labels:
+        app.data-infra.io/name: api-server-server
+    spec:
+      containers:
+      - name: data-api
+        image: 129862287110.dkr.ecr.us-east-2.amazonaws.com/data-infra/data-api-server:${tag}
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: conf-volume
+          mountPath: "/etc/api-server/conf/"
+          readOnly: true
+        ports:
+          - containerPort: 80
+      volumes:
+      - name: conf-volume
+        projected:
+          sources:
+          - configMap:
+              name: api-server-conf
