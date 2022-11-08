@@ -20,6 +20,209 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/contract/{address}": {
+            "get": {
+                "description": "Get contract detail",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.Contract"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/contract/{address}/internal_txns": {
+            "get": {
+                "description": "List contract's internal transactions",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "o",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/busi.EVMInternalTX"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/contract/{address}/txns": {
+            "get": {
+                "description": "List contract's transactions",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "o",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/busi.EVMTransaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/contracts": {
+            "get": {
+                "description": "List contracts",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "o",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.Contract"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/ping": {
             "get": {
                 "description": "Healthy examination",
@@ -49,114 +252,132 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/v1/network_core/circulating-supply/circulating_supply": {
-            "get": {
-                "description": "List table circulating_supply",
-                "consumes": [
-                    "application/json",
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json",
-                    "application/json"
-                ],
-                "tags": [
-                    "DATA-INFRA-API-External-V1"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user_id",
-                        "name": "user_id",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "authorization",
-                        "name": "authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "example": "2022-07-01",
-                        "name": "end_date",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "example": "2022-06-01",
-                        "name": "start_date",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/busi.CirculatingSupply"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ResponseWithRequestId"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ResponseWithRequestId"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
-        "busi.CirculatingSupply": {
+        "busi.EVMInternalTX": {
             "type": "object",
             "properties": {
-                "burnt_fil": {
-                    "type": "number"
-                },
-                "burnt_fil_increase": {
-                    "type": "number"
-                },
-                "circulating_fil": {
-                    "type": "number"
-                },
-                "circulating_fil_increase": {
-                    "type": "number"
-                },
-                "locked_fil": {
-                    "type": "number"
-                },
-                "locked_fil_increase": {
-                    "type": "number"
-                },
-                "mined_fil": {
-                    "type": "number"
-                },
-                "mined_fil_increase": {
-                    "type": "number"
-                },
-                "reserve_disbursed_fil": {
-                    "type": "number"
-                },
-                "reserve_disbursed_fil_increase": {
-                    "type": "number"
-                },
-                "stat_date": {
+                "from": {
                     "type": "string"
                 },
-                "vested_fil": {
-                    "type": "number"
+                "hash": {
+                    "type": "string"
                 },
-                "vested_fil_increase": {
-                    "type": "number"
+                "height": {
+                    "type": "integer"
+                },
+                "parent_hash": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "busi.EVMTransaction": {
+            "type": "object",
+            "properties": {
+                "block_hash": {
+                    "type": "string"
+                },
+                "block_number": {
+                    "type": "integer"
+                },
+                "chain_id": {
+                    "type": "integer"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "gas": {
+                    "type": "integer"
+                },
+                "gas_limit": {
+                    "type": "integer"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "max_fee_per_gas": {
+                    "type": "string"
+                },
+                "max_priority_fee_per_gas": {
+                    "type": "string"
+                },
+                "nonce": {
+                    "type": "integer"
+                },
+                "r": {
+                    "type": "string"
+                },
+                "s": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "transaction_index": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "v": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "core.Contract": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "integer"
+                },
+                "compiler": {
+                    "type": "string"
+                },
+                "filecoinAddress": {
+                    "type": "string"
+                },
+                "license": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "txns": {
+                    "type": "integer"
+                },
+                "verified": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
                 }
             }
         },
@@ -181,8 +402,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "block-api.spacescope.io",
-	BasePath:         "/",
+	Host:             "block-explorer-api.spacescope.io",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "api server",
 	Description:      "spacescope block explorer api server",

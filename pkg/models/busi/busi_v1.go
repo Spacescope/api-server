@@ -24,90 +24,111 @@ type CirculatingSupply struct {
 	CreateAt                    time.Time `json:"-"`
 }
 
-type BlockHeader struct {
-	Height          int64  `xorm:"integer notnull pk"`
-	Version         int    `xorm:"integer notnull pk"`
-	Cid             string `xorm:"varchar(255) pk notnull index default ''"`
-	Miner           string `xorm:"varchar(255) notnull default ''"`
-	ParentWeight    string `xorm:"varchar(100) notnull default ''"`
-	ParentBaseFee   string `xorm:"varchar(100) notnull default ''"`
-	ParentStateRoot string `xorm:"varchar(100) notnull default 0"`
-	WinCount        int64  `xorm:"integer notnull default 0"`
-	Timestamp       uint64 `xorm:"integer notnull default 0"`
-	ForkSignaling   uint64 `xorm:"integer notnull default 0"`
-	CreatedAt       int64  `xorm:"created"`
-}
-
-func (b *BlockHeader) TableName() string {
-	return "block_header"
-}
-
 type EVMBlockHeader struct {
-	Height           int64  `xorm:"integer notnull pk"`
-	Version          int    `xorm:"integer notnull pk"`
-	Number           int64  `xorm:"integer pk notnull default 0"`
-	ParentHash       string `xorm:"varchar(255) notnull default ''"`
-	Sha3Uncles       string `xorm:"varchar(255) notnull default ''"`
-	Miner            string `xorm:"varchar(255) notnull default ''"`
-	StateRoot        string `xorm:"varchar(255) notnull default ''"`
-	TransactionsRoot string `xorm:"varchar(255) notnull default ''"`
-	ReceiptsRoot     string `xorm:"varchar(255) notnull default ''"`
-	Difficulty       int64  `xorm:"integer notnull default 0"`
-	GasLimit         int64  `xorm:"integer notnull default 0"`
-	GasUsed          int64  `xorm:"integer notnull default 0"`
-	Timestamp        int64  `xorm:"integer notnull default 0"`
-	ExtraData        string `xorm:"text notnull default ''"`
-	MixHash          string `xorm:"varchar(255) notnull default ''"`
-	Nonce            string `xorm:"varchar(255) notnull default ''"`
-	BaseFeePerGas    int64  `xorm:"integer notnull default 0"`
-	Size             uint64 `xorm:"integer notnull default 0"`
-	CreatedAt        int64  `xorm:"created"`
+	Height           int64  `json:"height"`
+	Version          int    `json:"version"`
+	Number           int64  `json:"number"`
+	Hash             string `json:"hash"`
+	ParentHash       string `json:"parentHash"`
+	Sha3Uncles       string `json:"sha3_uncles"`
+	Miner            string `json:"miner"`
+	StateRoot        string `json:"state_root"`
+	TransactionsRoot string `json:"transactions_root"`
+	ReceiptsRoot     string `json:"receipts_root"`
+	Difficulty       int64  `json:"difficulty"`
+	GasLimit         int64  `json:"gas_limit"`
+	GasUsed          int64  `json:"gas_used"`
+	Timestamp        int64  `json:"timestamp"`
+	ExtraData        string `json:"extra_data"`
+	MixHash          string `json:"mix_hash"`
+	Nonce            string `json:"nonce"`
+	BaseFeePerGas    string `json:"base_fee_per_gas"`
+	Size             uint64 `json:"size"`
 }
 
 func (b *EVMBlockHeader) TableName() string {
 	return "evm_block_header"
 }
 
-type BlockHeader struct {
-	Height          int64  `xorm:"integer notnull pk"`
-	Version         int    `xorm:"integer notnull pk"`
-	Cid             string `xorm:"varchar(255) pk notnull index default ''"`
-	Miner           string `xorm:"varchar(255) notnull default ''"`
-	ParentWeight    string `xorm:"varchar(100) notnull default ''"`
-	ParentBaseFee   string `xorm:"varchar(100) notnull default ''"`
-	ParentStateRoot string `xorm:"varchar(100) notnull default 0"`
-	WinCount        int64  `xorm:"integer notnull default 0"`
-	Timestamp       uint64 `xorm:"integer notnull default 0"`
-	ForkSignaling   uint64 `xorm:"integer notnull default 0"`
-	CreatedAt       int64  `xorm:"created"`
+// Contract evm smart contract
+type EVMContract struct {
+	Height          int64  `json:"height"`
+	Version         int    `json:"version"`
+	Address         string `json:"address"`
+	FilecoinAddress string `json:"filecoin_address"`
+	Balance         int64  `json:"balance"`
+	Nonce           uint64 `json:"nonce"`
+	ByteCode        string `json:"byte_code"`
 }
 
-func (b *BlockHeader) TableName() string {
-	return "block_header"
+func (c *EVMContract) TableName() string {
+	return "evm_contract"
 }
 
-type EVMBlockHeader struct {
-	Height           int64  `xorm:"integer notnull pk"`
-	Version          int    `xorm:"integer notnull pk"`
-	Number           int64  `xorm:"integer pk notnull default 0"`
-	ParentHash       string `xorm:"varchar(255) notnull default ''"`
-	Sha3Uncles       string `xorm:"varchar(255) notnull default ''"`
-	Miner            string `xorm:"varchar(255) notnull default ''"`
-	StateRoot        string `xorm:"varchar(255) notnull default ''"`
-	TransactionsRoot string `xorm:"varchar(255) notnull default ''"`
-	ReceiptsRoot     string `xorm:"varchar(255) notnull default ''"`
-	Difficulty       int64  `xorm:"integer notnull default 0"`
-	GasLimit         int64  `xorm:"integer notnull default 0"`
-	GasUsed          int64  `xorm:"integer notnull default 0"`
-	Timestamp        int64  `xorm:"integer notnull default 0"`
-	ExtraData        string `xorm:"text notnull default ''"`
-	MixHash          string `xorm:"varchar(255) notnull default ''"`
-	Nonce            string `xorm:"varchar(255) notnull default ''"`
-	BaseFeePerGas    int64  `xorm:"integer notnull default 0"`
-	Size             uint64 `xorm:"integer notnull default 0"`
-	CreatedAt        int64  `xorm:"created"`
+// InternalTX contract internal transaction
+type EVMInternalTX struct {
+	Height     int64  `json:"height"`
+	Version    int    `json:"version"`
+	Hash       string `json:"hash"`
+	ParentHash string `json:"parent_hash"`
+	Type       uint64 `json:"type"`
+	From       string `json:"from"`
+	To         string `json:"to"`
+	Value      string `json:"value"`
 }
 
-func (b *EVMBlockHeader) TableName() string {
-	return "evm_block_header"
+func (i *EVMInternalTX) TableName() string {
+	return "evm_internal_tx"
+}
+
+// Receipt evm transaction receipt
+type EVMReceipt struct {
+	Height            int64  `json:"height"`
+	Version           int    `json:"version"`
+	TransactionHash   string `json:"transaction_hash"`
+	TransactionIndex  int64  `json:"transaction_index"`
+	BlockHash         string `json:"block_hash"`
+	BlockNumber       int64  `json:"block_number"`
+	From              string `json:"from"`
+	To                string `json:"to"`
+	StateRoot         string `json:"state_root"`
+	Status            int64  `json:"status"`
+	ContractAddress   string `json:"contract_address"`
+	CumulativeGasUsed int64  `json:"cumulative_gas_used"`
+	GasUsed           int64  `json:"gas_used"`
+	EffectiveGasPrice int64  `json:"effective_gas_price"`
+	LogsBloom         string `json:"logs_bloom"`
+	Logs              string `json:"logs"`
+}
+
+func (r *EVMReceipt) TableName() string {
+	return "evm_receipt"
+}
+
+// Transaction evm transaction
+type EVMTransaction struct {
+	Height               int64  `json:"height"`
+	Version              int    `json:"version"`
+	Hash                 string `json:"hash"`
+	ChainID              uint64 `json:"chain_id"`
+	Nonce                uint64 `json:"nonce"`
+	BlockHash            string `json:"block_hash"`
+	BlockNumber          uint64 `json:"block_number"`
+	TransactionIndex     uint64 `json:"transaction_index"`
+	From                 string `json:"from"`
+	To                   string `json:"to"`
+	Value                string `json:"value"`
+	Type                 uint64 `json:"type"`
+	Input                string `json:"input"`
+	Gas                  uint64 `json:"gas"`
+	GasLimit             uint64 `json:"gas_limit"`
+	MaxFeePerGas         string `json:"max_fee_per_gas"`
+	MaxPriorityFeePerGas string `json:"max_priority_fee_per_gas"`
+	V                    string `json:"v"`
+	R                    string `json:"r"`
+	S                    string `json:"s"`
+}
+
+func (m *EVMTransaction) TableName() string {
+	return "evm_transaction"
 }

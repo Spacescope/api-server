@@ -2,7 +2,6 @@ package busi
 
 import (
 	v1 "api-server/internal/busi/api/v1"
-	"api-server/internal/busi/core"
 	"api-server/pkg/utils"
 	"context"
 	"fmt"
@@ -15,10 +14,14 @@ import (
 )
 
 func registerV1(r *gin.Engine) {
-	apiv1 := r.Group("/v1")
-	tokenGroup_apiv1 := apiv1.Group("", core.AuthFromGateway(), core.GinUidLogMiddleware())
+	apiv1 := r.Group("/api/v1")
 	{
-		tokenGroup_apiv1.GET("/network_core/circulating-supply/circulating_supply", v1.ListCirculatingSupply)
+		apiv1.GET("/ping", v1.Ping)
+
+		apiv1.GET("/contracts", v1.ListContracts)                          // list contracts
+		apiv1.GET("/contract/:address", v1.GetContract)                    // contract detail
+		apiv1.GET("/contract/:address/txns", v1.ListTXNs)                  // list contract's txns
+		apiv1.GET("/contract/:address/internal_txns", v1.ListInternalTXNs) // list contract's internal txns
 	}
 }
 
@@ -26,7 +29,6 @@ func RegisterRoutes(r *gin.Engine) {
 	// r.Use(utils.Cors())
 	r.Use(cors.Default())
 	r.GET("/api-server/swagger/*any", swagHandler)
-	r.GET("/api/v1/ping", v1.Ping)
 
 	registerV1(r)
 }
@@ -37,8 +39,6 @@ func initconfig(ctx context.Context, cf *utils.TomlConfig) {
 	}
 
 	utils.EngineGroup = utils.NewEngineGroup(ctx, &[]utils.EngineInfo{{utils.DB, cf.APIServer.DB, nil}})
-
-	// utils.InitKVEngine(ctx, cf.DataInfra.KV, "", 0)
 }
 
 func Start() {

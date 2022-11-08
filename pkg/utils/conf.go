@@ -10,7 +10,7 @@ var CNF TomlConfig
 
 type TomlConfig struct {
 	Title     string
-	APIServer APIServer `toml:"api-server"`
+	APIServer APIServer `toml:"block-explorer-api"`
 }
 
 type APIServer struct {

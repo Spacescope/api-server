@@ -17,8 +17,8 @@ import (
 // @contact.name xueyouchen
 // @contact.email xueyou@starboardventures.io
 
-// @host block-api.spacescope.io
-// @BasePath /
+// @host block-explorer-api.spacescope.io
+// @BasePath /api/v1
 
 func NewRootCommand() *cobra.Command {
 	cmd := &cobra.Command{

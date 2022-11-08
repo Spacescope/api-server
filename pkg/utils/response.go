@@ -77,38 +77,10 @@ const (
 	CodeUserNotFound
 	CodeForbidSendEmail
 
-	CodeAccountRegister             = 10000
-	CodeAccountRegisterParamsErr    = 10001
-	CodeAccountInternalErr          = 10002
-	CodeAccountNotFound             = 10003
-	CodeAccountPasswordErr          = 10004
-	CodeAccountUserNotFound         = 10005
-	CodeAccountEmailFormatErr       = 10006
-	CodeAccountEmailNotVerified     = 10007
-	CodeAccountEmailRateLimit       = 10008
-	CodeAccountCodeOrFingerPrintErr = 10009
-	CodeAccountAlreadyExistsErr     = 10010
-
-	CodeMailCode                          = 11000
-	CodeMailCodeNotSend                   = 11001
-	CodeMailCodeVerifiedFailed            = 11002
-	CodeMailCodeVerifiedOK                = 11003
-	CodeMailBrowserFingerPrintMetadataErr = 11004
-	CodeMailSendFailed                    = 11005
-
-	CodeSPRD                 = 20000
-	CodeSPRDParamsErr        = 20001
-	CodeSPRDInternalErr      = 20002
-	CodeSPRDForbidden        = 20003
-	CodeSPRDSPNotFound       = 20004
-	CodeWatchRecordHasExists = 20005
-	CodeSPRDRegionNotFound   = 20006
-
-	CodeDataInfraAPI                = 30000
-	CodeDataInfraAPIForbidden       = 30001
-	CodeDataInfraAPIParamsErr       = 30002
-	CodeDataInfraAPIInternalErr     = 30003
-	CodeDataInfraAPIDataNotReadyErr = 30004
+	CodeBlockExplorerAPIServer            = 50000
+	CodeBlockExplorerAPIServerParamsErr   = 50001
+	CodeBlockExplorerAPIServerInternalErr = 50002
+	CodeBlockExplorerAPIServerNotFoundErr = 50003
 )
 
 var (
@@ -119,36 +91,9 @@ var (
 	ErrBadRequest     = &Response{Code: CodeBadRequest, Message: "bad request."}
 	ErrNotFound       = &Response{Code: CodeNotFound, Message: "object not found."}
 
-	ErrAccountRegister          = &Response{Code: CodeAccountRegister, Message: ""}
-	ErrAccountRegisterParams    = &Response{Code: CodeAccountRegisterParamsErr, Message: "register parameters error."}
-	ErrAccountInternal          = &Response{Code: CodeAccountInternalErr, Message: "account internal server error."}
-	ErrAccountNotFound          = &Response{Code: CodeAccountNotFound, Message: "account not found."}
-	ErrAccountPassword          = &Response{Code: CodeAccountPasswordErr, Message: "password error."}
-	ErrAccountUserNotFound      = &Response{Code: CodeAccountUserNotFound, Message: "user not found."}
-	ErrAccountEmailFormat       = &Response{Code: CodeAccountEmailFormatErr, Message: "email format error."}
-	ErrAccountEmailNotVerified  = &Response{Code: CodeAccountEmailNotVerified, Message: "email has not been verified."}
-	ErrAccountEmailRateLimit    = &Response{Code: CodeAccountEmailRateLimit, Message: "email rate limit."}
-	ErrAccountCodeOrFingerPrint = &Response{Code: CodeAccountCodeOrFingerPrintErr, Message: "finger print error."}
-	ErrAccountAlreadyExists     = &Response{Code: CodeAccountAlreadyExistsErr, Message: "account already exists."}
-
-	ErrMailCode                       = &Response{Code: CodeMailCode, Message: ""}
-	ErrMailCodeNotSend                = &Response{Code: CodeMailCodeNotSend, Message: "code has not been sent."}
-	ErrMailCodeVerifiedFailed         = &Response{Code: CodeMailCodeVerifiedFailed, Message: "code verified failed."}
-	ErrMailCodeVerifiedOK             = &Response{Code: CodeMailCodeVerifiedOK, Message: "code verified ok."}
-	ErrMailBrowserFingerPrintMetadata = &Response{Code: CodeMailBrowserFingerPrintMetadataErr, Message: "fp metadata error."}
-	ErrMailSendFailed                 = &Response{Code: CodeMailSendFailed, Message: "Failed to send email."}
-
-	ErrSPRDInternal             = &Response{Code: CodeSPRDInternalErr, Message: "sprd internal server error."}
-	ErrSPRDParamsErr            = &Response{Code: CodeSPRDParamsErr, Message: "sprd parameters error."}
-	ErrSPRDForBidden            = &Response{Code: CodeSPRDForbidden, Message: "sprd forbidden."}
-	ErrSPRDSPNotFound           = &Response{Code: CodeSPRDSPNotFound, Message: "sp not found."}
-	ErrSPRDWatchRecordHasExists = &Response{Code: CodeWatchRecordHasExists, Message: "record has exists."}
-	ErrSPRDRegionNotFound       = &Response{Code: CodeSPRDRegionNotFound, Message: "region not found exists."}
-
-	ErrDataInfraAPIForbidden    = &Response{Code: CodeDataInfraAPIForbidden, Message: "SpaceScope API forbidden."}
-	ErrDataInfraAPIParamsErr    = &Response{Code: CodeDataInfraAPIParamsErr, Message: "SpaceScope API parameters error."}
-	ErrDataInfraAPIInternal     = &Response{Code: CodeDataInfraAPIInternalErr, Message: "SpaceScope API internal server error."}
-	ErrDataInfraAPIDataNotReady = &Response{Code: CodeDataInfraAPIDataNotReadyErr, Message: "SpaceScope API data is not available."}
+	ErrBlockExplorerAPIServerParams   = &Response{Code: CodeBlockExplorerAPIServerParamsErr, Message: "API parameters error."}
+	ErrBlockExplorerAPIServerInternal = &Response{Code: CodeBlockExplorerAPIServerInternalErr, Message: "Internal server error."}
+	ErrBlockExplorerAPIServerNotFound = &Response{Code: CodeBlockExplorerAPIServerNotFoundErr, Message: "resource not find."}
 )
 
 type Gin struct {
