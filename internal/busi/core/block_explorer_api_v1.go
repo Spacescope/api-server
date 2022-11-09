@@ -37,11 +37,10 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 
 	for _, contract := range contracts {
 		var (
-			c   Contract
-			err error
+			c Contract
 		)
 
-		c.Txns, err = evmTransactionCount(contract.Address, contract.Version)
+		c.Txns, err = evmTransactionCountWitVersion(contract.Address, contract.Version)
 		if err != nil {
 			log.Error(err)
 			break
@@ -81,12 +80,12 @@ func Getcontract(ctx context.Context, address string) (interface{}, *utils.BuErr
 
 func ListTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
 	var (
-		t        busi.EVMTransaction
 		txnsList TxnsList
 	)
 
 	// get the numbers of transactions
-	total, err := busiTableRecordsCount(&t)
+	var t busi.EVMTransaction
+	total, err := evmTransactionCount(address, &t)
 	if err != nil {
 		return nil, err
 	}
@@ -108,12 +107,13 @@ func ListTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *
 
 func ListInternalTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
 	var (
-		t                busi.EVMInternalTX
 		internalTXNsList InternalTxnsList
 	)
 
 	// get the numbers of internal transactions
-	total, err := busiTableRecordsCount(&t)
+
+	var t busi.EVMInternalTX
+	total, err := evmTransactionCount(address, &t)
 	if err != nil {
 		return nil, err
 	}

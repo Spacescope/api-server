@@ -70,7 +70,7 @@ func evmTransactionFind(address string, r *ListQuery, rowsSlicePtr interface{}) 
 	return nil
 }
 
-func evmTransactionCount(address string, version int) (int64, error) {
+func evmTransactionCountWitVersion(address string, version int) (int64, *utils.BuErrorResponse) {
 	var (
 		count int64
 		err   error
@@ -78,6 +78,20 @@ func evmTransactionCount(address string, version int) (int64, error) {
 	)
 
 	if count, err = utils.EngineGroup[utils.DB].Where("(\"from\" = ? or \"to\" = ?) and version = ?", address, address, version).Count(&t); err != nil {
+		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	return count, nil
+}
+
+func evmTransactionCount(address string /*, version int*/, t interface{}) (int64, *utils.BuErrorResponse) {
+	var (
+		count int64
+		err   error
+	)
+
+	//if count, err = utils.EngineGroup[utils.DB].Where("(\"from\" = ? or \"to\" = ?) and version = ?", address, address, version).Count(&t); err != nil {
+	if count, err = utils.EngineGroup[utils.DB].Where("\"from\" = ? or \"to\" = ?", address, address).Count(t); err != nil {
 		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
