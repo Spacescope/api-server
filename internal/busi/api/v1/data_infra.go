@@ -25,12 +25,12 @@ func ListContracts(c *gin.Context) {
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return
 	}
 
 	if err := r.ListValidate(); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return
 	}
 
@@ -59,7 +59,7 @@ func GetContract(c *gin.Context) {
 
 	address := c.Param("address")
 	if err := validate.Var(address, "required"); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
 
 	result, resp := core.Getcontract(c.Request.Context(), address)
@@ -88,17 +88,17 @@ func ListTXNs(c *gin.Context) {
 
 	address := c.Param("address")
 	if err := validate.Var(address, "required"); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return
 	}
 
 	if err := r.ListValidate(); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return
 	}
 
@@ -128,17 +128,17 @@ func ListInternalTXNs(c *gin.Context) {
 
 	address := c.Param("address")
 	if err := validate.Var(address, "required"); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return
 	}
 
 	if err := r.ListValidate(); err != nil {
-		app.HTTPResponse(http.StatusBadRequest, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return
 	}
 
