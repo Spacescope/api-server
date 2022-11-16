@@ -1,8 +1,9 @@
 package core
 
 import (
-	"api-server/pkg/models/busi"
 	"time"
+
+	"api-server/pkg/models/busi"
 )
 
 type ContractsList struct {
@@ -16,7 +17,7 @@ type Contract struct {
 	Name            string
 	Compiler        string
 	Version         int64
-	Balance         uint64
+	Balance         string
 	Txns            int64
 	Verified        time.Time
 	License         string

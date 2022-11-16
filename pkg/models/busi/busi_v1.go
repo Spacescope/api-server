@@ -56,7 +56,7 @@ type EVMContract struct {
 	Version         int    `json:"version"`
 	Address         string `json:"address"`
 	FilecoinAddress string `json:"filecoin_address"`
-	Balance         int64  `json:"balance"`
+	Balance         string `json:"balance"`
 	Nonce           uint64 `json:"nonce"`
 	ByteCode        string `json:"byte_code"`
 }
