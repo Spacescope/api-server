@@ -1,11 +1,12 @@
 package core
 
 import (
-	"api-server/pkg/models/busi"
-	"api-server/pkg/utils"
 	"context"
 	"net/http"
 	"sort"
+
+	"api-server/pkg/models/busi"
+	"api-server/pkg/utils"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -48,7 +49,7 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 
 		c.Address = contract.Address
 		c.FilecoinAddress = contract.FilecoinAddress
-		c.Balance = uint64(contract.Balance)
+		c.Balance = contract.Balance
 		c.Version = int64(contract.Version)
 
 		contractsSlice = append(contractsSlice, &c)
@@ -65,7 +66,8 @@ func Getcontract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	err := utils.EngineGroup[utils.DB].Where("address = ?", address).Find(&evmContracts)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if len(evmContracts) == 0 {
