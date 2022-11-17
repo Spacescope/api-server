@@ -132,3 +132,32 @@ type EVMTransaction struct {
 func (m *EVMTransaction) TableName() string {
 	return "evm_transaction"
 }
+
+const (
+	CompilerTypeSingleFile   = 1
+	CompilerTypeMultiPart    = 2
+	CompilerTypeStdJsonInput = 3
+
+	EVMContractVerifyStatusDoing        = 0
+	EVMContractVerifyStatusSuccessfully = 1
+	EVMContractVerifyStatusNotEqual     = 2
+	EVMContractVerifyStatusUnknown      = 3
+)
+
+type EVMContractVerify struct {
+	ID              int64     `xorm:"pk autoincr" json:"id"`
+	Address         string    `xorm:"varchar(255) notnull default '' index" json:"address"`
+	CompilerType    int       `xorm:"int notnull default 1" json:"compiler_type"`
+	CompilerVersion string    `xorm:"varchar(100) notnull default ''" json:"compiler_version"`
+	LicenseType     string    `xorm:"varchar(255) notnull default ''" json:"license_type"`
+	ContractName    string    `xorm:"varchar(100) notnull default ''" json:"contract_name"`
+	Input           string    `xorm:"text notnull default ''" json:"input"`
+	Output          string    `xorm:"text notnull default ''" json:"output"`
+	Status          int       `xorm:"int notnull default 0" json:"status"`
+	CreateAt        time.Time `xorm:"created" json:"create_at"`
+	UpdatedAt       time.Time `xorm:"updated" json:"updated_at"`
+}
+
+func (c *EVMContractVerify) TableName() string {
+	return "evm_contract_verify"
+}

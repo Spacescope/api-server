@@ -1,11 +1,13 @@
 package busi
 
 import (
-	v1 "api-server/internal/busi/api/v1"
-	"api-server/pkg/utils"
 	"context"
 	"fmt"
 	"time"
+
+	v1 "api-server/internal/busi/api/v1"
+	"api-server/pkg/models/busi"
+	"api-server/pkg/utils"
 
 	log "github.com/sirupsen/logrus"
 
@@ -22,6 +24,8 @@ func registerV1(r *gin.Engine) {
 		apiv1.GET("/contract/:address", v1.GetContract)                    // contract detail
 		apiv1.GET("/contract/:address/txns", v1.ListTXNs)                  // list contract's txns
 		apiv1.GET("/contract/:address/internal_txns", v1.ListInternalTXNs) // list contract's internal txns
+		apiv1.POST("/contractverify/:address", v1.SubmitContractVerify)    // submit contract verify
+		apiv1.GET("/contractverify/:id", v1.GetContractVerify)             // submit contract verify
 	}
 }
 
@@ -38,7 +42,10 @@ func initconfig(ctx context.Context, cf *utils.TomlConfig) {
 		log.Fatalf("Load configuration file err: %v", err)
 	}
 
-	utils.EngineGroup = utils.NewEngineGroup(ctx, &[]utils.EngineInfo{{utils.DB, cf.APIServer.DB, nil}})
+	utils.EngineGroup = utils.NewEngineGroup(ctx, &[]utils.EngineInfo{
+		{utils.DB, cf.APIServer.DB, nil},
+		{utils.BusiDB, cf.APIServer.BusiDB, busi.Tables},
+	})
 }
 
 func Start() {

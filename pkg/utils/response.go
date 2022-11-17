@@ -55,7 +55,7 @@ func ToResponse(err error) *Response {
 	case *Response:
 		return t
 	default:
-		//logrus.Error(err)
+		// logrus.Error(err)
 	}
 	return NewResponse(CodeError, err.Error(), nil)
 }
@@ -81,6 +81,7 @@ const (
 	CodeBlockExplorerAPIServerParamsErr   = 50001
 	CodeBlockExplorerAPIServerInternalErr = 50002
 	CodeBlockExplorerAPIServerNotFoundErr = 50003
+	CodeContractVerified                  = 50004
 )
 
 var (
@@ -91,9 +92,13 @@ var (
 	ErrBadRequest     = &Response{Code: CodeBadRequest, Message: "bad request."}
 	ErrNotFound       = &Response{Code: CodeNotFound, Message: "object not found."}
 
-	ErrBlockExplorerAPIServerParams   = &Response{Code: CodeBlockExplorerAPIServerParamsErr, Message: "API parameters error."}
-	ErrBlockExplorerAPIServerInternal = &Response{Code: CodeBlockExplorerAPIServerInternalErr, Message: "Internal server error."}
-	ErrBlockExplorerAPIServerNotFound = &Response{Code: CodeBlockExplorerAPIServerNotFoundErr, Message: "resource not find."}
+	ErrBlockExplorerAPIServerParams = &Response{Code: CodeBlockExplorerAPIServerParamsErr,
+		Message: "API parameters error."}
+	ErrBlockExplorerAPIServerInternal = &Response{Code: CodeBlockExplorerAPIServerInternalErr,
+		Message: "Internal server error."}
+	ErrBlockExplorerAPIServerNotFound = &Response{Code: CodeBlockExplorerAPIServerNotFoundErr,
+		Message: "resource not find."}
+	ErrContractVerified = &Response{Code: CodeContractVerified, Message: "contract has been verified"}
 )
 
 type Gin struct {

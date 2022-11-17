@@ -5,5 +5,5 @@ var (
 )
 
 func init() {
-	Tables = append(Tables)
+	Tables = append(Tables, new(EVMContractVerify))
 }
