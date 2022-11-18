@@ -13,6 +13,51 @@
     "host": "block-explorer-api.spacescope.io",
     "basePath": "/api/v1",
     "paths": {
+        "/api/v1/complieversions": {
+            "get": {
+                "description": "list compile version",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.CompileVersionList"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/contract/{address}": {
             "get": {
                 "description": "Get contract detail",
@@ -216,6 +261,142 @@
                 }
             }
         },
+        "/api/v1/contractverify/{address}": {
+            "post": {
+                "description": "submit contract verify",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "enum": [
+                            1,
+                            2,
+                            3
+                        ],
+                        "type": "integer",
+                        "description": "TODO need support more CompilerType, only implement single file now.",
+                        "name": "compiler_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "compiler_version",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "evm_version",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "is_optimization",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "license_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "TODO need more field support more CompilerType",
+                        "name": "runs",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "source_code",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/busi.EVMContractVerify"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/contractverify/{id}": {
+            "get": {
+                "description": "check contract verify",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.ContractVerify"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/ping": {
             "get": {
                 "description": "Healthy examination",
@@ -248,6 +429,38 @@
         }
     },
     "definitions": {
+        "busi.EVMContractVerify": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "compiler_type": {
+                    "type": "integer"
+                },
+                "compiler_version": {
+                    "type": "string"
+                },
+                "contract_name": {
+                    "type": "string"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "license_type": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "busi.EVMInternalTX": {
             "type": "object",
             "properties": {
@@ -342,6 +555,28 @@
                 }
             }
         },
+        "core.CompileVersion": {
+            "type": "object",
+            "properties": {
+                "long_version": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "core.CompileVersionList": {
+            "type": "object",
+            "properties": {
+                "versions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.CompileVersion"
+                    }
+                }
+            }
+        },
         "core.Contract": {
             "type": "object",
             "properties": {
@@ -349,7 +584,7 @@
                     "type": "string"
                 },
                 "balance": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "compiler": {
                     "type": "string"
@@ -371,6 +606,61 @@
                 },
                 "version": {
                     "type": "integer"
+                }
+            }
+        },
+        "core.ContractVerify": {
+            "type": "object",
+            "properties": {
+                "abi": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "compiler_type": {
+                    "type": "integer"
+                },
+                "compiler_version": {
+                    "type": "string"
+                },
+                "contract_name": {
+                    "type": "string"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "err_msg": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "license_type": {
+                    "type": "string"
+                },
+                "source_codes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.SourceCode"
+                    }
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "core.SourceCode": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "file_name": {
+                    "type": "string"
                 }
             }
         },

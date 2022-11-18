@@ -1,5 +1,26 @@
 basePath: /api/v1
 definitions:
+  busi.EVMContractVerify:
+    properties:
+      address:
+        type: string
+      compiler_type:
+        type: integer
+      compiler_version:
+        type: string
+      contract_name:
+        type: string
+      create_at:
+        type: string
+      id:
+        type: integer
+      license_type:
+        type: string
+      status:
+        type: integer
+      updated_at:
+        type: string
+    type: object
   busi.EVMInternalTX:
     properties:
       from:
@@ -62,12 +83,26 @@ definitions:
       version:
         type: integer
     type: object
+  core.CompileVersion:
+    properties:
+      long_version:
+        type: string
+      version:
+        type: string
+    type: object
+  core.CompileVersionList:
+    properties:
+      versions:
+        items:
+          $ref: '#/definitions/core.CompileVersion'
+        type: array
+    type: object
   core.Contract:
     properties:
       address:
         type: string
       balance:
-        type: integer
+        type: string
       compiler:
         type: string
       filecoinAddress:
@@ -82,6 +117,42 @@ definitions:
         type: string
       version:
         type: integer
+    type: object
+  core.ContractVerify:
+    properties:
+      abi:
+        type: string
+      address:
+        type: string
+      compiler_type:
+        type: integer
+      compiler_version:
+        type: string
+      contract_name:
+        type: string
+      create_at:
+        type: string
+      err_msg:
+        type: string
+      id:
+        type: integer
+      license_type:
+        type: string
+      source_codes:
+        items:
+          $ref: '#/definitions/core.SourceCode'
+        type: array
+      status:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  core.SourceCode:
+    properties:
+      code:
+        type: string
+      file_name:
+        type: string
     type: object
   utils.ResponseWithRequestId:
     properties:
@@ -103,6 +174,36 @@ info:
   title: api server
   version: "1.0"
 paths:
+  /api/v1/complieversions:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: list compile version
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.CompileVersionList'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
   /api/v1/contract/{address}:
     get:
       consumes:
@@ -226,6 +327,98 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/core.Contract'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/contractverify/{address}:
+    post:
+      consumes:
+      - application/json
+      - application/json
+      description: submit contract verify
+      parameters:
+      - description: TODO need support more CompilerType, only implement single file
+          now.
+        enum:
+        - 1
+        - 2
+        - 3
+        in: query
+        name: compiler_type
+        required: true
+        type: integer
+      - in: query
+        name: compiler_version
+        required: true
+        type: string
+      - in: query
+        name: evm_version
+        type: string
+      - in: query
+        name: is_optimization
+        type: boolean
+      - in: query
+        name: license_type
+        required: true
+        type: string
+      - description: TODO need more field support more CompilerType
+        in: query
+        name: runs
+        required: true
+        type: integer
+      - in: query
+        name: source_code
+        type: string
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.EVMContractVerify'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/contractverify/{id}:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: check contract verify
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.ContractVerify'
         "400":
           description: Bad Request
           schema:
