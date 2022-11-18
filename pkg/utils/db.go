@@ -16,7 +16,10 @@ import (
 const DBTYPE = "postgres"
 const DBRetry = 3
 
-const DB = "block_explorer_db"
+const (
+	DB     = "block_explorer_db"
+	BusiDB = "busi_db"
+)
 
 var (
 	EngineGroup map[string]*xorm.Engine
@@ -78,12 +81,13 @@ func SyncTables(x *xorm.Engine, tables []interface{}) error {
 	return x.StoreEngine("InnoDB").Sync2(tables...)
 }
 
-func newEngine(ctx context.Context /*, migrateFunc func(*xorm.Engine) error*/, schema string) (x *xorm.Engine, err error) {
+func newEngine(ctx context.Context /*, migrateFunc func(*xorm.Engine) error*/, schema string) (x *xorm.Engine,
+	err error) {
 	if x, err = setEngine(schema); err != nil {
 		return nil, err
 	}
 
-	x.ShowSQL(true)
+	x.ShowSQL(false)
 	x.SetDefaultContext(ctx)
 	x.SetMapper(names.GonicMapper{})
 
@@ -106,7 +110,7 @@ func setEngine(schema string) (*xorm.Engine, error) {
 
 	x.SetMaxIdleConns(7)
 	x.SetMaxOpenConns(30)
-	//x.SetConnMaxLifetime()
+	// x.SetConnMaxLifetime()
 	x.SetMapper(names.GonicMapper{})
 
 	return x, nil

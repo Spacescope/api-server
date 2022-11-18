@@ -32,3 +32,24 @@ type InternalTxnsList struct {
 	EVMInternalTX []*busi.EVMInternalTX `json:"evm_internal_txns"`
 	Hits          int64                 `json:"hits"`
 }
+
+type CompileVersionList struct {
+	Versions []*CompileVersion `json:"versions"`
+}
+
+type CompileVersion struct {
+	Version     string `json:"version"`
+	LongVersion string `json:"long_version"`
+}
+
+type SourceCode struct {
+	FileName string `json:"file_name"`
+	Code     string `json:"code"`
+}
+
+type ContractVerify struct {
+	busi.EVMContractVerify
+	SourceCodes []*SourceCode `json:"source_codes"`
+	ABI         string        `json:"abi"`
+	ErrMsg      string        `json:"err_msg"`
+}
