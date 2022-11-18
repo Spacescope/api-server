@@ -3,3 +3,4 @@ title = "spacescope-block-explorer-api-server"
 [block-explorer-api]
     listen = ":7006"
     db = "postgresql://user:password@ip:port/data_task?sslmode=disable"
+    busi_db = "postgresql://user:password@ip:port/fvm_explorer?sslmode=disable"
