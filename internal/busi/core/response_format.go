@@ -52,4 +52,22 @@ type ContractVerify struct {
 	SourceCodes []*SourceCode `json:"source_codes"`
 	ABI         string        `json:"abi"`
 	ErrMsg      string        `json:"err_msg"`
+	Bytecode    string        `json:"bytecode"`
+}
+
+type ContractDetail struct {
+	Address         string        `json:"address"`
+	FilecoinAddress string        `json:"filecoin_address"`
+	Balance         string        `json:"balance"`
+	Nonce           uint64        `json:"nonce"`
+	ByteCode        string        `json:"byte_code"`
+	Creator         string        `json:"creator"`
+	Txn             string        `json:"txn"`
+	CompilerType    int           `json:"compiler_type"`
+	CompilerVersion string        `json:"compiler_version"`
+	LicenseType     string        `json:"license_type"`
+	ContractName    string        `json:"contract_name"`
+	Verified        time.Time     `json:"verified"`
+	ABI             string        `json:"abi"`
+	SourceCodes     []*SourceCode `json:"source_codes"`
 }

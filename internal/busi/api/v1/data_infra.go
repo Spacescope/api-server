@@ -3,6 +3,7 @@ package v1
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"api-server/internal/busi/core"
 	"api-server/pkg/utils"
@@ -64,7 +65,7 @@ func GetContract(c *gin.Context) {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
 
-	result, resp := core.Getcontract(c.Request.Context(), address)
+	result, resp := core.GetContract(c.Request.Context(), strings.ToLower(address))
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return
@@ -185,7 +186,7 @@ func SubmitContractVerify(c *gin.Context) {
 		return
 	}
 
-	result, resp := core.SubmitContractVerify(c.Request.Context(), address, &r)
+	result, resp := core.SubmitContractVerify(c.Request.Context(), strings.ToLower(address), &r)
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return
