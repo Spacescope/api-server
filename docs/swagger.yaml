@@ -124,6 +124,8 @@ definitions:
         type: string
       address:
         type: string
+      bytecode:
+        type: string
       compiler_type:
         type: integer
       compiler_version:

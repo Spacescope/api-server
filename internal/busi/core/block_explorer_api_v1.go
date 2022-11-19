@@ -76,10 +76,10 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 	return contractsList, nil
 }
 
-func Getcontract(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
+func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
 	evmContracts := make([]*busi.EVMContract, 0)
 
-	err := utils.EngineGroup[utils.DB].Where("address ilike ?", address).Find(&evmContracts)
+	err := utils.EngineGroup[utils.DB].Where("address=?", address).Find(&evmContracts)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -93,7 +93,76 @@ func Getcontract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	// get the heightest and new version address
 	t := newContractsArr(evmContracts)
 	sort.Sort(t)
-	return t[len(t)-1], nil
+
+	contract := t[len(t)-1]
+
+	contractDetail := ContractDetail{
+		Address:         contract.Address,
+		FilecoinAddress: contract.FilecoinAddress,
+		Balance:         contract.Balance,
+		Nonce:           contract.Nonce,
+		ByteCode:        contract.ByteCode,
+	}
+
+	var receipt busi.EVMReceipt
+	exist, err := utils.EngineGroup[utils.DB].
+		Where("`to`='' and contract_address=?", address).Get(&receipt)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if exist {
+		contractDetail.Creator = receipt.From
+		contractDetail.Txn = receipt.TransactionHash
+	}
+
+	var contractVerify busi.EVMContractVerify
+	exist, err = utils.EngineGroup[utils.BusiDB].Where("address=? and status=?",
+		address, busi.EVMContractVerifyStatusSuccessfully).Get(&contractVerify)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if exist {
+		contractDetail.Verified = contractVerify.CreateAt
+		contractDetail.ContractName = contractVerify.ContractName
+		contractDetail.LicenseType = contractVerify.LicenseType
+		contractDetail.CompilerVersion = contractVerify.CompilerVersion
+		contractDetail.ContractName = contractVerify.ContractName
+
+		var output solc.Output
+		if err := json.Unmarshal([]byte(contractVerify.Output), &output); err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+		var input solc.Input
+		if err := json.Unmarshal([]byte(contractVerify.Input), &input); err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+
+		for fileName, code := range input.Sources {
+			// use single file no filename
+			if contractVerify.CompilerType == busi.CompilerTypeSingleFile {
+				fileName = fmt.Sprintf("%s.sol", contractVerify.ContractName)
+			}
+			contractDetail.SourceCodes = append(contractDetail.SourceCodes, &SourceCode{
+				FileName: fileName,
+				Code:     code.Content,
+			})
+		}
+
+		if contractVerify.CompilerType == busi.CompilerTypeSingleFile {
+			for _, c := range output.Contracts[""] {
+				contractDetail.ABI = gjson.Get(c.Metadata, "output.abi").String()
+				break
+			}
+		}
+	}
+
+	return contractDetail, nil
 }
 
 func ListTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
@@ -155,7 +224,7 @@ func SubmitContractVerify(ctx context.Context, address string, r *SubmitContract
 	*utils.BuErrorResponse) {
 
 	var contract busi.EVMContract
-	exist, err := utils.EngineGroup[utils.DB].Where("address ilike ?", address).OrderBy("height desc").Get(&contract)
+	exist, err := utils.EngineGroup[utils.DB].Where("address=?", address).OrderBy("height desc").Get(&contract)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -167,7 +236,7 @@ func SubmitContractVerify(ctx context.Context, address string, r *SubmitContract
 	}
 
 	count, err := utils.EngineGroup[utils.BusiDB].Table(new(busi.EVMContractVerify)).
-		Where("address ilike ? and status=?", address, busi.EVMContractVerifyStatusSuccessfully).Count()
+		Where("address=? and status=?", address, busi.EVMContractVerifyStatusSuccessfully).Count()
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -320,7 +389,7 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 	}
 	if contractVerify.Status != busi.EVMContractVerifyStatusSuccessfully {
 		if len(output.Errors) == 0 {
-			contractVerify.ErrMsg = "unknown"
+			contractVerify.ErrMsg = "bytecode not equal"
 		} else {
 			contractVerify.ErrMsg = output.Errors[0].Message
 		}
@@ -347,6 +416,7 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 	if contractVerify.CompilerType == busi.CompilerTypeSingleFile {
 		for _, c := range output.Contracts[""] {
 			contractVerify.ABI = gjson.Get(c.Metadata, "output.abi").String()
+			contractVerify.Bytecode = c.EVM.DeployedBytecode.Object
 			break
 		}
 	}
@@ -355,7 +425,7 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 
 func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify,
 	*utils.BuErrorResponse) {
-	return getContractVerifyByQuery(ctx, "address ilike ? and status=?", address,
+	return getContractVerifyByQuery(ctx, "address=? and status=?", address,
 		busi.EVMContractVerifyStatusSuccessfully)
 }
 

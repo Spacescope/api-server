@@ -625,6 +625,9 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "bytecode": {
+                    "type": "string"
+                },
                 "compiler_type": {
                     "type": "integer"
                 },
