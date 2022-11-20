@@ -19,7 +19,7 @@ swag:
 	swag init -g cmd/api-server/main.go
 
 binary:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/api-server cmd/api-server/main.go
+	go build -o bin/api-server cmd/api-server/main.go
 
 test:
 	go clean -testcache
