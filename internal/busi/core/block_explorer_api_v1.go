@@ -10,10 +10,13 @@ import (
 
 	"api-server/pkg/models/busi"
 	"api-server/pkg/utils"
+
 	"github.com/goccy/go-json"
 	"github.com/imxyb/solc-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
+
+	ethcommon "github.com/ethereum/go-ethereum/common"
 )
 
 func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
@@ -97,7 +100,7 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	contract := t[len(t)-1]
 
 	contractDetail := ContractDetail{
-		Address:         contract.Address,
+		Address:         ethcommon.HexToAddress(contract.Address).Hex(),
 		FilecoinAddress: contract.FilecoinAddress,
 		Balance:         contract.Balance,
 		Nonce:           contract.Nonce,
