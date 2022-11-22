@@ -165,6 +165,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/contract/{address}/is_verify": {
+            "get": {
+                "description": "get contract is verify",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.ContractIsVerify"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/contract/{address}/txns": {
             "get": {
                 "description": "List contract's transactions",
@@ -593,7 +638,10 @@ const docTemplate = `{
                 "balance": {
                     "type": "string"
                 },
-                "compiler": {
+                "compilerType": {
+                    "type": "integer"
+                },
+                "compilerVersion": {
                     "type": "string"
                 },
                 "filecoinAddress": {
@@ -613,6 +661,14 @@ const docTemplate = `{
                 },
                 "version": {
                     "type": "integer"
+                }
+            }
+        },
+        "core.ContractIsVerify": {
+            "type": "object",
+            "properties": {
+                "is_verify": {
+                    "type": "boolean"
                 }
             }
         },

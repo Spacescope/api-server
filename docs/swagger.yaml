@@ -103,7 +103,9 @@ definitions:
         type: string
       balance:
         type: string
-      compiler:
+      compilerType:
+        type: integer
+      compilerVersion:
         type: string
       filecoinAddress:
         type: string
@@ -117,6 +119,11 @@ definitions:
         type: string
       version:
         type: integer
+    type: object
+  core.ContractIsVerify:
+    properties:
+      is_verify:
+        type: boolean
     type: object
   core.ContractVerify:
     properties:
@@ -262,6 +269,36 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/busi.EVMInternalTX'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/contract/{address}/is_verify:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: get contract is verify
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.ContractIsVerify'
         "400":
           description: Bad Request
           schema:
