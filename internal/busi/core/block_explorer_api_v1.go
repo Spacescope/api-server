@@ -107,21 +107,17 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 		ByteCode:        contract.ByteCode,
 	}
 
-	var receipt busi.EVMReceipt
-	exist, err := utils.EngineGroup[utils.DB].
-		Where("`to`='' and contract_address=?", address).Get(&receipt)
+	transaction, resErr := findCreatorTransaction(address)
 	if err != nil {
-		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, resErr
 	}
-	if exist {
-		contractDetail.Creator = receipt.From
-		contractDetail.Txn = receipt.TransactionHash
+	if transaction != nil {
+		contractDetail.Creator = transaction.From
+		contractDetail.Txn = transaction.Hash
 	}
 
 	var contractVerify busi.EVMContractVerify
-	exist, err = utils.EngineGroup[utils.BusiDB].Where("address=? and status=?",
+	exist, err := utils.EngineGroup[utils.BusiDB].Where("address=? and status=?",
 		address, busi.EVMContractVerifyStatusSuccessfully).Get(&contractVerify)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
@@ -173,11 +169,20 @@ func ListTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *
 		txnsList TxnsList
 	)
 
+	// if address is contract, must add creator hash
+	creatorTx, err := findCreatorTransaction(address)
+	if err != nil {
+		return nil, err
+	}
+
 	// get the numbers of transactions
 	var t busi.EVMTransaction
 	total, err := evmTransactionCount(address, &t)
 	if err != nil {
 		return nil, err
+	}
+	if creatorTx != nil {
+		total += 1
 	}
 
 	txnsList.Hits = total
@@ -190,6 +195,10 @@ func ListTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *
 	if err := evmTransactionFind(address, r, &transactions); err != nil {
 		return nil, err
 	}
+	// creator tx must at last
+	if creatorTx != nil {
+		transactions = append(transactions, creatorTx)
+	}
 	txnsList.EVMTransaction = transactions
 
 	return txnsList, nil
@@ -200,25 +209,32 @@ func ListInternalTXNs(ctx context.Context, address string, r *ListQuery) (interf
 		internalTXNsList InternalTxnsList
 	)
 
-	// get the numbers of internal transactions
-
-	var t busi.EVMInternalTX
-	total, err := evmTransactionCount(address, &t)
+	count, err := utils.EngineGroup[utils.DB].Table(new(busi.EVMInternalTX)).
+		Join("inner", "evm_transaction", "evm_internal_tx.parent_hash=evm_transaction.hash").
+		Where("evm_transaction.from=? or evm_transaction.to=?", address, address).Count()
 	if err != nil {
-		return nil, err
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
-	internalTXNsList.Hits = total
+	internalTXNsList.Hits = count
 	if internalTXNsList.Hits <= 0 {
 		return internalTXNsList, nil
 	}
 
-	// get internal transactions list
-	internal_transactions := make([]*busi.EVMInternalTX, 0)
-	if err := evmTransactionFind(address, r, &internal_transactions); err != nil {
-		return nil, err
+	internalTxs := make([]*busi.EVMInternalTX, 0)
+	err = utils.EngineGroup[utils.DB].Select("evm_internal_tx.*").
+		Join("inner", "evm_transaction", "evm_internal_tx.parent_hash=evm_transaction.hash").
+		Where("evm_transaction.from=? or evm_transaction.to=?", address, address).
+		Limit(r.Limit, r.Offset).Find(&internalTxs)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
-	internalTXNsList.EVMInternalTX = internal_transactions
+
+	internalTXNsList.EVMInternalTX = internalTxs
 
 	return internalTXNsList, nil
 }
