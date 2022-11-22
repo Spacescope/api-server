@@ -66,7 +66,8 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 		}
 		if contractVerify != nil {
 			c.Name = contractVerify.ContractName
-			c.Compiler = contractVerify.CompilerVersion
+			c.CompilerType = contractVerify.CompilerType
+			c.CompilerVersion = contractVerify.CompilerVersion
 			c.License = contractVerify.LicenseType
 			c.Verified = contractVerify.CreateAt
 		}
@@ -478,4 +479,19 @@ func ListCompileVersion(ctx context.Context) (interface{}, *utils.BuErrorRespons
 		})
 	}
 	return versions, nil
+}
+
+func GetContractIsVerify(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
+	count, err := utils.EngineGroup[utils.BusiDB].Where("address=? and status=?",
+		address, busi.EVMContractVerifyStatusSuccessfully).Table(new(busi.EVMContractVerify)).Count()
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	var result ContractIsVerify
+	if count > 0 {
+		result.IsVerify = true
+	}
+	return result, nil
 }
