@@ -15,7 +15,8 @@ type Contract struct {
 	Address         string
 	FilecoinAddress string
 	Name            string
-	Compiler        string
+	CompilerType    int
+	CompilerVersion string
 	Version         int64
 	Balance         string
 	Txns            int64
@@ -70,4 +71,8 @@ type ContractDetail struct {
 	Verified        time.Time     `json:"verified"`
 	ABI             string        `json:"abi"`
 	SourceCodes     []*SourceCode `json:"source_codes"`
+}
+
+type ContractIsVerify struct {
+	IsVerify bool `json:"is_verify"`
 }
