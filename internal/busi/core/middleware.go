@@ -59,8 +59,29 @@ func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorRespon
 	return nil
 }
 
-func getContractVerify(address string, m *busi.EVMContractVerify) {
-
+func findCreatorTransaction(address string) (*busi.EVMTransaction, *utils.BuErrorResponse) {
+	var receipt busi.EVMReceipt
+	exist, err := utils.EngineGroup[utils.DB].
+		Where("`to`='' and contract_address=?", address).Get(&receipt)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	var tx busi.EVMTransaction
+	if exist {
+		exist, err = utils.EngineGroup[utils.DB].
+			Where("hash=?", receipt.TransactionHash).Get(&tx)
+		if err != nil {
+			log.Errorf("Execute sql error: %v", err)
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+		if exist {
+			return &tx, nil
+		}
+	}
+	return nil, nil
 }
 
 func evmTransactionFind(address string, r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorResponse {

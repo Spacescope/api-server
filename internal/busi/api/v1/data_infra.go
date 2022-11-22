@@ -93,6 +93,7 @@ func ListTXNs(c *gin.Context) {
 	if err := validate.Var(address, "required"); err != nil {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
+	address = strings.ToLower(address)
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
@@ -133,6 +134,7 @@ func ListInternalTXNs(c *gin.Context) {
 	if err := validate.Var(address, "required"); err != nil {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
+	address = strings.ToLower(address)
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
