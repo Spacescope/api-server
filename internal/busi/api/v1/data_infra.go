@@ -106,7 +106,7 @@ func ListTXNs(c *gin.Context) {
 		return
 	}
 
-	result, resp := core.ListTXNs(c.Request.Context(), address, &r)
+	result, resp := core.ListTXNs(c.Request.Context(), strings.ToLower(address), &r)
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return
@@ -147,7 +147,7 @@ func ListInternalTXNs(c *gin.Context) {
 		return
 	}
 
-	result, resp := core.ListInternalTXNs(c.Request.Context(), address, &r)
+	result, resp := core.ListInternalTXNs(c.Request.Context(), strings.ToLower(address), &r)
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return

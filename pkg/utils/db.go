@@ -87,7 +87,7 @@ func newEngine(ctx context.Context /*, migrateFunc func(*xorm.Engine) error*/, s
 		return nil, err
 	}
 
-	x.ShowSQL(true)
+	x.ShowSQL(false)
 	x.SetDefaultContext(ctx)
 	x.SetMapper(names.GonicMapper{})
 

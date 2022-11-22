@@ -24,9 +24,10 @@ func registerV1(r *gin.Engine) {
 		apiv1.GET("/contract/:address", v1.GetContract)                    // contract detail
 		apiv1.GET("/contract/:address/txns", v1.ListTXNs)                  // list contract's txns
 		apiv1.GET("/contract/:address/internal_txns", v1.ListInternalTXNs) // list contract's internal txns
-		apiv1.POST("/contractverify/:address", v1.SubmitContractVerify)    // submit contract verify
-		apiv1.GET("/contractverify/:id", v1.GetContractVerify)             // get contract verify
-		apiv1.GET("/complieversions", v1.ListCompileVersion)               // list contract compile cersion
+
+		apiv1.POST("/contractverify/:address", v1.SubmitContractVerify) // submit contract verify
+		apiv1.GET("/contractverify/:id", v1.GetContractVerify)          // get contract verify
+		apiv1.GET("/complieversions", v1.ListCompileVersion)            // list contract compile cersion
 	}
 }
 
