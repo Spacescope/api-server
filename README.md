@@ -26,4 +26,4 @@ docker run -v /home/ec2-user/api-server/config:/etc/api-server/conf -p 7006:7006
 ```
 
 ### Refer
-1. https://docs.google.com/document/d/1HzXjjQ2OlDxuhjDh6q4R6W8EPAqhI3rNKVTz0MgkZv8/edit
+1. https://drive.google.com/drive/u/0/folders/1ptiBCy4lsO78KJqQR3oYv2TXrk3BrH8p
