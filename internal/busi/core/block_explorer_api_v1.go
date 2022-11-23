@@ -403,10 +403,7 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 	contractVerify.Address = cv.Address
 
 	var output solc.Output
-	if err := json.Unmarshal([]byte(cv.Output), &output); err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
-	}
+	json.Unmarshal([]byte(cv.Output), &output)
 	if contractVerify.Status != busi.EVMContractVerifyStatusSuccessfully {
 		if len(output.Errors) == 0 {
 			contractVerify.ErrMsg = "bytecode not equal"
