@@ -46,8 +46,8 @@ func initconfig(ctx context.Context, cf *utils.TomlConfig) {
 	}
 
 	utils.EngineGroup = utils.NewEngineGroup(ctx, &[]utils.EngineInfo{
-		{utils.DB, cf.APIServer.DB, nil},
-		{utils.BusiDB, cf.APIServer.BusiDB, busi.Tables},
+		{utils.TaskDB, cf.APIServer.DB, nil},
+		{utils.APIDB, cf.APIServer.BusiDB, busi.Tables},
 	})
 }
 

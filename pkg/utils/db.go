@@ -17,8 +17,8 @@ const DBTYPE = "postgres"
 const DBRetry = 3
 
 const (
-	DB     = "block_explorer_db"
-	BusiDB = "busi_db"
+	TaskDB = "task_db"
+	APIDB  = "api_db"
 )
 
 var (

@@ -33,7 +33,7 @@ func (x contractsArr) Swap(i, j int) {
 }
 
 func busiTableRecordsCount(prt interface{}) (int64, *utils.BuErrorResponse) {
-	total, err := utils.EngineGroup[utils.DB].Count(prt)
+	total, err := utils.EngineGroup[utils.TaskDB].Count(prt)
 	if err != nil {
 		log.Errorf("ListContracts execute sql error: %v\n", err)
 		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -51,7 +51,7 @@ func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorRespon
 		return nil
 	}
 
-	if err := utils.EngineGroup[utils.DB].Limit(r.Limit, r.Offset).Find(rowsSlicePtr); err != nil {
+	if err := utils.EngineGroup[utils.TaskDB].Limit(r.Limit, r.Offset).Find(rowsSlicePtr); err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
 			Response: utils.ErrBlockExplorerAPIServerInternal}
@@ -61,7 +61,7 @@ func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorRespon
 
 func findCreatorTransaction(address string) (*busi.EVMTransaction, *utils.BuErrorResponse) {
 	var receipt busi.EVMReceipt
-	exist, err := utils.EngineGroup[utils.DB].
+	exist, err := utils.EngineGroup[utils.TaskDB].
 		Where("`to`='' and contract_address=?", address).Get(&receipt)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
@@ -70,7 +70,7 @@ func findCreatorTransaction(address string) (*busi.EVMTransaction, *utils.BuErro
 	}
 	var tx busi.EVMTransaction
 	if exist {
-		exist, err = utils.EngineGroup[utils.DB].
+		exist, err = utils.EngineGroup[utils.TaskDB].
 			Where("hash=?", receipt.TransactionHash).Get(&tx)
 		if err != nil {
 			log.Errorf("Execute sql error: %v", err)
@@ -92,7 +92,7 @@ func evmTransactionFind(address string, r *ListQuery, rowsSlicePtr interface{}) 
 		return nil
 	}
 
-	if err := utils.EngineGroup[utils.DB].Where("\"from\" = ? or \"to\" = ?", address, address).Limit(r.Limit,
+	if err := utils.EngineGroup[utils.TaskDB].Where("\"from\" = ? or \"to\" = ?", address, address).Limit(r.Limit,
 		r.Offset).Find(rowsSlicePtr); err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -109,7 +109,7 @@ func evmTransactionCountWitVersion(address string, version int) (int64, *utils.B
 		t     busi.EVMTransaction
 	)
 
-	if count, err = utils.EngineGroup[utils.DB].Where("(\"from\" = ? or \"to\" = ?) and version = ?", address, address,
+	if count, err = utils.EngineGroup[utils.TaskDB].Where("(\"from\" = ? or \"to\" = ?) and version = ?", address, address,
 		version).Count(&t); err != nil {
 		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
 			Response: utils.ErrBlockExplorerAPIServerInternal}
@@ -125,7 +125,7 @@ func evmTransactionCount(address string /*, version int*/, t interface{}) (int64
 	)
 
 	// if count, err = utils.EngineGroup[utils.DB].Where("(\"from\" = ? or \"to\" = ?) and version = ?", address, address, version).Count(&t); err != nil {
-	if count, err = utils.EngineGroup[utils.DB].Where("\"from\" = ? or \"to\" = ?", address,
+	if count, err = utils.EngineGroup[utils.TaskDB].Where("\"from\" = ? or \"to\" = ?", address,
 		address).Count(t); err != nil {
 		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
 			Response: utils.ErrBlockExplorerAPIServerInternal}
