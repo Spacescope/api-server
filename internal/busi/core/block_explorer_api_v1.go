@@ -470,6 +470,9 @@ func ListCompileVersion(ctx context.Context) (interface{}, *utils.BuErrorRespons
 	}
 	var versions CompileVersionList
 	for _, build := range buildList {
+		if strings.Contains(build.LongVersion, "nightly") {
+			continue
+		}
 		versions.Versions = append(versions.Versions, &CompileVersion{
 			Version:     build.Version,
 			LongVersion: build.LongVersion,
