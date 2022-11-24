@@ -1,7 +1,7 @@
-FROM golang:1.18.3-bullseye as builder
+FROM golang:1.19.3-bullseye as builder
 
 COPY . /opt
-RUN cd /opt && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/api-server cmd/api-server/main.go
+RUN cd /opt && go build -o bin/api-server cmd/api-server/main.go
 
 FROM alpine:3.15.4
 RUN mkdir -p /app/api-server
