@@ -35,7 +35,7 @@ func (x contractsArr) Swap(i, j int) {
 func busiTableRecordsCount(prt interface{}) (int64, *utils.BuErrorResponse) {
 	total, err := utils.EngineGroup[utils.TaskDB].Count(prt)
 	if err != nil {
-		log.Errorf("ListContracts execute sql error: %v\n", err)
+		log.Errorf("ListContracts execute sql error: %v", err)
 		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
@@ -58,21 +58,17 @@ func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorRespon
 
 func findCreatorTransaction(address string) (*busi.EVMTransaction, *utils.BuErrorResponse) {
 	var receipt busi.EVMReceipt
-	exist, err := utils.EngineGroup[utils.TaskDB].
-		Where("`to`='' and contract_address=?", address).Get(&receipt)
+	exist, err := utils.EngineGroup[utils.TaskDB].Where("`to`='' and contract_address=?", address).Get(&receipt)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	var tx busi.EVMTransaction
 	if exist {
-		exist, err = utils.EngineGroup[utils.TaskDB].
-			Where("hash=?", receipt.TransactionHash).Get(&tx)
+		exist, err = utils.EngineGroup[utils.TaskDB].Where("hash=?", receipt.TransactionHash).Get(&tx)
 		if err != nil {
 			log.Errorf("Execute sql error: %v", err)
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-				Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if exist {
 			return &tx, nil

@@ -20,15 +20,23 @@ func registerV1(r *gin.Engine) {
 	{
 		apiv1.GET("/ping", v1.Ping)
 
-		apiv1.GET("/contracts", v1.ListContracts)                          // list contracts
-		apiv1.GET("/contract/:address", v1.GetContract)                    // contract detail
-		apiv1.GET("/contract/:address/txns", v1.ListTXNs)                  // list contract's txns
-		apiv1.GET("/contract/:address/internal_txns", v1.ListInternalTXNs) // list contract's internal txns
-		apiv1.GET("/contract/:address/is_verify", v1.ContractIsVerify)     // contract is verify
+		{
+			apiv1.GET("/contracts", v1.ListContracts)                          // list contracts
+			apiv1.GET("/contract/:address", v1.GetContract)                    // contract detail
+			apiv1.GET("/contract/:address/txns", v1.ListContractTXNs)          // list contract's txns
+			apiv1.GET("/contract/:address/internal_txns", v1.ListInternalTXNs) // list contract's internal txns
+			apiv1.GET("/contract/:address/is_verify", v1.ContractIsVerify)     // contract is verify
+		}
 
-		apiv1.POST("/contractverify/:address", v1.SubmitContractVerify) // submit contract verify
-		apiv1.GET("/contractverify/:id", v1.GetContractVerify)          // get contract verify
-		apiv1.GET("/complieversions", v1.ListCompileVersion)            // list contract compile cersion
+		{
+			apiv1.GET("/txns", v1.ListTXNs)
+		}
+
+		{
+			apiv1.POST("/contractverify/:address", v1.SubmitContractVerify) // submit contract verify
+			apiv1.GET("/contractverify/:id", v1.GetContractVerify)          // get contract verify
+			apiv1.GET("/complieversions", v1.ListCompileVersion)            // list contract compile cersion
+		}
 	}
 }
 

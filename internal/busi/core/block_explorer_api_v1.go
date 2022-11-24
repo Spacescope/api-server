@@ -159,7 +159,7 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	return contractDetail, nil
 }
 
-func ListTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
+func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
 	var (
 		txnsList TxnsList
 	)
@@ -485,4 +485,28 @@ func GetContractIsVerify(ctx context.Context, address string) (interface{}, *uti
 		result.IsVerify = true
 	}
 	return result, nil
+}
+
+func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
+	var (
+		c        busi.EVMContract
+		txnsList TxnsList
+	)
+
+	// get the numbers of txns
+	total, err := busiTableRecordsCount(&c)
+	if err != nil {
+		return nil, err
+	}
+
+	txnsList.Hits = total
+	if txnsList.Hits <= 0 {
+		return txnsList, nil
+	}
+
+	txnsList.EVMTransaction = make([]*busi.EVMTransaction, 0)
+	if err := busiSQLExecute(r, &txnsList.EVMTransaction); err != nil {
+		return nil, err
+	}
+	return txnsList, nil
 }

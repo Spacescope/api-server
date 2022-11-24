@@ -488,4 +488,33 @@ paths:
             type: string
       tags:
       - Sys
+  /api/v1/txns:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List transactions
+      parameters:
+      - in: query
+        name: l
+        type: integer
+      - in: query
+        name: o
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
 swagger: "2.0"
