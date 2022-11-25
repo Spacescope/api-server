@@ -488,6 +488,34 @@ paths:
             type: string
       tags:
       - Sys
+  /api/v1/txn/{txnHash}:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: Get transaction
+      parameters:
+      - description: txnHash
+        in: path
+        name: txnHash
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
   /api/v1/txns:
     get:
       consumes:

@@ -303,3 +303,31 @@ func ListTXNs(c *gin.Context) {
 
 	app.HTTPResponseOK(result)
 }
+
+// GetTXN godoc
+// @Description Get transaction
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param txnHash path string true "txnHash"
+// @Success 200 {object} nil
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/txn/{txnHash} [get]
+func GetTXN(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	txnHash := c.Param("txnHash")
+	if err := validate.Var(txnHash, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetTXN(c.Request.Context(), strings.ToLower(txnHash))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}

@@ -30,6 +30,7 @@ func registerV1(r *gin.Engine) {
 
 		{
 			apiv1.GET("/txns", v1.ListTXNs)
+			apiv1.GET("/txn/:txnHash", v1.GetTXN)
 		}
 
 		{

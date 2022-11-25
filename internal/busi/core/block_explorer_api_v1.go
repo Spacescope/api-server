@@ -510,3 +510,30 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 	}
 	return txnsList, nil
 }
+
+func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorResponse) {
+	evmTransactions := make([]*busi.EVMTransaction, 0)
+
+	err := utils.EngineGroup[utils.TaskDB].Where("hash = ?", hash).Find(&evmTransactions)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	if len(evmTransactions) == 0 {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusOK, Response: utils.ErrBlockExplorerAPIServerNotFound}
+	}
+
+	var (
+		maxHeight      int64
+		evmTransaction busi.EVMTransaction
+	)
+	for _, t := range evmTransactions {
+		if t.Height > maxHeight {
+			maxHeight = t.Height
+			evmTransaction = *t
+		}
+	}
+
+	return evmTransaction, nil
+}

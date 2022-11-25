@@ -479,6 +479,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/txn/{txnHash}": {
+            "get": {
+                "description": "Get transaction",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "txnHash",
+                        "name": "txnHash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/txns": {
             "get": {
                 "description": "List transactions",
