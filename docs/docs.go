@@ -20,6 +20,51 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/block/{height}": {
+            "get": {
+                "description": "Get block detail",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "height",
+                        "name": "height",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/busi.EVMBlockHeader"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/complieversions": {
             "get": {
                 "description": "list compile version",
@@ -568,6 +613,68 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "busi.EVMBlockHeader": {
+            "type": "object",
+            "properties": {
+                "base_fee_per_gas": {
+                    "type": "string"
+                },
+                "difficulty": {
+                    "type": "integer"
+                },
+                "extra_data": {
+                    "type": "string"
+                },
+                "gas_limit": {
+                    "type": "integer"
+                },
+                "gas_used": {
+                    "type": "integer"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "miner": {
+                    "type": "string"
+                },
+                "mix_hash": {
+                    "type": "string"
+                },
+                "nonce": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "integer"
+                },
+                "parentHash": {
+                    "type": "string"
+                },
+                "receipts_root": {
+                    "type": "string"
+                },
+                "sha3_uncles": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "state_root": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
+                },
+                "transactions_root": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
         "busi.EVMContractVerify": {
             "type": "object",
             "properties": {

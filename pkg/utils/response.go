@@ -92,13 +92,10 @@ var (
 	ErrBadRequest     = &Response{Code: CodeBadRequest, Message: "bad request."}
 	ErrNotFound       = &Response{Code: CodeNotFound, Message: "object not found."}
 
-	ErrBlockExplorerAPIServerParams = &Response{Code: CodeBlockExplorerAPIServerParamsErr,
-		Message: "API parameters error."}
-	ErrBlockExplorerAPIServerInternal = &Response{Code: CodeBlockExplorerAPIServerInternalErr,
-		Message: "Internal server error."}
-	ErrBlockExplorerAPIServerNotFound = &Response{Code: CodeBlockExplorerAPIServerNotFoundErr,
-		Message: "resource not find."}
-	ErrContractVerified = &Response{Code: CodeContractVerified, Message: "contract has been verified"}
+	ErrBlockExplorerAPIServerParams   = &Response{Code: CodeBlockExplorerAPIServerParamsErr, Message: "API parameters error."}
+	ErrBlockExplorerAPIServerInternal = &Response{Code: CodeBlockExplorerAPIServerInternalErr, Message: "Internal server error."}
+	ErrBlockExplorerAPIServerNotFound = &Response{Code: CodeBlockExplorerAPIServerNotFoundErr, Message: "resource not find."}
+	ErrContractVerified               = &Response{Code: CodeContractVerified, Message: "contract has been verified"}
 )
 
 type Gin struct {

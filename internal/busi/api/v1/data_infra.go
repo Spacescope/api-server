@@ -331,3 +331,31 @@ func GetTXN(c *gin.Context) {
 
 	app.HTTPResponseOK(result)
 }
+
+// GetBlock godoc
+// @Description Get block detail
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param height path string true "height"
+// @Success 200 {object} busi.EVMBlockHeader
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/block/{height} [get]
+func GetBlock(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	height := c.Param("height")
+	if err := validate.Var(height, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetBlock(c.Request.Context(), height)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}

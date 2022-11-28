@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"api-server/pkg/models/busi"
@@ -536,4 +537,27 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 	}
 
 	return evmTransaction, nil
+}
+
+func GetBlock(ctx context.Context, heightStr string) (interface{}, *utils.BuErrorResponse) {
+
+	height, err := strconv.ParseInt(heightStr, 10, 64)
+	if err != nil {
+		log.Errorf("GetBlock ParseInt err: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusOK, Response: utils.ErrBlockExplorerAPIServerParams}
+	}
+
+	evmBlockHeader := new(busi.EVMBlockHeader)
+
+	b, err := utils.EngineGroup[utils.TaskDB].Where("height = ?", height).Get(evmBlockHeader)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	if !b {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusOK, Response: utils.ErrBlockExplorerAPIServerNotFound}
+	}
+
+	return evmBlockHeader, nil
 }
