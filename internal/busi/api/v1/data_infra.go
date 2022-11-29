@@ -74,7 +74,7 @@ func GetContract(c *gin.Context) {
 	app.HTTPResponseOK(result)
 }
 
-// ListTXNs godoc
+// ListContractTXNs godoc
 // @Description List contract's transactions
 // @Tags DATA-INFRA-API-External-V1
 // @Accept application/json,json
@@ -85,7 +85,7 @@ func GetContract(c *gin.Context) {
 // @Failure 400 {object} utils.ResponseWithRequestId
 // @Failure 500 {object} utils.ResponseWithRequestId
 // @Router /api/v1/contract/{address}/txns [get]
-func ListTXNs(c *gin.Context) {
+func ListContractTXNs(c *gin.Context) {
 	app := utils.Gin{C: c}
 	validate := validator.New()
 
@@ -93,7 +93,6 @@ func ListTXNs(c *gin.Context) {
 	if err := validate.Var(address, "required"); err != nil {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
-	address = strings.ToLower(address)
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
@@ -106,7 +105,7 @@ func ListTXNs(c *gin.Context) {
 		return
 	}
 
-	result, resp := core.ListTXNs(c.Request.Context(), strings.ToLower(address), &r)
+	result, resp := core.ListContractTXNs(c.Request.Context(), strings.ToLower(address), &r)
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return
@@ -134,7 +133,6 @@ func ListInternalTXNs(c *gin.Context) {
 	if err := validate.Var(address, "required"); err != nil {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
-	address = strings.ToLower(address)
 
 	var r core.ListQuery
 	if err := c.ShouldBindQuery(&r); err != nil {
@@ -263,9 +261,97 @@ func ContractIsVerify(c *gin.Context) {
 	if err := validate.Var(address, "required"); err != nil {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 	}
-	address = strings.ToLower(address)
 
 	result, resp := core.GetContractIsVerify(c.Request.Context(), strings.ToLower(address))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// ListTXNs godoc
+// @Description List transactions
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param ListQuery query core.ListQuery true "ListQuery"
+// @Success 200 {object} nil
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/txns [get]
+func ListTXNs(c *gin.Context) {
+	app := utils.Gin{C: c}
+
+	var r core.ListQuery
+	if err := c.ShouldBindQuery(&r); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	if err := r.ListValidate(); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	result, resp := core.ListTXNs(c.Request.Context(), &r)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// GetTXN godoc
+// @Description Get transaction
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param txnHash path string true "txnHash"
+// @Success 200 {object} nil
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/txn/{txnHash} [get]
+func GetTXN(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	txnHash := c.Param("txnHash")
+	if err := validate.Var(txnHash, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetTXN(c.Request.Context(), strings.ToLower(txnHash))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// GetBlock godoc
+// @Description Get block detail
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param height path string true "height"
+// @Success 200 {object} busi.EVMBlockHeader
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/block/{height} [get]
+func GetBlock(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	height := c.Param("height")
+	if err := validate.Var(height, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetBlock(c.Request.Context(), height)
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return

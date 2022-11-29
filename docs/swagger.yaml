@@ -1,5 +1,46 @@
 basePath: /api/v1
 definitions:
+  busi.EVMBlockHeader:
+    properties:
+      base_fee_per_gas:
+        type: string
+      difficulty:
+        type: integer
+      extra_data:
+        type: string
+      gas_limit:
+        type: integer
+      gas_used:
+        type: integer
+      hash:
+        type: string
+      height:
+        type: integer
+      miner:
+        type: string
+      mix_hash:
+        type: string
+      nonce:
+        type: string
+      number:
+        type: integer
+      parentHash:
+        type: string
+      receipts_root:
+        type: string
+      sha3_uncles:
+        type: string
+      size:
+        type: integer
+      state_root:
+        type: string
+      timestamp:
+        type: integer
+      transactions_root:
+        type: string
+      version:
+        type: integer
+    type: object
   busi.EVMContractVerify:
     properties:
       address:
@@ -223,6 +264,36 @@ info:
   title: api server
   version: "1.0"
 paths:
+  /api/v1/block/{height}:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: Get block detail
+      parameters:
+      - description: height
+        in: path
+        name: height
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.EVMBlockHeader'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
   /api/v1/complieversions:
     get:
       consumes:
@@ -502,4 +573,61 @@ paths:
             type: string
       tags:
       - Sys
+  /api/v1/txn/{txnHash}:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: Get transaction
+      parameters:
+      - description: txnHash
+        in: path
+        name: txnHash
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/txns:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List transactions
+      parameters:
+      - in: query
+        name: l
+        type: integer
+      - in: query
+        name: o
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
 swagger: "2.0"
