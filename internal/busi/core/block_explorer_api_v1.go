@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -280,16 +282,17 @@ func SubmitContractVerify(ctx context.Context, address string, r *SubmitContract
 				},
 			},
 		},
+		Sources: map[string]solc.SourceIn{},
 	}
 	if r.EVMVersion != "" && !strings.Contains(r.EVMVersion, "default") {
 		input.Settings.EVMVersion = r.EVMVersion
 	}
 
-	// TODO need support more CompilerType
-	if r.CompilerType == busi.CompilerTypeSingleFile {
-		input.Sources = map[string]solc.SourceIn{
-			"": {Content: r.SourceCode},
-		}
+	var mainContractFileName string
+	input.Sources, mainContractFileName, err = buildSource(r)
+	if err != nil {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	ib, _ := json.Marshal(input)
@@ -307,14 +310,48 @@ func SubmitContractVerify(ctx context.Context, address string, r *SubmitContract
 	}
 
 	// async compile
-	go asyncCompilerContract(input, contractVerify, &contract)
+	go asyncCompilerContract(input, mainContractFileName, contractVerify, &contract)
 
 	return contractVerify, nil
 }
 
+func buildSource(r *SubmitContractVerifyRequest) (map[string]solc.SourceIn, string, error) {
+	var mainContractFileName string
+	sources := make(map[string]solc.SourceIn)
+	if r.CompilerType == busi.CompilerTypeSingleFile {
+		sources[""] = solc.SourceIn{Content: r.SourceCode}
+	} else if r.CompilerType == busi.CompilerTypeMultiPart {
+		for _, part := range r.SourceCodeParts {
+			baseName := filepath.Base(part.Filename)
+
+			// main contract at first
+			if mainContractFileName == "" {
+				mainContractFileName = baseName
+			}
+
+			resp, err := http.Get(part.SourceCodeUrl)
+			if err != nil {
+				log.Errorf("get url %s faild, err:%s", part.SourceCodeUrl, err)
+				return nil, "", &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+					Response: utils.ErrBlockExplorerAPIServerInternal}
+			}
+			b, err := io.ReadAll(resp.Body)
+			if err != nil {
+				resp.Body.Close()
+				log.Errorf("get url %s ReadAll failed, err:%s", part.SourceCodeUrl, err)
+				return nil, "", err
+			}
+			resp.Body.Close()
+			sources[baseName] = solc.SourceIn{Content: string(b)}
+		}
+	}
+	return sources, mainContractFileName, nil
+}
+
 var errByteCodeNotEqual = errors.New("bytecode not equal")
 
-func asyncCompilerContract(input *solc.Input, cv *busi.EVMContractVerify, contract *busi.EVMContract) {
+func asyncCompilerContract(input *solc.Input, mainContractFileName string,
+	cv *busi.EVMContractVerify, contract *busi.EVMContract) {
 	var (
 		output       *solc.Output
 		err          error
@@ -371,8 +408,14 @@ func asyncCompilerContract(input *solc.Input, cv *busi.EVMContractVerify, contra
 			contractName = cn
 			break
 		}
+	} else if cv.CompilerType == busi.CompilerTypeMultiPart {
+		mainContract := strings.Replace(mainContractFileName, ".sol", "", -1)
+		c := output.Contracts[mainContractFileName][mainContract]
+		compliedByteCode = c.EVM.DeployedBytecode.Object
+		result := gjson.Get(c.Metadata, "settings.metadata.bytecodeHash")
+		bytecodeHash = result.String()
+		contractName = mainContract
 	}
-
 	equal, err := solc.Verify(compliedByteCode, contract.ByteCode, bytecodeHash)
 	if err != nil {
 		log.Errorf("solc.Verify failed, err:%s", err)

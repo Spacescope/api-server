@@ -25,13 +25,23 @@ func (r *ListQuery) ListValidate() error {
 	return nil
 }
 
+type SourceCodePart struct {
+	Filename      string `json:"filename"`
+	SourceCodeUrl string `json:"source_code_url"`
+}
+
+type JsonInput struct {
+	Url string `json:"url"`
+}
+
 type SubmitContractVerifyRequest struct {
 	// TODO need support more CompilerType, only implement single file now.
-	CompilerType    int    `form:"compiler_type" json:"compiler_type" binding:"required,oneof=1 2 3" desc:"1-single file 2-multi part 3-jsoninput"`
-	CompilerVersion string `from:"compiler_version" json:"compiler_version" binding:"required,semver"`
-	LicenseType     string `from:"license_type" json:"license_type" binding:"required"`
-	IsOptimization  bool   `from:"is_optimization" json:"is_optimization"`
-	SourceCode      string `from:"source_code" json:"source_code"`
+	CompilerType    int               `form:"compiler_type" json:"compiler_type" binding:"required,oneof=1 2 3" desc:"1-single file 2-multi part 3-jsoninput"`
+	CompilerVersion string            `from:"compiler_version" json:"compiler_version" binding:"required,semver"`
+	LicenseType     string            `from:"license_type" json:"license_type" binding:"required"`
+	IsOptimization  bool              `from:"is_optimization" json:"is_optimization"`
+	SourceCode      string            `from:"source_code" json:"source_code"`
+	SourceCodeParts []*SourceCodePart `form:"source_code_parts" json:"source_code_parts"`
 	// TODO need more field support more CompilerType
 	Runs       int    `from:"runs" json:"runs" binding:"required"`
 	EVMVersion string `from:"evm_version" json:"evm_version"`
