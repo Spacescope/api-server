@@ -374,50 +374,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
-                        "enum": [
-                            1,
-                            2,
-                            3
-                        ],
-                        "type": "integer",
-                        "description": "TODO need support more CompilerType, only implement single file now.",
-                        "name": "compiler_type",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "compiler_version",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "evm_version",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "name": "is_optimization",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "license_type",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "TODO need more field support more CompilerType",
-                        "name": "runs",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "source_code",
-                        "in": "query"
+                        "description": "SubmitContractVerifyRequest",
+                        "name": "SubmitContractVerifyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/core.SubmitContractVerifyRequest"
+                        }
                     },
                     {
                         "type": "string",
@@ -921,6 +884,62 @@ const docTemplate = `{
                 },
                 "file_name": {
                     "type": "string"
+                }
+            }
+        },
+        "core.SourceCodePart": {
+            "type": "object",
+            "properties": {
+                "filename": {
+                    "type": "string"
+                },
+                "source_code_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "core.SubmitContractVerifyRequest": {
+            "type": "object",
+            "required": [
+                "compiler_type",
+                "compiler_version",
+                "license_type",
+                "runs"
+            ],
+            "properties": {
+                "compiler_type": {
+                    "description": "TODO need support more CompilerType, only implement single file now.",
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "compiler_version": {
+                    "type": "string"
+                },
+                "evm_version": {
+                    "type": "string"
+                },
+                "is_optimization": {
+                    "type": "boolean"
+                },
+                "license_type": {
+                    "type": "string"
+                },
+                "runs": {
+                    "description": "TODO need more field support more CompilerType",
+                    "type": "integer"
+                },
+                "source_code": {
+                    "type": "string"
+                },
+                "source_code_parts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.SourceCodePart"
+                    }
                 }
             }
         },

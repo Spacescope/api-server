@@ -204,6 +204,46 @@ definitions:
       file_name:
         type: string
     type: object
+  core.SourceCodePart:
+    properties:
+      filename:
+        type: string
+      source_code_url:
+        type: string
+    type: object
+  core.SubmitContractVerifyRequest:
+    properties:
+      compiler_type:
+        description: TODO need support more CompilerType, only implement single file
+          now.
+        enum:
+        - 1
+        - 2
+        - 3
+        type: integer
+      compiler_version:
+        type: string
+      evm_version:
+        type: string
+      is_optimization:
+        type: boolean
+      license_type:
+        type: string
+      runs:
+        description: TODO need more field support more CompilerType
+        type: integer
+      source_code:
+        type: string
+      source_code_parts:
+        items:
+          $ref: '#/definitions/core.SourceCodePart'
+        type: array
+    required:
+    - compiler_type
+    - compiler_version
+    - license_type
+    - runs
+    type: object
   utils.ResponseWithRequestId:
     properties:
       code:
@@ -454,38 +494,12 @@ paths:
       - application/json
       description: submit contract verify
       parameters:
-      - description: TODO need support more CompilerType, only implement single file
-          now.
-        enum:
-        - 1
-        - 2
-        - 3
-        in: query
-        name: compiler_type
+      - description: SubmitContractVerifyRequest
+        in: body
+        name: SubmitContractVerifyRequest
         required: true
-        type: integer
-      - in: query
-        name: compiler_version
-        required: true
-        type: string
-      - in: query
-        name: evm_version
-        type: string
-      - in: query
-        name: is_optimization
-        type: boolean
-      - in: query
-        name: license_type
-        required: true
-        type: string
-      - description: TODO need more field support more CompilerType
-        in: query
-        name: runs
-        required: true
-        type: integer
-      - in: query
-        name: source_code
-        type: string
+        schema:
+          $ref: '#/definitions/core.SubmitContractVerifyRequest'
       - description: address
         in: path
         name: address

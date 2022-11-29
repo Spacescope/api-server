@@ -160,7 +160,7 @@ func ListInternalTXNs(c *gin.Context) {
 // @Tags DATA-INFRA-API-External-V1
 // @Accept application/json,json
 // @Produce application/json,json
-// @Param SubmitContractVerifyRequest query core.SubmitContractVerifyRequest true "SubmitContractVerifyRequest"
+// @Param SubmitContractVerifyRequest body core.SubmitContractVerifyRequest true "SubmitContractVerifyRequest"
 // @Param address path string true "address"
 // @Success 200 {object} busi.EVMContractVerify
 // @Failure 400 {object} utils.ResponseWithRequestId

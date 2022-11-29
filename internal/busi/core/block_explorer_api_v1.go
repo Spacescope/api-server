@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -86,7 +88,8 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	b, err := utils.EngineGroup[utils.TaskDB].Where("address=?", address).Get(evmContracts)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if !b {
@@ -117,10 +120,12 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	}
 
 	var contractVerify busi.EVMContractVerify
-	exist, err := utils.EngineGroup[utils.APIDB].Where("address=? and status=?", address, busi.EVMContractVerifyStatusSuccessfully).Get(&contractVerify)
+	exist, err := utils.EngineGroup[utils.APIDB].Where("address=? and status=?", address,
+		busi.EVMContractVerifyStatusSuccessfully).Get(&contractVerify)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	if exist {
 		contractDetail.Verified = contractVerify.CreateAt
@@ -131,11 +136,13 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 
 		var output solc.Output
 		if err := json.Unmarshal([]byte(contractVerify.Output), &output); err != nil {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		var input solc.Input
 		if err := json.Unmarshal([]byte(contractVerify.Input), &input); err != nil {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 
 		for fileName, code := range input.Sources {
@@ -274,16 +281,17 @@ func SubmitContractVerify(ctx context.Context, address string, r *SubmitContract
 				},
 			},
 		},
+		Sources: map[string]solc.SourceIn{},
 	}
 	if r.EVMVersion != "" && !strings.Contains(r.EVMVersion, "default") {
 		input.Settings.EVMVersion = r.EVMVersion
 	}
 
-	// TODO need support more CompilerType
-	if r.CompilerType == busi.CompilerTypeSingleFile {
-		input.Sources = map[string]solc.SourceIn{
-			"": {Content: r.SourceCode},
-		}
+	var mainContractFileName string
+	input.Sources, mainContractFileName, err = buildSource(r)
+	if err != nil {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	ib, _ := json.Marshal(input)
@@ -301,14 +309,48 @@ func SubmitContractVerify(ctx context.Context, address string, r *SubmitContract
 	}
 
 	// async compile
-	go asyncCompilerContract(input, contractVerify, &contract)
+	go asyncCompilerContract(input, mainContractFileName, contractVerify, &contract)
 
 	return contractVerify, nil
 }
 
+func buildSource(r *SubmitContractVerifyRequest) (map[string]solc.SourceIn, string, error) {
+	var mainContractFileName string
+	sources := make(map[string]solc.SourceIn)
+	if r.CompilerType == busi.CompilerTypeSingleFile {
+		sources[""] = solc.SourceIn{Content: r.SourceCode}
+	} else if r.CompilerType == busi.CompilerTypeMultiPart {
+		for _, part := range r.SourceCodeParts {
+			baseName := filepath.Base(part.Filename)
+
+			// main contract at first
+			if mainContractFileName == "" {
+				mainContractFileName = baseName
+			}
+
+			resp, err := http.Get(part.SourceCodeUrl)
+			if err != nil {
+				log.Errorf("get url %s faild, err:%s", part.SourceCodeUrl, err)
+				return nil, "", &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+					Response: utils.ErrBlockExplorerAPIServerInternal}
+			}
+			b, err := io.ReadAll(resp.Body)
+			if err != nil {
+				resp.Body.Close()
+				log.Errorf("get url %s ReadAll failed, err:%s", part.SourceCodeUrl, err)
+				return nil, "", err
+			}
+			resp.Body.Close()
+			sources[baseName] = solc.SourceIn{Content: string(b)}
+		}
+	}
+	return sources, mainContractFileName, nil
+}
+
 var errByteCodeNotEqual = errors.New("bytecode not equal")
 
-func asyncCompilerContract(input *solc.Input, cv *busi.EVMContractVerify, contract *busi.EVMContract) {
+func asyncCompilerContract(input *solc.Input, mainContractFileName string,
+	cv *busi.EVMContractVerify, contract *busi.EVMContract) {
 	var (
 		output       *solc.Output
 		err          error
@@ -365,8 +407,14 @@ func asyncCompilerContract(input *solc.Input, cv *busi.EVMContractVerify, contra
 			contractName = cn
 			break
 		}
+	} else if cv.CompilerType == busi.CompilerTypeMultiPart {
+		mainContract := strings.Replace(mainContractFileName, ".sol", "", -1)
+		c := output.Contracts[mainContractFileName][mainContract]
+		compliedByteCode = c.EVM.DeployedBytecode.Object
+		result := gjson.Get(c.Metadata, "settings.metadata.bytecodeHash")
+		bytecodeHash = result.String()
+		contractName = mainContract
 	}
-
 	equal, err := solc.Verify(compliedByteCode, contract.ByteCode, bytecodeHash)
 	if err != nil {
 		log.Errorf("solc.Verify failed, err:%s", err)
@@ -434,7 +482,8 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 	return contractVerify, nil
 }
 
-func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify, *utils.BuErrorResponse) {
+func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify,
+	*utils.BuErrorResponse) {
 	return getContractVerifyByQuery(ctx, "address=? and status=?", address, busi.EVMContractVerifyStatusSuccessfully)
 }
 
@@ -518,7 +567,8 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 	err := utils.EngineGroup[utils.TaskDB].Where("hash = ?", hash).Find(&evmTransactions)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if len(evmTransactions) == 0 {
@@ -552,7 +602,8 @@ func GetBlock(ctx context.Context, heightStr string) (interface{}, *utils.BuErro
 	b, err := utils.EngineGroup[utils.TaskDB].Where("height = ?", height).Get(evmBlockHeader)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if !b {
