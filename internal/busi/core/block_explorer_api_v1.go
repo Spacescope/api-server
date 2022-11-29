@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -83,13 +84,22 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 }
 
 func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
-	evmContracts := new(busi.EVMContract)
+	evmContract := new(busi.EVMContract)
 
-	b, err := utils.EngineGroup[utils.TaskDB].Where("address=?", address).Get(evmContracts)
+	b, err := utils.EngineGroup[utils.TaskDB].
+		Where("address=? or filecoin_address=?", address, address).Get(evmContract)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
 			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	var ethAddress string
+	// if query address is filecoin address
+	if address[0] == 'f' || address[0] == 't' {
+		ethAddress = evmContract.Address
+	} else {
+		ethAddress = address
 	}
 
 	if !b {
@@ -97,20 +107,20 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	}
 
 	// get the heightest and new version address
-	// t := newContractsArr(evmContracts)
+	// t := newContractsArr(evmContract)
 	// sort.Sort(t)
 
 	// contract := t[len(t)-1]
 
 	contractDetail := ContractDetail{
-		Address:         ethcommon.HexToAddress(evmContracts.Address).Hex(),
-		FilecoinAddress: evmContracts.FilecoinAddress,
-		Balance:         evmContracts.Balance,
-		Nonce:           evmContracts.Nonce,
-		ByteCode:        evmContracts.ByteCode,
+		Address:         ethcommon.HexToAddress(evmContract.Address).Hex(),
+		FilecoinAddress: evmContract.FilecoinAddress,
+		Balance:         evmContract.Balance,
+		Nonce:           evmContract.Nonce,
+		ByteCode:        evmContract.ByteCode,
 	}
 
-	transaction, resErr := findCreatorTransaction(address)
+	transaction, resErr := findCreatorTransaction(ethAddress)
 	if err != nil {
 		return nil, resErr
 	}
@@ -120,7 +130,7 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	}
 
 	var contractVerify busi.EVMContractVerify
-	exist, err := utils.EngineGroup[utils.APIDB].Where("address=? and status=?", address,
+	exist, err := utils.EngineGroup[utils.APIDB].Where("address=? and status=?", ethAddress,
 		busi.EVMContractVerifyStatusSuccessfully).Get(&contractVerify)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
@@ -132,7 +142,6 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 		contractDetail.ContractName = contractVerify.ContractName
 		contractDetail.LicenseType = contractVerify.LicenseType
 		contractDetail.CompilerVersion = contractVerify.CompilerVersion
-		contractDetail.ContractName = contractVerify.ContractName
 
 		var output solc.Output
 		if err := json.Unmarshal([]byte(contractVerify.Output), &output); err != nil {
@@ -155,12 +164,23 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 				Code:     code.Content,
 			})
 		}
+		// main contract must at first
+		sort.Slice(contractDetail.SourceCodes, func(i, j int) bool {
+			if strings.Contains(contractDetail.SourceCodes[i].FileName, contractDetail.ContractName) {
+				return true
+			}
+			return false
+		})
 
 		if contractVerify.CompilerType == busi.CompilerTypeSingleFile {
 			for _, c := range output.Contracts[""] {
 				contractDetail.ABI = gjson.Get(c.Metadata, "output.abi").String()
 				break
 			}
+		} else if contractVerify.CompilerType == busi.CompilerTypeMultiPart {
+			key := fmt.Sprintf("%s.sol", contractDetail.ContractName)
+			metadata := output.Contracts[key][contractDetail.ContractName].Metadata
+			contractDetail.ABI = gjson.Get(metadata, "output.abi").String()
 		}
 	}
 
