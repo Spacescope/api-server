@@ -48,9 +48,7 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 	contractsSlice := make([]*Contract, 0, len(contracts))
 
 	for _, contract := range contracts {
-		var (
-			c Contract
-		)
+		var c Contract
 
 		c.Txns, err = evmTransactionCount(contract.Address)
 		if err != nil {
@@ -58,6 +56,7 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 			break
 		}
 
+		c.Height = contract.Height
 		c.Address = contract.Address
 		c.FilecoinAddress = contract.FilecoinAddress
 		c.Balance = contract.Balance

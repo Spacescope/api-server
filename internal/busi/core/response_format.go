@@ -12,6 +12,7 @@ type ContractsList struct {
 }
 
 type Contract struct {
+	Height          int64
 	Address         string
 	FilecoinAddress string
 	Name            string
