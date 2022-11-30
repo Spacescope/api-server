@@ -49,7 +49,7 @@ func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorRespon
 		return nil
 	}
 
-	if err := utils.EngineGroup[utils.TaskDB].Limit(r.Limit, r.Offset).Find(rowsSlicePtr); err != nil {
+	if err := utils.EngineGroup[utils.TaskDB].Limit(r.Limit, r.Offset).Desc("height").Find(rowsSlicePtr); err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
