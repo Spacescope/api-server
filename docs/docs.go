@@ -804,6 +804,9 @@ const docTemplate = `{
                 "filecoinAddress": {
                     "type": "string"
                 },
+                "height": {
+                    "type": "integer"
+                },
                 "license": {
                     "type": "string"
                 },

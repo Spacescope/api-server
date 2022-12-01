@@ -150,6 +150,8 @@ definitions:
         type: string
       filecoinAddress:
         type: string
+      height:
+        type: integer
       license:
         type: string
       name:
