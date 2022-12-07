@@ -629,6 +629,16 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 		resp.ConfirmationBlocks = int64(math.Max(50, float64(max_height-resp.Height)))
 	}
 
+	// get txn status
+	evmReceipt := new(busi.EVMReceipt)
+	b, err := utils.EngineGroup[utils.TaskDB].Where("transaction_hash = ?", evmTransaction.Hash).Get(evmReceipt)
+	if err != nil {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if b && evmReceipt.Status > 0 {
+		resp.TxnStatus = true
+	}
+
 	return resp, nil
 }
 

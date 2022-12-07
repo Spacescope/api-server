@@ -33,6 +33,7 @@ type TxnsList struct {
 type EVMTransaction struct {
 	busi.EVMTransaction `json:",inline"`
 	ToIsContract        bool  `json:"to_is_contract"`
+	TxnStatus           bool  `json:"txn_status"`
 	ConfirmationBlocks  int64 `json:"confirmation_blocks"`
 }
 

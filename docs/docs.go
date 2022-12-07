@@ -953,6 +953,9 @@ const docTemplate = `{
                 "transaction_index": {
                     "type": "integer"
                 },
+                "txn_status": {
+                    "type": "boolean"
+                },
                 "type": {
                     "type": "integer"
                 },
