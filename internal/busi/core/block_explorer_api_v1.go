@@ -85,12 +85,10 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
 	evmContract := new(busi.EVMContract)
 
-	b, err := utils.EngineGroup[utils.TaskDB].
-		Where("address=? or filecoin_address=?", address, address).Get(evmContract)
+	b, err := utils.EngineGroup[utils.TaskDB].Where("address=? or filecoin_address=?", address, address).Get(evmContract)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	var ethAddress string
@@ -586,8 +584,7 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 	err := utils.EngineGroup[utils.TaskDB].Where("hash = ?", hash).Find(&evmTransactions)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if len(evmTransactions) == 0 {
@@ -605,7 +602,18 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 		}
 	}
 
-	return evmTransaction, nil
+	var resp EVMTransaction
+	resp.EVMTransaction = evmTransaction
+
+	evmContract := new(busi.EVMContract)
+	if evmTransaction.To != "" {
+		resp.ToIsContract, err = utils.EngineGroup[utils.TaskDB].Where("address = ?", evmTransaction.To).Get(evmContract)
+		if err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+	}
+
+	return resp, nil
 }
 
 func GetBlock(ctx context.Context, heightStr string) (interface{}, *utils.BuErrorResponse) {
