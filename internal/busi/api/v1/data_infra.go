@@ -19,7 +19,7 @@ import (
 // @Accept application/json,json
 // @Produce application/json,json
 // @Param ListQuery query core.ListQuery true "ListQuery"
-// @Success 200 {object} core.Contract
+// @Success 200 {object} core.ContractsList
 // @Failure 400 {object} utils.ResponseWithRequestId
 // @Failure 500 {object} utils.ResponseWithRequestId
 // @Router /api/v1/contracts [get]
@@ -81,7 +81,7 @@ func GetContract(c *gin.Context) {
 // @Produce application/json,json
 // @Param ListQuery query core.ListQuery true "ListQuery"
 // @Param address path string true "address"
-// @Success 200 {object} busi.EVMTransaction
+// @Success 200 {object} core.TxnsList
 // @Failure 400 {object} utils.ResponseWithRequestId
 // @Failure 500 {object} utils.ResponseWithRequestId
 // @Router /api/v1/contract/{address}/txns [get]
@@ -121,7 +121,7 @@ func ListContractTXNs(c *gin.Context) {
 // @Produce application/json,json
 // @Param ListQuery query core.ListQuery true "ListQuery"
 // @Param address path string true "address"
-// @Success 200 {object} busi.EVMInternalTX
+// @Success 200 {object} core.InternalTxnsList
 // @Failure 400 {object} utils.ResponseWithRequestId
 // @Failure 500 {object} utils.ResponseWithRequestId
 // @Router /api/v1/contract/{address}/internal_txns [get]
@@ -152,7 +152,6 @@ func ListInternalTXNs(c *gin.Context) {
 	}
 
 	app.HTTPResponseOK(result)
-
 }
 
 // SubmitContractVerify godoc
@@ -310,7 +309,7 @@ func ListTXNs(c *gin.Context) {
 // @Accept application/json,json
 // @Produce application/json,json
 // @Param txnHash path string true "txnHash"
-// @Success 200 {object} nil
+// @Success 200 {object} core.EVMTransaction
 // @Failure 400 {object} utils.ResponseWithRequestId
 // @Failure 500 {object} utils.ResponseWithRequestId
 // @Router /api/v1/txn/{txnHash} [get]
