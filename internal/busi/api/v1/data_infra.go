@@ -358,3 +358,111 @@ func GetBlock(c *gin.Context) {
 
 	app.HTTPResponseOK(result)
 }
+
+// GetAddress godoc
+// @Description Get evm address
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param address path string true "address"
+// @Success 200 {object} busi.EVMAddress
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/address/{address} [get]
+func GetAddress(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	address := c.Param("address")
+	if err := validate.Var(address, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetAddress(c.Request.Context(), strings.ToLower(address))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// ListAddressTXNs godoc
+// @Description List address's transactions
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param ListQuery query core.ListQuery true "ListQuery"
+// @Param address path string true "address"
+// @Success 200 {object} busi.EVMTransaction
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/contract/{address}/txns [get]
+func ListAddressTXNs(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	address := c.Param("address")
+	if err := validate.Var(address, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	var r core.ListQuery
+	if err := c.ShouldBindQuery(&r); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	if err := r.ListValidate(); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	result, resp := core.ListAddressTXNs(c.Request.Context(), strings.ToLower(address), &r)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// ListAddressInternalTXNs godoc
+// @Description List address's internal transactions
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param ListQuery query core.ListQuery true "ListQuery"
+// @Param address path string true "address"
+// @Success 200 {object} busi.EVMInternalTX
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/address/{address}/internal_txns [get]
+func ListAddressInternalTXNs(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	address := c.Param("address")
+	if err := validate.Var(address, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	var r core.ListQuery
+	if err := c.ShouldBindQuery(&r); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	if err := r.ListValidate(); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	result, resp := core.ListInternalTXNs(c.Request.Context(), strings.ToLower(address), &r)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}

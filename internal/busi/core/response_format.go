@@ -84,3 +84,11 @@ type ContractDetail struct {
 type ContractIsVerify struct {
 	IsVerify bool `json:"is_verify"`
 }
+
+type Address struct {
+	Height          int64  `json:"height"`
+	Address         string `json:"address"`
+	FilecoinAddress string `json:"filecoin_address"`
+	Balance         string `json:"balance"`
+	Nonce           uint64 `json:"nonce"`
+}

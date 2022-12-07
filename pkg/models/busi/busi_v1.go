@@ -141,3 +141,17 @@ type EVMContractVerify struct {
 func (c *EVMContractVerify) TableName() string {
 	return "evm_contract_verify"
 }
+
+// EVMAddress evm address
+type EVMAddress struct {
+	Height          int64  `xorm:"bigint notnull pk" json:"height"`
+	Version         int    `xorm:"integer notnull pk" json:"version"`
+	Address         string `xorm:"varchar(255) notnull pk" json:"address"`
+	FilecoinAddress string `xorm:"varchar(255) notnull default ''" json:"filecoin_address"`
+	Balance         string `xorm:"varchar(100) notnull default '0'" json:"balance"`
+	Nonce           uint64 `xorm:"bigint notnull default 0" json:"nonce"`
+}
+
+func (a *EVMAddress) TableName() string {
+	return "evm_address"
+}

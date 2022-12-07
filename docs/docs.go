@@ -20,6 +20,106 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/address/{address}": {
+            "get": {
+                "description": "Get evm address",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/busi.EVMAddress"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/address/{address}/internal_txns": {
+            "get": {
+                "description": "List address's internal transactions",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "o",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/busi.EVMInternalTX"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/block/{height}": {
             "get": {
                 "description": "Get block detail",
@@ -257,7 +357,7 @@ const docTemplate = `{
         },
         "/api/v1/contract/{address}/txns": {
             "get": {
-                "description": "List contract's transactions",
+                "description": "List address's transactions",
                 "consumes": [
                     "application/json",
                     "application/json"
@@ -579,6 +679,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "busi.EVMAddress": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "string"
+                },
+                "filecoin_address": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "nonce": {
+                    "type": "integer"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
         "busi.EVMBlockHeader": {
             "type": "object",
             "properties": {

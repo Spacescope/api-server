@@ -42,6 +42,12 @@ func registerV1(r *gin.Engine) {
 			apiv1.GET("/contractverify/:id", v1.GetContractVerify)          // get contract verify
 			apiv1.GET("/complieversions", v1.ListCompileVersion)            // list contract compile cersion
 		}
+
+		{
+			apiv1.GET("/address/:address", v1.GetAddress)
+			apiv1.GET("/address/:address/txns", v1.ListAddressTXNs)                  // list address's txns
+			apiv1.GET("/address/:address/internal_txns", v1.ListAddressInternalTXNs) // list address's internal txns
+		}
 	}
 }
 
