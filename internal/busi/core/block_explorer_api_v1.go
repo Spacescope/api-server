@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"path/filepath"
 	"sort"
@@ -582,6 +583,7 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorResponse) {
 	evmTransactions := make([]*busi.EVMTransaction, 0)
 
+	// get txn
 	err := utils.EngineGroup[utils.TaskDB].Where("hash = ?", hash).Find(&evmTransactions)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
@@ -604,7 +606,36 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 		}
 	}
 
-	return evmTransaction, nil
+	// check if "to" is contract
+	var resp EVMTransaction
+	resp.EVMTransaction = evmTransaction
+
+	evmContract := new(busi.EVMContract)
+	if evmTransaction.To != "" {
+		resp.ToIsContract, err = utils.EngineGroup[utils.TaskDB].Where("address = ?",
+			evmTransaction.To).Get(evmContract)
+		if err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+	}
+
+	// confirmation blocks count
+	result, err := utils.EngineGroup[utils.TaskDB].QueryString("select max(height) from evm_block_header;")
+	if err != nil {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	max_height, err := strconv.ParseInt(result[0]["max"], 10, 64)
+	if err != nil {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if max_height > 0 && (max_height > resp.Height) {
+		resp.ConfirmationBlocks = int64(math.Max(50, float64(max_height-resp.Height)))
+	}
+
+	return resp, nil
 }
 
 func GetBlock(ctx context.Context, heightStr string) (interface{}, *utils.BuErrorResponse) {

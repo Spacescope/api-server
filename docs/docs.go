@@ -292,7 +292,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/busi.EVMInternalTX"
+                            "$ref": "#/definitions/core.InternalTxnsList"
                         }
                     },
                     "400": {
@@ -392,7 +392,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/busi.EVMTransaction"
+                            "$ref": "#/definitions/core.TxnsList"
                         }
                     },
                     "400": {
@@ -440,7 +440,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/core.Contract"
+                            "$ref": "#/definitions/core.ContractsList"
                         }
                     },
                     "400": {
@@ -612,7 +612,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.EVMTransaction"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -1002,6 +1005,105 @@ const docTemplate = `{
                 }
             }
         },
+        "core.ContractsList": {
+            "type": "object",
+            "properties": {
+                "contracts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.Contract"
+                    }
+                },
+                "hits": {
+                    "type": "integer"
+                }
+            }
+        },
+        "core.EVMTransaction": {
+            "type": "object",
+            "properties": {
+                "block_hash": {
+                    "type": "string"
+                },
+                "block_number": {
+                    "type": "integer"
+                },
+                "chain_id": {
+                    "type": "integer"
+                },
+                "confirmation_blocks": {
+                    "type": "integer"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "gas": {
+                    "type": "integer"
+                },
+                "gas_limit": {
+                    "type": "integer"
+                },
+                "hash": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "max_fee_per_gas": {
+                    "type": "string"
+                },
+                "max_priority_fee_per_gas": {
+                    "type": "string"
+                },
+                "nonce": {
+                    "type": "integer"
+                },
+                "r": {
+                    "type": "string"
+                },
+                "s": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                },
+                "to_is_contract": {
+                    "type": "boolean"
+                },
+                "transaction_index": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "v": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "core.InternalTxnsList": {
+            "type": "object",
+            "properties": {
+                "evm_internal_txns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/busi.EVMInternalTX"
+                    }
+                },
+                "hits": {
+                    "type": "integer"
+                }
+            }
+        },
         "core.SourceCode": {
             "type": "object",
             "properties": {
@@ -1066,6 +1168,20 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/core.SourceCodePart"
                     }
+                }
+            }
+        },
+        "core.TxnsList": {
+            "type": "object",
+            "properties": {
+                "evm_txns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/busi.EVMTransaction"
+                    }
+                },
+                "hits": {
+                    "type": "integer"
                 }
             }
         },

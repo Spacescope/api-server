@@ -30,6 +30,12 @@ type TxnsList struct {
 	Hits           int64                  `json:"hits"`
 }
 
+type EVMTransaction struct {
+	busi.EVMTransaction `json:",inline"`
+	ToIsContract        bool  `json:"to_is_contract"`
+	ConfirmationBlocks  int64 `json:"confirmation_blocks"`
+}
+
 type InternalTxnsList struct {
 	EVMInternalTX []*busi.EVMInternalTX `json:"evm_internal_txns"`
 	Hits          int64                 `json:"hits"`
