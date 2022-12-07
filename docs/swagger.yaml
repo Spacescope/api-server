@@ -1,5 +1,20 @@
 basePath: /api/v1
 definitions:
+  busi.EVMAddress:
+    properties:
+      address:
+        type: string
+      balance:
+        type: string
+      filecoin_address:
+        type: string
+      height:
+        type: integer
+      nonce:
+        type: integer
+      version:
+        type: integer
+    type: object
   busi.EVMBlockHeader:
     properties:
       base_fee_per_gas:
@@ -150,6 +165,8 @@ definitions:
         type: string
       filecoinAddress:
         type: string
+      height:
+        type: integer
       license:
         type: string
       name:
@@ -264,6 +281,72 @@ info:
   title: api server
   version: "1.0"
 paths:
+  /api/v1/address/{address}:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: Get evm address
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.EVMAddress'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/address/{address}/internal_txns:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List address's internal transactions
+      parameters:
+      - in: query
+        name: l
+        type: integer
+      - in: query
+        name: o
+        type: integer
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/busi.EVMInternalTX'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
   /api/v1/block/{height}:
     get:
       consumes:
@@ -425,7 +508,7 @@ paths:
       consumes:
       - application/json
       - application/json
-      description: List contract's transactions
+      description: List address's transactions
       parameters:
       - in: query
         name: l

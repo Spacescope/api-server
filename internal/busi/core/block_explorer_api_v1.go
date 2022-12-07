@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -13,9 +14,8 @@ import (
 
 	"api-server/pkg/models/busi"
 	"api-server/pkg/utils"
-
-	"github.com/goccy/go-json"
 	"github.com/imxyb/solc-go"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 
@@ -86,7 +86,8 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 	evmContract := new(busi.EVMContract)
 
 	b, err := utils.EngineGroup[utils.TaskDB].
-		Where("address=? or filecoin_address=?", address, address).Get(evmContract)
+		Where("address=? or filecoin_address=?", address, address).
+		OrderBy("height desc").Get(evmContract)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -202,9 +203,6 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 	if err != nil {
 		return nil, err
 	}
-	if creatorTx != nil {
-		total += 1
-	}
 
 	txnsList.Hits = total
 	if txnsList.Hits <= 0 {
@@ -217,8 +215,9 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 		return nil, err
 	}
 	// creator tx must at last
-	if creatorTx != nil {
+	if creatorTx != nil && len(transactions) < r.Limit {
 		transactions = append(transactions, creatorTx)
+		txnsList.Hits += 1
 	}
 	txnsList.EVMTransaction = transactions
 
@@ -248,7 +247,7 @@ func ListInternalTXNs(ctx context.Context, address string, r *ListQuery) (interf
 	err = utils.EngineGroup[utils.TaskDB].Select("evm_internal_tx.*").
 		Join("inner", "evm_transaction", "evm_internal_tx.parent_hash=evm_transaction.hash").
 		Where("evm_transaction.from=? or evm_transaction.to=?", address, address).
-		Limit(r.Limit, r.Offset).Find(&internalTxs)
+		Limit(r.Limit, r.Offset).OrderBy("height desc").Find(&internalTxs)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
@@ -630,4 +629,47 @@ func GetBlock(ctx context.Context, heightStr string) (interface{}, *utils.BuErro
 	}
 
 	return evmBlockHeader, nil
+}
+
+func GetAddress(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
+	evmAddress := new(busi.EVMAddress)
+
+	b, err := utils.EngineGroup[utils.TaskDB].
+		Where("address=? or filecoin_address=?", address, address).
+		OrderBy("height desc").Get(evmAddress)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if !b {
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusOK, Response: utils.ErrBlockExplorerAPIServerNotFound}
+	}
+	return evmAddress, nil
+}
+
+func ListAddressTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
+	var (
+		txnsList TxnsList
+	)
+
+	// get the numbers of transactions
+	total, err := evmTransactionCount(address)
+	if err != nil {
+		return nil, err
+	}
+
+	txnsList.Hits = total
+	if txnsList.Hits <= 0 {
+		return txnsList, nil
+	}
+
+	// get transactions list
+	transactions := make([]*busi.EVMTransaction, 0)
+	if err := evmTransactionFind(address, r, &transactions); err != nil {
+		return nil, err
+	}
+	txnsList.EVMTransaction = transactions
+
+	return txnsList, nil
 }
