@@ -82,5 +82,3 @@ require (
 	rogchap.com/v8go v0.7.0 // indirect
 	xorm.io/builder v0.3.9 // indirect
 )
-
-replace rogchap.com/v8go v0.7.0 => /Users/imxyb/code/golang/v8go
