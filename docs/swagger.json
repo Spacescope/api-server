@@ -248,6 +248,61 @@
                 }
             }
         },
+        "/api/v1/contract/{address}/events": {
+            "get": {
+                "description": "List contract's event",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "o",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.EventList"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/contract/{address}/internal_txns": {
             "get": {
                 "description": "List contract's internal transactions",
@@ -385,7 +440,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/core.TxnsList"
+                            "$ref": "#/definitions/busi.EVMTransaction"
                         }
                     },
                     "400": {
@@ -854,8 +909,18 @@
                 "max_priority_fee_per_gas": {
                     "type": "string"
                 },
+                "method_name": {
+                    "type": "string"
+                },
+                "method_sig": {
+                    "type": "string"
+                },
                 "nonce": {
                     "type": "integer"
+                },
+                "params": {
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "r": {
                     "type": "string"
@@ -1051,8 +1116,18 @@
                 "max_priority_fee_per_gas": {
                     "type": "string"
                 },
+                "method_name": {
+                    "type": "string"
+                },
+                "method_sig": {
+                    "type": "string"
+                },
                 "nonce": {
                     "type": "integer"
+                },
+                "params": {
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "r": {
                     "type": "string"
@@ -1083,6 +1158,60 @@
                 },
                 "version": {
                     "type": "integer"
+                }
+            }
+        },
+        "core.Event": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "block_hash": {
+                    "type": "string"
+                },
+                "block_number": {
+                    "type": "integer"
+                },
+                "event_name": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "integer"
+                },
+                "parsed_data": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "parsed_topics": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "raw_data": {
+                    "type": "string"
+                },
+                "raw_topics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tx_hash": {
+                    "type": "string"
+                },
+                "tx_index": {
+                    "type": "integer"
+                }
+            }
+        },
+        "core.EventList": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/core.Event"
+                    }
                 }
             }
         },
