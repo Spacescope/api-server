@@ -209,7 +209,7 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 	}
 
 	txnsList.Hits = total
-	if txnsList.Hits <= 0 {
+	if creatorTx == nil && txnsList.Hits <= 0 {
 		return txnsList, nil
 	}
 
@@ -757,7 +757,8 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 	evmReceipt := new(busi.EVMReceipt)
 	b, err := utils.EngineGroup[utils.TaskDB].Where("transaction_hash = ?", evmTransaction.Hash).Get(evmReceipt)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	if b && evmReceipt.Status > 0 {
 		resp.TxnStatus = true
