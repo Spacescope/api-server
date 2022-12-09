@@ -26,6 +26,7 @@ func registerV1(r *gin.Engine) {
 			apiv1.GET("/contract/:address/txns", v1.ListContractTXNs)          // list contract's txns
 			apiv1.GET("/contract/:address/internal_txns", v1.ListInternalTXNs) // list contract's internal txns
 			apiv1.GET("/contract/:address/is_verify", v1.ContractIsVerify)     // contract is verify
+			apiv1.GET("/contract/:address/events", v1.ListContractEvents)      // contract is verify
 		}
 
 		{

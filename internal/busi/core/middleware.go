@@ -1,13 +1,20 @@
 package core
 
 import (
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"reflect"
+	"strings"
+	"sync"
 
 	"api-server/pkg/models/busi"
 	"api-server/pkg/utils"
-
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/imxyb/solc-go"
 	log "github.com/sirupsen/logrus"
+	"github.com/tidwall/gjson"
 )
 
 type contractsArr []*busi.EVMContract
@@ -115,4 +122,78 @@ func evmTransactionCount(address string) (int64, *utils.BuErrorResponse) {
 	}
 
 	return count, nil
+}
+
+func parseMethodAndParamsFromContract(input, contractAddress string) (string, string, map[string]interface{}) {
+	if input == "" {
+		return "unknown", "", nil
+	}
+	inputData, err := hex.DecodeString(input)
+	if len(inputData) < 4 {
+		return "unknown", "", nil
+	}
+	tokenABI, err := getContractABI(contractAddress)
+	if err != nil {
+		log.Errorf("getContractABI failed, err:%s", err)
+		return fmt.Sprintf("0x%s", hex.EncodeToString(inputData[:4])), "", nil
+	}
+	if tokenABI == nil {
+		return fmt.Sprintf("0x%s", hex.EncodeToString(inputData[:4])), "", nil
+	}
+	abiMethod, err := tokenABI.MethodById(inputData[:4])
+	if err != nil {
+		log.Errorf("tokenABI.MethodById failed, err:%s", err)
+		return "unknown", "", nil
+	}
+	params := make(map[string]interface{})
+	if err = abiMethod.Inputs.UnpackIntoMap(params, inputData[4:]); err != nil {
+		return "", "", nil
+	}
+	return abiMethod.RawName, abiMethod.String(), params
+}
+
+var (
+	cacheABI sync.Map
+)
+
+func getContractABI(contractAddress string) (*abi.ABI, error) {
+	contractAddress = strings.ToLower(contractAddress)
+	v, ok := cacheABI.Load(contractAddress)
+	if ok {
+		return v.(*abi.ABI), nil
+	}
+
+	var contractVerify busi.EVMContractVerify
+	exist, err := utils.EngineGroup[utils.APIDB].Where("address=? and status=?",
+		contractAddress, busi.EVMContractVerifyStatusSuccessfully).Get(&contractVerify)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, nil
+	}
+
+	var (
+		output    solc.Output
+		abiString string
+	)
+	if err = json.Unmarshal([]byte(contractVerify.Output), &output); err != nil {
+		return nil, err
+	}
+	if contractVerify.CompilerType == busi.CompilerTypeSingleFile {
+		for _, c := range output.Contracts[""] {
+			abiString = gjson.Get(c.Metadata, "output.abi").String()
+			break
+		}
+	} else if contractVerify.CompilerType == busi.CompilerTypeMultiPart {
+		key := fmt.Sprintf("%s.sol", contractVerify.ContractName)
+		metadata := output.Contracts[key][contractVerify.ContractName].Metadata
+		abiString = gjson.Get(metadata, "output.abi").String()
+	}
+	tokenABI, err := abi.JSON(strings.NewReader(abiString))
+	if err != nil {
+		return nil, err
+	}
+	cacheABI.LoadOrStore(contractAddress, &tokenABI)
+	return &tokenABI, nil
 }

@@ -92,3 +92,21 @@ type Address struct {
 	Balance         string `json:"balance"`
 	Nonce           uint64 `json:"nonce"`
 }
+
+type EventList struct {
+	Events []*Event `json:"events"`
+}
+
+type Event struct {
+	Address      string                 `json:"address"`
+	RawTopics    []string               `json:"raw_topics"`
+	ParsedTopics map[string]interface{} `json:"parsed_topics"`
+	RawData      string                 `json:"raw_data"`
+	ParsedData   map[string]interface{} `json:"parsed_data"`
+	BlockNumber  uint64                 `json:"block_number"`
+	TxHash       string                 `json:"tx_hash"`
+	TxIndex      uint                   `json:"tx_index"`
+	BlockHash    string                 `json:"block_hash"`
+	Index        uint                   `json:"index"`
+	EventName    string                 `json:"event_name"`
+}

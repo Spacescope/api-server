@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,6 +16,8 @@ import (
 
 	"api-server/pkg/models/busi"
 	"api-server/pkg/utils"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/imxyb/solc-go"
 
 	log "github.com/sirupsen/logrus"
@@ -220,9 +223,100 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 		transactions = append(transactions, creatorTx)
 		txnsList.Hits += 1
 	}
+
+	for _, transaction := range transactions {
+		if transaction.To == "" {
+			transaction.MethodName = "create"
+		} else {
+			transaction.MethodName, transaction.MethodSig, transaction.Params =
+				parseMethodAndParamsFromContract(transaction.Input, address)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	txnsList.EVMTransaction = transactions
 
 	return txnsList, nil
+}
+
+func ListContractEvents(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
+	var (
+		evmReceipts []busi.EVMReceipt
+		events      []*Event
+	)
+	err := utils.EngineGroup[utils.TaskDB].Where("`to`=? and logs!='[]'", address).
+		OrderBy("height desc").Limit(r.Limit).Find(&evmReceipts)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	tokenABI, err := getContractABI(address)
+	if err != nil {
+		log.Errorf("getContractABI error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if tokenABI == nil {
+		return events, nil
+	}
+
+	for _, receipt := range evmReceipts {
+		var ethLogs []types.Log
+		if err = json.Unmarshal([]byte(receipt.Logs), &ethLogs); err != nil {
+			log.Errorf("json.Unmarshal error: %v", err)
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+		for _, ethLog := range ethLogs {
+			abiEvent, err := tokenABI.EventByID(ethLog.Topics[0])
+			if err != nil {
+				log.Errorf("tokenABI.EventByID error: %v", err)
+				return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+					Response: utils.ErrBlockExplorerAPIServerInternal}
+			}
+			event := &Event{
+				Address:     ethLog.Address.String(),
+				RawData:     hex.EncodeToString(ethLog.Data),
+				BlockNumber: ethLog.BlockNumber,
+				TxHash:      ethLog.TxHash.String(),
+				TxIndex:     ethLog.TxIndex,
+				BlockHash:   ethLog.BlockHash.String(),
+				Index:       ethLog.Index,
+				EventName:   abiEvent.String(),
+			}
+			for _, topic := range ethLog.Topics {
+				event.RawTopics = append(event.RawTopics, topic.String())
+			}
+			var indexedArgs []abi.Argument
+			for _, input := range abiEvent.Inputs {
+				if input.Indexed {
+					indexedArgs = append(indexedArgs, input)
+				}
+			}
+			event.ParsedTopics = make(map[string]interface{})
+			if err = abi.ParseTopicsIntoMap(event.ParsedTopics, indexedArgs, ethLog.Topics[1:]); err != nil {
+				log.Errorf("abi.ParseTopicsIntoMap error: %v", err)
+				return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+					Response: utils.ErrBlockExplorerAPIServerInternal}
+			}
+			event.ParsedData = make(map[string]interface{})
+			if err = abiEvent.Inputs.UnpackIntoMap(event.ParsedData, ethLog.Data); err != nil {
+				log.Errorf("abiEvent.Inputs.UnpackIntoMap error: %v", err)
+				return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+					Response: utils.ErrBlockExplorerAPIServerInternal}
+			}
+			events = append(events, event)
+		}
+	}
+
+	// 因为一个receipt可能有多个event, 只取r.limit个，参考etherscan
+	if len(events) > r.Limit {
+		events = events[:r.Limit]
+	}
+
+	return EventList{Events: events}, nil
 }
 
 func ListInternalTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
@@ -573,10 +667,22 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 		return txnsList, nil
 	}
 
-	txnsList.EVMTransaction = make([]*busi.EVMTransaction, 0)
-	if err := busiSQLExecute(r, &txnsList.EVMTransaction); err != nil {
+	evmTransaction := make([]*busi.EVMTransaction, 0)
+	if err := busiSQLExecute(r, &evmTransaction); err != nil {
 		return nil, err
 	}
+	for _, transaction := range evmTransaction {
+		if transaction.To == "" {
+			transaction.MethodName = "create"
+		} else {
+			transaction.MethodName, transaction.MethodSig, transaction.Params =
+				parseMethodAndParamsFromContract(transaction.Input, transaction.To)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	txnsList.EVMTransaction = evmTransaction
 	return txnsList, nil
 }
 
@@ -603,6 +709,18 @@ func GetTXN(ctx context.Context, hash string) (interface{}, *utils.BuErrorRespon
 		if t.Height > maxHeight {
 			maxHeight = t.Height
 			evmTransaction = *t
+		}
+	}
+
+	if evmTransaction.To == "" {
+		evmTransaction.MethodName = "create"
+	} else {
+		evmTransaction.MethodName, evmTransaction.MethodSig, evmTransaction.Params =
+			parseMethodAndParamsFromContract(evmTransaction.Input, evmTransaction.To)
+		if err != nil {
+			log.Errorf("parseMethodAndParamsFromContract error: %v", err)
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 	}
 
@@ -709,6 +827,17 @@ func ListAddressTXNs(ctx context.Context, address string, r *ListQuery) (interfa
 	transactions := make([]*busi.EVMTransaction, 0)
 	if err := evmTransactionFind(address, r, &transactions); err != nil {
 		return nil, err
+	}
+	for _, transaction := range transactions {
+		if transaction.To == "" {
+			transaction.MethodName = "create"
+		} else {
+			transaction.MethodName, transaction.MethodSig, transaction.Params =
+				parseMethodAndParamsFromContract(transaction.Input, transaction.To)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 	txnsList.EVMTransaction = transactions
 

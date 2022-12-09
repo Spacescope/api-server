@@ -107,6 +107,10 @@ type EVMTransaction struct {
 	V                    string `json:"v"`
 	R                    string `json:"r"`
 	S                    string `json:"s"`
+
+	MethodName string                 `xorm:"-" json:"method_name"`
+	MethodSig  string                 `xorm:"-" json:"method_sig"`
+	Params     map[string]interface{} `xorm:"-" json:"params"`
 }
 
 func (m *EVMTransaction) TableName() string {
