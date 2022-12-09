@@ -59,6 +59,13 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 			log.Error(err)
 			break
 		}
+		creatorTx, err := findCreatorTransaction(contract.Address)
+		if errByteCodeNotEqual != nil {
+			return nil, err
+		}
+		if creatorTx != nil {
+			c.Txns += 1
+		}
 
 		c.Height = contract.Height
 		c.Address = contract.Address
