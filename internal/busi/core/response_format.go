@@ -85,6 +85,10 @@ type ContractIsVerify struct {
 	IsVerify bool `json:"is_verify"`
 }
 
+type ContractIsContract struct {
+	IsContract bool `json:"is_contract"`
+}
+
 type Address struct {
 	Height          int64  `json:"height"`
 	Address         string `json:"address"`

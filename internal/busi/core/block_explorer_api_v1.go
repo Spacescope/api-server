@@ -635,6 +635,21 @@ func ListCompileVersion(ctx context.Context) (interface{}, *utils.BuErrorRespons
 	return versions, nil
 }
 
+func GetContractIsContract(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
+	count, err := utils.EngineGroup[utils.TaskDB].Where("address=?", address).
+		Table(new(busi.EVMContract)).Count()
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	var result ContractIsContract
+	if count > 0 {
+		result.IsContract = true
+	}
+	return result, nil
+}
+
 func GetContractIsVerify(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
 	count, err := utils.EngineGroup[utils.APIDB].Where("address=? and status=?",
 		address, busi.EVMContractVerifyStatusSuccessfully).Table(new(busi.EVMContractVerify)).Count()

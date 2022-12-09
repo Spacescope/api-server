@@ -282,6 +282,34 @@ func ListCompileVersion(c *gin.Context) {
 	app.HTTPResponseOK(result)
 }
 
+// ContractIsContract godoc
+// @Description get contract is contract
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param id path int true "id"
+// @Success 200 {object} core.ContractIsContract
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/contract/{address}/is_contract [get]
+func ContractIsContract(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	address := c.Param("address")
+	if err := validate.Var(address, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetContractIsContract(c.Request.Context(), strings.ToLower(address))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
 // ContractIsVerify godoc
 // @Description get contract is verify
 // @Tags DATA-INFRA-API-External-V1
