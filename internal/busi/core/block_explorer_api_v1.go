@@ -60,7 +60,7 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 			break
 		}
 		creatorTx, err := findCreatorTransaction(contract.Address)
-		if errByteCodeNotEqual != nil {
+		if err != nil {
 			return nil, err
 		}
 		if creatorTx != nil {
