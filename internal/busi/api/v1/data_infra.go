@@ -534,3 +534,99 @@ func ListAddressInternalTXNs(c *gin.Context) {
 
 	app.HTTPResponseOK(result)
 }
+
+// SearchTextType godoc
+// @Description Get transaction
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param txnHash path string true "txnHash"
+// @Success 200 {object} core.EVMTransaction
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/search/{text}/type [get]
+func SearchTextType(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	text := c.Param("text")
+	if err := validate.Var(text, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.GetSearchTextType(c.Request.Context(), strings.ToLower(text))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// ListTxnEvents godoc
+// @Description List transaction's event
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param address path string true "address"
+// @Success 200 {object} core.EventList
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/txn/{txnHash}/events [get]
+func ListTxnEvents(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	txHash := c.Param("txnHash")
+	if err := validate.Var(txHash, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	result, resp := core.ListTxnEvents(c.Request.Context(), strings.ToLower(txHash))
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// ListTxnInternalTXNs godoc
+// @Description List transaction's internal transactions
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param ListQuery query core.ListQuery true "ListQuery"
+// @Param address path string true "address"
+// @Success 200 {object} core.InternalTxnsList
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/txn/{txnHash}/internal_txns [get]
+func ListTxnInternalTXNs(c *gin.Context) {
+	app := utils.Gin{C: c}
+	validate := validator.New()
+
+	txHash := c.Param("txnHash")
+	if err := validate.Var(txHash, "required"); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+	}
+
+	var r core.ListQuery
+	if err := c.ShouldBindQuery(&r); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	if err := r.ListValidate(); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	result, resp := core.ListInternalTXNsByTxHash(c.Request.Context(), strings.ToLower(txHash), &r)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
