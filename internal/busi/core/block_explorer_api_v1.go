@@ -284,20 +284,11 @@ func parseEventsFromReceipt(receipt busi.EVMReceipt,
 			Index:       ethLog.Index,
 			EventName:   abiEvent.String(),
 		}
-		tx, err := GetTXN(context.Background(), strings.ToLower(event.TxHash))
-		if err == nil {
-			event.MethodName = "unknown"
-			input, err := hex.DecodeString(tx.Input)
-			if err == nil {
-				if len(input) >= 4 {
-					abiMethod, err := tokenABI.MethodById(input[:4])
-					if err == nil {
-						event.MethodName = abiMethod.RawName
-					} else {
-						event.MethodName = fmt.Sprintf("0x%s", hex.EncodeToString(input[:4]))
-					}
-				}
-			}
+		tx, buErr := GetTXN(context.Background(), strings.ToLower(event.TxHash))
+		if buErr == nil {
+			event.MethodName = tx.MethodName
+		} else {
+			log.Errorf("get txn err:%s", buErr)
 		}
 
 		for _, topic := range ethLog.Topics {
