@@ -104,6 +104,7 @@ type Address struct {
 }
 
 type EventList struct {
+	Hits   int      `json:"hits"`
 	Events []*Event `json:"events"`
 }
 
