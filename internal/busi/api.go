@@ -33,6 +33,8 @@ func registerV1(r *gin.Engine) {
 		{
 			apiv1.GET("/txns", v1.ListTXNs)
 			apiv1.GET("/txn/:txnHash", v1.GetTXN)
+			apiv1.GET("/txn/:txnHash/events", v1.ListTxnEvents)
+			apiv1.GET("/txn/:txnHash/internal_txns", v1.ListTxnInternalTXNs)
 		}
 
 		{
@@ -49,6 +51,10 @@ func registerV1(r *gin.Engine) {
 			apiv1.GET("/address/:address", v1.GetAddress)
 			apiv1.GET("/address/:address/txns", v1.ListAddressTXNs)                  // list address's txns
 			apiv1.GET("/address/:address/internal_txns", v1.ListAddressInternalTXNs) // list address's internal txns
+		}
+
+		{
+			apiv1.GET("/search/:text/type", v1.SearchTextType)
 		}
 	}
 }

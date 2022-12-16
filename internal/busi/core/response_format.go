@@ -30,10 +30,16 @@ type TxnsList struct {
 	Hits           int64                  `json:"hits"`
 }
 
+const (
+	TxSuccess = 1
+	TxFailed  = 0
+	TxPending = -1
+)
+
 type EVMTransaction struct {
 	busi.EVMTransaction `json:",inline"`
 	ToIsContract        bool  `json:"to_is_contract"`
-	TxnStatus           bool  `json:"txn_status"`
+	TxnStatus           int   `json:"txn_status"`
 	ConfirmationBlocks  int64 `json:"confirmation_blocks"`
 }
 
@@ -113,4 +119,9 @@ type Event struct {
 	BlockHash    string                 `json:"block_hash"`
 	Index        uint                   `json:"index"`
 	EventName    string                 `json:"event_name"`
+	MethodName   string                 `json:"method_name"`
+}
+
+type SearchTextType struct {
+	Type string `json:"type"`
 }
