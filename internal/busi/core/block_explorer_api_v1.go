@@ -343,7 +343,7 @@ func ListContractEvents(ctx context.Context, address string, r *ListQuery) (inte
 		events = events[:r.Limit]
 	}
 
-	return EventList{Events: events}, nil
+	return EventList{Events: events, Hits: len(events)}, nil
 }
 
 func ListInternalTXNs(ctx context.Context, address string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
@@ -949,7 +949,7 @@ func ListTxnEvents(ctx context.Context, hash string) (interface{}, *utils.BuErro
 		log.Errorf("Execute sql error: %v", err)
 		return nil, buErr
 	}
-	return EventList{Events: events}, nil
+	return EventList{Events: events, Hits: len(events)}, nil
 }
 
 func ListInternalTXNsByTxHash(ctx context.Context, hash string, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
