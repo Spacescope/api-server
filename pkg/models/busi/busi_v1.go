@@ -100,7 +100,6 @@ type EVMTransaction struct {
 	Value                string `json:"value"`
 	Type                 uint64 `json:"type"`
 	Input                string `json:"input"`
-	Gas                  uint64 `json:"gas"`
 	GasLimit             uint64 `json:"gas_limit"`
 	MaxFeePerGas         string `json:"max_fee_per_gas"`
 	MaxPriorityFeePerGas string `json:"max_priority_fee_per_gas"`
