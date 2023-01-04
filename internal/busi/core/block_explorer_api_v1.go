@@ -58,7 +58,7 @@ func listContractsVerified(ctx context.Context, r *ListContractsParams) (interfa
 
 	// get contracts list
 	verifiedContracts := make([]*busi.EVMContractVerify, 0)
-	if err := utils.EngineGroup[utils.APIDB].Limit(r.Limit, r.Offset).Desc("height").Find(&verifiedContracts); err != nil {
+	if err := utils.EngineGroup[utils.APIDB].Limit(r.Limit, r.Offset).Desc("create_at").Find(&verifiedContracts); err != nil {
 		log.Errorf("Execute sql error: %v", err)
 		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
