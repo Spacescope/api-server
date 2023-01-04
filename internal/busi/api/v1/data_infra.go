@@ -26,7 +26,7 @@ import (
 func ListContracts(c *gin.Context) {
 	app := utils.Gin{C: c}
 
-	var r core.ListQuery
+	var r core.ListContractsParams
 	if err := c.ShouldBindQuery(&r); err != nil {
 		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
 		return

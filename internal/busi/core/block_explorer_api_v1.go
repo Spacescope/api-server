@@ -16,6 +16,7 @@ import (
 
 	"api-server/pkg/models/busi"
 	"api-server/pkg/utils"
+
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/imxyb/solc-go"
@@ -26,7 +27,92 @@ import (
 	ethcommon "github.com/ethereum/go-ethereum/common"
 )
 
-func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorResponse) {
+func ListContracts(ctx context.Context, r *ListContractsParams) (interface{}, *utils.BuErrorResponse) {
+	switch r.Verified {
+	case 0:
+		return listAllContracts(ctx, r)
+	case 1:
+		return listContractsVerified(ctx, r)
+	}
+
+	return nil, nil
+}
+
+func listContractsVerified(ctx context.Context, r *ListContractsParams) (interface{}, *utils.BuErrorResponse) {
+	var (
+		cv            busi.EVMContractVerify
+		contractsList ContractsList
+	)
+
+	// get the numbers of verified contracts
+	total, err := utils.EngineGroup[utils.APIDB].Where("status = ?", busi.EVMContractVerifyStatusSuccessfully).Count(&cv)
+	if err != nil {
+		log.Errorf("ListContracts execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	contractsList.Hits = total
+	if contractsList.Hits <= 0 {
+		return contractsList, nil
+	}
+
+	// get contracts list
+	verifiedContracts := make([]*busi.EVMContractVerify, 0)
+	if err := utils.EngineGroup[utils.APIDB].Limit(r.Limit, r.Offset).Desc("height").Find(&verifiedContracts); err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	contractsSlice := make([]*Contract, 0, len(verifiedContracts))
+	for _, verifiedContract := range verifiedContracts {
+		var c Contract
+
+		c.Txns, err = evmTransactionCount(verifiedContract.Address)
+		if err != nil {
+			log.Error(err)
+			break
+		}
+		creatorTx, err := findCreatorTransaction(verifiedContract.Address)
+		if err != nil {
+			return nil, err
+		}
+		if creatorTx != nil {
+			c.Txns += 1
+		}
+
+		var (
+			contractMeta busi.EVMContract
+		)
+
+		b, errT := utils.EngineGroup[utils.TaskDB].Where("address = ?", verifiedContract.Address).Get(&contractMeta)
+		if errT != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+		if !b {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+
+		c.Height = contractMeta.Height
+		c.Address = verifiedContract.Address
+		c.FilecoinAddress = contractMeta.FilecoinAddress
+		c.Balance = contractMeta.Balance
+		c.Version = int64(contractMeta.Version)
+
+		c.Name = verifiedContract.ContractName
+		c.CompilerType = verifiedContract.CompilerType
+		c.CompilerVersion = verifiedContract.CompilerVersion
+		c.License = verifiedContract.LicenseType
+		c.Verified = verifiedContract.CreateAt
+
+		contractsSlice = append(contractsSlice, &c)
+	}
+
+	contractsList.Contracts = contractsSlice
+
+	return contractsList, nil
+}
+
+func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{}, *utils.BuErrorResponse) {
 	var (
 		c             busi.EVMContract
 		contractsList ContractsList
@@ -45,12 +131,11 @@ func ListContracts(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErr
 
 	// get contracts list
 	contracts := make([]*busi.EVMContract, 0)
-	if err := busiSQLExecute(r, &contracts); err != nil {
+	if err := busiSQLExecute(&r.ListQuery, &contracts); err != nil {
 		return nil, err
 	}
 
 	contractsSlice := make([]*Contract, 0, len(contracts))
-
 	for _, contract := range contracts {
 		var c Contract
 
@@ -622,23 +707,19 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 	return contractVerify, nil
 }
 
-func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify,
-	*utils.BuErrorResponse) {
+func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify, *utils.BuErrorResponse) {
 	return getContractVerifyByQuery(ctx, "address=? and status=?", address, busi.EVMContractVerifyStatusSuccessfully)
 }
 
-func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...interface{}) (*busi.EVMContractVerify,
-	*utils.BuErrorResponse) {
+func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...interface{}) (*busi.EVMContractVerify, *utils.BuErrorResponse) {
 	var contractVerify busi.EVMContractVerify
 	exist, err := utils.EngineGroup[utils.APIDB].Where(query, args...).Get(&contractVerify)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	if !exist {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusNotFound,
-			Response: utils.ErrBlockExplorerAPIServerNotFound}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusNotFound, Response: utils.ErrBlockExplorerAPIServerNotFound}
 	}
 	return &contractVerify, nil
 }

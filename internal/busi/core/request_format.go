@@ -6,6 +6,11 @@ import (
 	"api-server/pkg/models/busi"
 )
 
+type ListContractsParams struct {
+	ListQuery
+	Verified uint8 `form:"verified" json:"verified" desc:"0-all contracts, 1-verified contracts"`
+}
+
 type ListQuery struct {
 	Offset int `form:"o" json:"o"`
 	Limit  int `form:"l" json:"l"`

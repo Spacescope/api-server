@@ -11,6 +11,7 @@ import (
 
 	"api-server/pkg/models/busi"
 	"api-server/pkg/utils"
+
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/imxyb/solc-go"
 	log "github.com/sirupsen/logrus"
@@ -43,8 +44,7 @@ func busiTableRecordsCount(prt interface{}) (int64, *utils.BuErrorResponse) {
 	total, err := utils.EngineGroup[utils.TaskDB].Count(prt)
 	if err != nil {
 		log.Errorf("ListContracts execute sql error: %v", err)
-		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	return total, nil
@@ -53,15 +53,13 @@ func busiTableRecordsCount(prt interface{}) (int64, *utils.BuErrorResponse) {
 func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorResponse {
 	v := reflect.ValueOf(rowsSlicePtr)
 	if v.Kind() != reflect.Ptr || reflect.Indirect(v).Kind() != reflect.Slice {
-		log.Errorf("needs a pointer to a slice, v.Kind() = %v, reflect.Indirect(v).Kind() = %v", v.Kind(),
-			reflect.Indirect(v).Kind())
+		log.Errorf("needs a pointer to a slice, v.Kind() = %v, reflect.Indirect(v).Kind() = %v", v.Kind(), reflect.Indirect(v).Kind())
 		return nil
 	}
 
 	if err := utils.EngineGroup[utils.TaskDB].Limit(r.Limit, r.Offset).Desc("height").Find(rowsSlicePtr); err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	return nil
 }
@@ -71,16 +69,14 @@ func findCreatorTransaction(address string) (*busi.EVMTransaction, *utils.BuErro
 	exist, err := utils.EngineGroup[utils.TaskDB].Where("`to`='' and contract_address=?", address).Get(&receipt)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	var tx busi.EVMTransaction
 	if exist {
 		exist, err = utils.EngineGroup[utils.TaskDB].Where("hash=?", receipt.TransactionHash).Get(&tx)
 		if err != nil {
 			log.Errorf("Execute sql error: %v", err)
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-				Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if exist {
 			return &tx, nil
@@ -115,10 +111,8 @@ func evmTransactionCount(address string) (int64, *utils.BuErrorResponse) {
 		t busi.EVMTransaction
 	)
 
-	if count, err = utils.EngineGroup[utils.TaskDB].Where("\"from\" = ? or \"to\" = ?", address,
-		address).Count(&t); err != nil {
-		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+	if count, err = utils.EngineGroup[utils.TaskDB].Where("\"from\" = ? or \"to\" = ?", address, address).Count(&t); err != nil {
+		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	return count, nil
