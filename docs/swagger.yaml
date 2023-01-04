@@ -106,8 +106,6 @@ definitions:
         type: integer
       from:
         type: string
-      gas:
-        type: integer
       gas_limit:
         type: integer
       hash:
@@ -185,6 +183,11 @@ definitions:
       version:
         type: integer
     type: object
+  core.ContractIsContract:
+    properties:
+      is_contract:
+        type: boolean
+    type: object
   core.ContractIsVerify:
     properties:
       is_verify:
@@ -242,8 +245,6 @@ definitions:
         type: integer
       from:
         type: string
-      gas:
-        type: integer
       gas_limit:
         type: integer
       hash:
@@ -276,7 +277,7 @@ definitions:
       transaction_index:
         type: integer
       txn_status:
-        type: boolean
+        type: integer
       type:
         type: integer
       v:
@@ -298,6 +299,8 @@ definitions:
         type: string
       index:
         type: integer
+      method_name:
+        type: string
       parsed_data:
         additionalProperties: true
         type: object
@@ -321,6 +324,8 @@ definitions:
         items:
           $ref: '#/definitions/core.Event'
         type: array
+      hits:
+        type: integer
     type: object
   core.InternalTxnsList:
     properties:
@@ -635,6 +640,36 @@ paths:
             $ref: '#/definitions/utils.ResponseWithRequestId'
       tags:
       - DATA-INFRA-API-External-V1
+  /api/v1/contract/{address}/is_contract:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: get contract is contract
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.ContractIsContract'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
   /api/v1/contract/{address}/is_verify:
     get:
       consumes:
@@ -818,6 +853,36 @@ paths:
             type: string
       tags:
       - Sys
+  /api/v1/search/{text}/type:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: Get transaction
+      parameters:
+      - description: txnHash
+        in: path
+        name: txnHash
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.EVMTransaction'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
   /api/v1/txn/{txnHash}:
     get:
       consumes:
@@ -838,6 +903,72 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/core.EVMTransaction'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/txn/{txnHash}/events:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List transaction's event
+      parameters:
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.EventList'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseWithRequestId'
+      tags:
+      - DATA-INFRA-API-External-V1
+  /api/v1/txn/{txnHash}/internal_txns:
+    get:
+      consumes:
+      - application/json
+      - application/json
+      description: List transaction's internal transactions
+      parameters:
+      - in: query
+        name: l
+        type: integer
+      - in: query
+        name: o
+        type: integer
+      - description: address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.InternalTxnsList'
         "400":
           description: Bad Request
           schema:

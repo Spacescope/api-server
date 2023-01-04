@@ -365,6 +365,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/contract/{address}/is_contract": {
+            "get": {
+                "description": "get contract is contract",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.ContractIsContract"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/contract/{address}/is_verify": {
             "get": {
                 "description": "get contract is verify",
@@ -642,6 +687,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/search/{text}/type": {
+            "get": {
+                "description": "Get transaction",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "txnHash",
+                        "name": "txnHash",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.EVMTransaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/txn/{txnHash}": {
             "get": {
                 "description": "Get transaction",
@@ -670,6 +760,106 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/core.EVMTransaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/txn/{txnHash}/events": {
+            "get": {
+                "description": "List transaction's event",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.EventList"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseWithRequestId"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/txn/{txnHash}/internal_txns": {
+            "get": {
+                "description": "List transaction's internal transactions",
+                "consumes": [
+                    "application/json",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/json"
+                ],
+                "tags": [
+                    "DATA-INFRA-API-External-V1"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "l",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "o",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/core.InternalTxnsList"
                         }
                     },
                     "400": {
@@ -895,9 +1085,6 @@ const docTemplate = `{
                 "from": {
                     "type": "string"
                 },
-                "gas": {
-                    "type": "integer"
-                },
                 "gas_limit": {
                     "type": "integer"
                 },
@@ -1015,6 +1202,14 @@ const docTemplate = `{
                 }
             }
         },
+        "core.ContractIsContract": {
+            "type": "object",
+            "properties": {
+                "is_contract": {
+                    "type": "boolean"
+                }
+            }
+        },
         "core.ContractIsVerify": {
             "type": "object",
             "properties": {
@@ -1102,9 +1297,6 @@ const docTemplate = `{
                 "from": {
                     "type": "string"
                 },
-                "gas": {
-                    "type": "integer"
-                },
                 "gas_limit": {
                     "type": "integer"
                 },
@@ -1152,7 +1344,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "txn_status": {
-                    "type": "boolean"
+                    "type": "integer"
                 },
                 "type": {
                     "type": "integer"
@@ -1185,6 +1377,9 @@ const docTemplate = `{
                 },
                 "index": {
                     "type": "integer"
+                },
+                "method_name": {
+                    "type": "string"
                 },
                 "parsed_data": {
                     "type": "object",
@@ -1219,6 +1414,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/core.Event"
                     }
+                },
+                "hits": {
+                    "type": "integer"
                 }
             }
         },
