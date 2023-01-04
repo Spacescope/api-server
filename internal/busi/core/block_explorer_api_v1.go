@@ -744,7 +744,7 @@ func ListCompileVersion(ctx context.Context) (interface{}, *utils.BuErrorRespons
 }
 
 func GetContractIsContract(ctx context.Context, address string) (interface{}, *utils.BuErrorResponse) {
-	count, err := utils.EngineGroup[utils.TaskDB].Where("address=?", address).
+	count, err := utils.EngineGroup[utils.TaskDB].Where("address=? or filecoin_address=?", address, address).
 		Table(new(busi.EVMContract)).Count()
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
