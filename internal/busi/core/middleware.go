@@ -40,11 +40,11 @@ func (x contractsArr) Swap(i, j int) {
 	x[i], x[j] = x[j], x[i]
 }
 
-func busiTableRecordsCount(prt interface{}) (int64, *utils.BuErrorResponse) {
+func busiTableRecordsCount(prt interface{}) (int64, error) {
 	total, err := utils.EngineGroup[utils.TaskDB].Count(prt)
 	if err != nil {
 		log.Errorf("ListContracts execute sql error: %v", err)
-		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return 0, err
 	}
 
 	return total, nil
@@ -64,19 +64,19 @@ func busiSQLExecute(r *ListQuery, rowsSlicePtr interface{}) *utils.BuErrorRespon
 	return nil
 }
 
-func findCreatorTransaction(address string) (*busi.EVMTransaction, *utils.BuErrorResponse) {
+func findCreatorTransaction(address string) (*busi.EVMTransaction, error) {
 	var receipt busi.EVMReceipt
 	exist, err := utils.EngineGroup[utils.TaskDB].Where("`to`='' and contract_address=?", address).Get(&receipt)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, err
 	}
 	var tx busi.EVMTransaction
 	if exist {
 		exist, err = utils.EngineGroup[utils.TaskDB].Where("hash=?", receipt.TransactionHash).Get(&tx)
 		if err != nil {
 			log.Errorf("Execute sql error: %v", err)
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, err
 		}
 		if exist {
 			return &tx, nil
@@ -103,7 +103,7 @@ func evmTransactionFind(address string, r *ListQuery, rowsSlicePtr interface{}) 
 	return nil
 }
 
-func evmTransactionCount(address string) (int64, *utils.BuErrorResponse) {
+func evmTransactionCount(address string) (int64, error) {
 	var (
 		count int64
 		err   error
@@ -112,7 +112,7 @@ func evmTransactionCount(address string) (int64, *utils.BuErrorResponse) {
 	)
 
 	if count, err = utils.EngineGroup[utils.TaskDB].Where("\"from\" = ? or \"to\" = ?", address, address).Count(&t); err != nil {
-		return 0, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return 0, err
 	}
 
 	return count, nil

@@ -74,7 +74,7 @@ func listContractsVerified(ctx context.Context, r *ListContractsParams) (interfa
 		}
 		creatorTx, err := findCreatorTransaction(verifiedContract.Address)
 		if err != nil {
-			return nil, err
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if creatorTx != nil {
 			c.Txns += 1
@@ -121,7 +121,7 @@ func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{},
 	// get the numbers of contracts
 	total, err := busiTableRecordsCount(&c)
 	if err != nil {
-		return nil, err
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	contractsList.Hits = total
@@ -146,7 +146,7 @@ func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{},
 		}
 		creatorTx, err := findCreatorTransaction(contract.Address)
 		if err != nil {
-			return nil, err
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if creatorTx != nil {
 			c.Txns += 1
@@ -159,8 +159,8 @@ func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{},
 		c.Version = int64(contract.Version)
 
 		contractVerify, err := GetSuccessContractVerifyByAddress(ctx, c.Address)
-		if err != nil && err.HttpCode != http.StatusNotFound {
-			return nil, err
+		if err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if contractVerify != nil {
 			c.Name = contractVerify.ContractName
@@ -186,8 +186,7 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 		OrderBy("height desc").Get(evmContract)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	var ethAddress string
@@ -216,9 +215,9 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 		ByteCode:        evmContract.ByteCode,
 	}
 
-	transaction, resErr := findCreatorTransaction(ethAddress)
+	transaction, err := findCreatorTransaction(ethAddress)
 	if err != nil {
-		return nil, resErr
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	if transaction != nil {
 		contractDetail.Creator = transaction.From
@@ -291,13 +290,13 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 	// if address is contract, must add creator hash
 	creatorTx, err := findCreatorTransaction(address)
 	if err != nil {
-		return nil, err
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	// get the numbers of transactions
 	total, err := evmTransactionCount(address)
 	if err != nil {
-		return nil, err
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	txnsList.Hits = total
@@ -320,11 +319,7 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 		if transaction.To == "" {
 			transaction.MethodName = "create"
 		} else {
-			transaction.MethodName, transaction.MethodSig, transaction.Params =
-				parseMethodAndParamsFromContract(transaction.Input, address)
-			if err != nil {
-				return nil, err
-			}
+			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input, address)
 		}
 	}
 	txnsList.EVMTransaction = transactions
@@ -656,7 +651,7 @@ func asyncCompilerContract(input *solc.Input, mainContractFileName string,
 func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuErrorResponse) {
 	cv, buErr := getContractVerifyByQuery(ctx, "id=?", id)
 	if buErr != nil {
-		return nil, buErr
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	contractVerify := new(ContractVerify)
 	contractVerify.ID = cv.ID
@@ -707,19 +702,19 @@ func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuE
 	return contractVerify, nil
 }
 
-func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify, *utils.BuErrorResponse) {
+func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*busi.EVMContractVerify, error) {
 	return getContractVerifyByQuery(ctx, "address=? and status=?", address, busi.EVMContractVerifyStatusSuccessfully)
 }
 
-func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...interface{}) (*busi.EVMContractVerify, *utils.BuErrorResponse) {
+func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...interface{}) (*busi.EVMContractVerify, error) {
 	var contractVerify busi.EVMContractVerify
 	exist, err := utils.EngineGroup[utils.APIDB].Where(query, args...).Get(&contractVerify)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, err
 	}
 	if !exist {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusNotFound, Response: utils.ErrBlockExplorerAPIServerNotFound}
+		return nil, nil
 	}
 	return &contractVerify, nil
 }
@@ -727,8 +722,7 @@ func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...in
 func ListCompileVersion(ctx context.Context) (interface{}, *utils.BuErrorResponse) {
 	buildList, err := solc.GetBuildList()
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	var versions CompileVersionList
 	for _, build := range buildList {
@@ -782,7 +776,7 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 	// get the numbers of txns
 	total, err := busiTableRecordsCount(&c)
 	if err != nil {
-		return nil, err
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	txnsList.Hits = total
@@ -798,11 +792,7 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 		if transaction.To == "" {
 			transaction.MethodName = "create"
 		} else {
-			transaction.MethodName, transaction.MethodSig, transaction.Params =
-				parseMethodAndParamsFromContract(transaction.Input, transaction.To)
-			if err != nil {
-				return nil, err
-			}
+			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input, transaction.To)
 		}
 	}
 	txnsList.EVMTransaction = evmTransaction
@@ -816,8 +806,7 @@ func GetTXN(ctx context.Context, hash string) (*EVMTransaction, *utils.BuErrorRe
 	err := utils.EngineGroup[utils.TaskDB].Where("hash = ?", hash).Find(&evmTransactions)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
-			Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if len(evmTransactions) == 0 {
@@ -942,7 +931,7 @@ func ListAddressTXNs(ctx context.Context, address string, r *ListQuery) (interfa
 	// get the numbers of transactions
 	total, err := evmTransactionCount(address)
 	if err != nil {
-		return nil, err
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	txnsList.Hits = total
@@ -959,11 +948,7 @@ func ListAddressTXNs(ctx context.Context, address string, r *ListQuery) (interfa
 		if transaction.To == "" {
 			transaction.MethodName = "create"
 		} else {
-			transaction.MethodName, transaction.MethodSig, transaction.Params =
-				parseMethodAndParamsFromContract(transaction.Input, transaction.To)
-			if err != nil {
-				return nil, err
-			}
+			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input, transaction.To)
 		}
 	}
 	txnsList.EVMTransaction = transactions
