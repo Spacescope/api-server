@@ -17,6 +17,7 @@ type APIServer struct {
 	Addr   string `toml:"listen"`
 	DB     string `toml:"task_db"`
 	BusiDB string `toml:"api_db"`
+	StatDB string `toml:"stat_db"`
 }
 
 func InitConfFile(file string, cf *TomlConfig) error {

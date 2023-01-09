@@ -11,6 +11,22 @@ type ContractsList struct {
 	Hits      int64       `json:"hits"`
 }
 
+type StatContractBreakdownDetail struct {
+	Rank            int    `json:"rank"`
+	ContractAddress string `json:"contract_address"`
+	TxnCount        int64  `json:"txn_count"`
+	InternalTxns    int64  `json:"internal_txns"`
+	FilBurned       int64  `json:"fil_burned"`
+	UserCount       int64  `json:"user_count"`
+	CallInCount     int64  `json:"call_in_count"`
+	CallOutCount    int64  `json:"call_out_count"`
+}
+
+type StatContractBreakdown struct {
+	Contracts []*StatContractBreakdownDetail `json:"contracts"`
+	Hits      int64                          `json:"hits"`
+}
+
 type Contract struct {
 	Height          int64
 	Address         string
@@ -125,4 +141,14 @@ type Event struct {
 
 type SearchTextType struct {
 	Type string `json:"type"`
+}
+
+type StatOverview struct {
+	TotalInternalTxnCount     int64   `json:"total_internal_txn_count"`
+	TotalExternalTxnCount     int64   `json:"total_external_txn_count"`
+	TotalValueReceived        float64 `json:"total_value_received"`
+	TotalValueSent            float64 `json:"total_value_sent"`
+	TotalValueLocked          float64 `json:"total_value_locked"`
+	TotalContractCount        int64   `json:"total_contract_count"`
+	TotalDeployerAddressCount int64   `json:"total_deployer_address_count"`
 }

@@ -46,6 +46,39 @@ func ListContracts(c *gin.Context) {
 	app.HTTPResponseOK(result)
 }
 
+// ListStatContractBreakdown godoc
+// @Description List contract breakdown
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param ListStatContractBreakdownParams query core.ListStatContractBreakdownParams true "ListStatContractBreakdownParams"
+// @Success 200 {object} core.StatContractBreakdown
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/contract/breakdown [get]
+func ListStatContractBreakdown(c *gin.Context) {
+	app := utils.Gin{C: c}
+
+	var r core.ListStatContractBreakdownParams
+	if err := c.ShouldBindQuery(&r); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	if err := r.ListValidate(); err != nil {
+		app.HTTPResponse(http.StatusOK, utils.NewResponse(utils.CodeBadRequest, err.Error(), nil))
+		return
+	}
+
+	result, resp := core.ListContractBreakdown(c.Request.Context(), &r)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
 // GetContract godoc
 // @Description Get contract detail
 // @Tags DATA-INFRA-API-External-V1
@@ -623,6 +656,28 @@ func ListTxnInternalTXNs(c *gin.Context) {
 	}
 
 	result, resp := core.ListInternalTXNsByTxHash(c.Request.Context(), strings.ToLower(txHash), &r)
+	if resp != nil {
+		app.HTTPResponse(resp.HttpCode, resp.Response)
+		return
+	}
+
+	app.HTTPResponseOK(result)
+}
+
+// StatOverview godoc
+// @Description List transaction's internal transactions
+// @Tags DATA-INFRA-API-External-V1
+// @Accept application/json,json
+// @Produce application/json,json
+// @Param address path string true "address"
+// @Success 200 {object} core.StatOverview
+// @Failure 400 {object} utils.ResponseWithRequestId
+// @Failure 500 {object} utils.ResponseWithRequestId
+// @Router /api/v1/stat/overview [get]
+func StatOverview(c *gin.Context) {
+	app := utils.Gin{C: c}
+
+	result, resp := core.GetStatOverview(c.Request.Context())
 	if resp != nil {
 		app.HTTPResponse(resp.HttpCode, resp.Response)
 		return

@@ -19,6 +19,7 @@ const DBRetry = 3
 const (
 	TaskDB = "task_db"
 	APIDB  = "api_db"
+	StatDB = "stat_db"
 )
 
 var (
@@ -81,7 +82,8 @@ func SyncTables(x *xorm.Engine, tables []interface{}) error {
 	return x.StoreEngine("InnoDB").Sync2(tables...)
 }
 
-func newEngine(ctx context.Context /*, migrateFunc func(*xorm.Engine) error*/, schema string) (x *xorm.Engine, err error) {
+func newEngine(ctx context.Context /*, migrateFunc func(*xorm.Engine) error*/, schema string) (x *xorm.Engine,
+	err error) {
 	if x, err = setEngine(schema); err != nil {
 		return nil, err
 	}
