@@ -56,6 +56,11 @@ func registerV1(r *gin.Engine) {
 		{
 			apiv1.GET("/search/:text/type", v1.SearchTextType)
 		}
+
+		{
+			apiv1.GET("/stat/overview", v1.StatOverview)
+			apiv1.GET("/stat/breakdown", v1.ListStatContractBreakdown) // list contract breakdown
+		}
 	}
 }
 
@@ -75,6 +80,7 @@ func initconfig(ctx context.Context, cf *utils.TomlConfig) {
 	utils.EngineGroup = utils.NewEngineGroup(ctx, &[]utils.EngineInfo{
 		{utils.TaskDB, cf.APIServer.DB, nil},
 		{utils.APIDB, cf.APIServer.BusiDB, busi.Tables},
+		{utils.StatDB, cf.APIServer.StatDB, nil},
 	})
 }
 

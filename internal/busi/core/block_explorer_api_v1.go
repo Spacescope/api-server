@@ -45,10 +45,12 @@ func listContractsVerified(ctx context.Context, r *ListContractsParams) (interfa
 	)
 
 	// get the numbers of verified contracts
-	total, err := utils.EngineGroup[utils.APIDB].Where("status = ?", busi.EVMContractVerifyStatusSuccessfully).Count(&cv)
+	total, err := utils.EngineGroup[utils.APIDB].Where("status = ?",
+		busi.EVMContractVerifyStatusSuccessfully).Count(&cv)
 	if err != nil {
 		log.Errorf("ListContracts execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	contractsList.Hits = total
@@ -58,9 +60,11 @@ func listContractsVerified(ctx context.Context, r *ListContractsParams) (interfa
 
 	// get contracts list
 	verifiedContracts := make([]*busi.EVMContractVerify, 0)
-	if err := utils.EngineGroup[utils.APIDB].Limit(r.Limit, r.Offset).Desc("create_at").Find(&verifiedContracts); err != nil {
+	if err := utils.EngineGroup[utils.APIDB].Limit(r.Limit,
+		r.Offset).Desc("create_at").Find(&verifiedContracts); err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	contractsSlice := make([]*Contract, 0, len(verifiedContracts))
@@ -74,7 +78,8 @@ func listContractsVerified(ctx context.Context, r *ListContractsParams) (interfa
 		}
 		creatorTx, err := findCreatorTransaction(verifiedContract.Address)
 		if err != nil {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if creatorTx != nil {
 			c.Txns += 1
@@ -86,10 +91,12 @@ func listContractsVerified(ctx context.Context, r *ListContractsParams) (interfa
 
 		b, errT := utils.EngineGroup[utils.TaskDB].Where("address = ?", verifiedContract.Address).Get(&contractMeta)
 		if errT != nil {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if !b {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 
 		c.Height = contractMeta.Height
@@ -121,7 +128,8 @@ func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{},
 	// get the numbers of contracts
 	total, err := busiTableRecordsCount(&c)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	contractsList.Hits = total
@@ -146,7 +154,8 @@ func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{},
 		}
 		creatorTx, err := findCreatorTransaction(contract.Address)
 		if err != nil {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if creatorTx != nil {
 			c.Txns += 1
@@ -160,7 +169,8 @@ func listAllContracts(ctx context.Context, r *ListContractsParams) (interface{},
 
 		contractVerify, err := GetSuccessContractVerifyByAddress(ctx, c.Address)
 		if err != nil {
-			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
 		}
 		if contractVerify != nil {
 			c.Name = contractVerify.ContractName
@@ -186,7 +196,8 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 		OrderBy("height desc").Get(evmContract)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	var ethAddress string
@@ -217,7 +228,8 @@ func GetContract(ctx context.Context, address string) (interface{}, *utils.BuErr
 
 	transaction, err := findCreatorTransaction(ethAddress)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	if transaction != nil {
 		contractDetail.Creator = transaction.From
@@ -290,13 +302,15 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 	// if address is contract, must add creator hash
 	creatorTx, err := findCreatorTransaction(address)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	// get the numbers of transactions
 	total, err := evmTransactionCount(address)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	txnsList.Hits = total
@@ -319,7 +333,8 @@ func ListContractTXNs(ctx context.Context, address string, r *ListQuery) (interf
 		if transaction.To == "" {
 			transaction.MethodName = "create"
 		} else {
-			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input, address)
+			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input,
+				address)
 		}
 	}
 	txnsList.EVMTransaction = transactions
@@ -651,7 +666,8 @@ func asyncCompilerContract(input *solc.Input, mainContractFileName string,
 func GetContractVerifyByID(ctx context.Context, id int) (interface{}, *utils.BuErrorResponse) {
 	cv, buErr := getContractVerifyByQuery(ctx, "id=?", id)
 	if buErr != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	contractVerify := new(ContractVerify)
 	contractVerify.ID = cv.ID
@@ -706,7 +722,8 @@ func GetSuccessContractVerifyByAddress(ctx context.Context, address string) (*bu
 	return getContractVerifyByQuery(ctx, "address=? and status=?", address, busi.EVMContractVerifyStatusSuccessfully)
 }
 
-func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...interface{}) (*busi.EVMContractVerify, error) {
+func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...interface{}) (*busi.EVMContractVerify,
+	error) {
 	var contractVerify busi.EVMContractVerify
 	exist, err := utils.EngineGroup[utils.APIDB].Where(query, args...).Get(&contractVerify)
 	if err != nil {
@@ -722,7 +739,8 @@ func getContractVerifyByQuery(ctx context.Context, query interface{}, args ...in
 func ListCompileVersion(ctx context.Context) (interface{}, *utils.BuErrorResponse) {
 	buildList, err := solc.GetBuildList()
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 	var versions CompileVersionList
 	for _, build := range buildList {
@@ -776,7 +794,8 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 	// get the numbers of txns
 	total, err := busiTableRecordsCount(&c)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	txnsList.Hits = total
@@ -792,7 +811,8 @@ func ListTXNs(ctx context.Context, r *ListQuery) (interface{}, *utils.BuErrorRes
 		if transaction.To == "" {
 			transaction.MethodName = "create"
 		} else {
-			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input, transaction.To)
+			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input,
+				transaction.To)
 		}
 	}
 	txnsList.EVMTransaction = evmTransaction
@@ -806,7 +826,8 @@ func GetTXN(ctx context.Context, hash string) (*EVMTransaction, *utils.BuErrorRe
 	err := utils.EngineGroup[utils.TaskDB].Where("hash = ?", hash).Find(&evmTransactions)
 	if err != nil {
 		log.Errorf("Execute sql error: %v", err)
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	if len(evmTransactions) == 0 {
@@ -931,7 +952,8 @@ func ListAddressTXNs(ctx context.Context, address string, r *ListQuery) (interfa
 	// get the numbers of transactions
 	total, err := evmTransactionCount(address)
 	if err != nil {
-		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError, Response: utils.ErrBlockExplorerAPIServerInternal}
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
 	}
 
 	txnsList.Hits = total
@@ -948,7 +970,8 @@ func ListAddressTXNs(ctx context.Context, address string, r *ListQuery) (interfa
 		if transaction.To == "" {
 			transaction.MethodName = "create"
 		} else {
-			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input, transaction.To)
+			transaction.MethodName, transaction.MethodSig, transaction.Params = parseMethodAndParamsFromContract(transaction.Input,
+				transaction.To)
 		}
 	}
 	txnsList.EVMTransaction = transactions
@@ -1048,4 +1071,192 @@ func ListInternalTXNsByTxHash(ctx context.Context, hash string, r *ListQuery) (i
 	internalTXNsList.EVMInternalTX = internalTxs
 
 	return internalTXNsList, nil
+}
+
+func GetStatOverview(ctx context.Context) (interface{}, *utils.BuErrorResponse) {
+	var (
+		statOverview StatOverview
+
+		fvmSummaryDaily          busi.FVMSummaryDaily
+		fvmTotalValueLockedDaily busi.FVMTotalValueLockedDaily
+	)
+	exist, err := utils.EngineGroup[utils.StatDB].Where("is_latest=?", true).Get(&fvmSummaryDaily)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if exist {
+		statOverview.TotalInternalTxnCount = fvmSummaryDaily.TotalInternalTxnCount
+		statOverview.TotalExternalTxnCount = fvmSummaryDaily.TotalExternalTxnCount
+		statOverview.TotalContractCount = fvmSummaryDaily.TotalContractCount
+		statOverview.TotalDeployerAddressCount = fvmSummaryDaily.TotalDeployerAddressCount
+	}
+
+	exist, err = utils.EngineGroup[utils.StatDB].Where("is_latest=?", true).Get(&fvmTotalValueLockedDaily)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if exist {
+		statOverview.TotalValueReceived = fvmTotalValueLockedDaily.TotalValueReceived
+		statOverview.TotalValueSent = fvmTotalValueLockedDaily.TotalValueSent
+		statOverview.TotalValueLocked = fvmTotalValueLockedDaily.TotalValueLocked
+	}
+
+	return statOverview, nil
+}
+
+func ListContractBreakdown(ctx context.Context, r *ListStatContractBreakdownParams) (interface{},
+	*utils.BuErrorResponse) {
+	fvmContractSummaryDailyLastSateDate, err := getStatDBLastStatDate("fvm_contract_summary_daily")
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	fvmContractCallCountLastSateDate, err := getStatDBLastStatDate("fvm_contract_call_count_daily")
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	if fvmContractCallCountLastSateDate != fvmContractSummaryDailyLastSateDate {
+		log.Errorf("fvm_contract_call_count_daily and fvm_contract_summary_daily not same")
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	lastDate := fvmContractSummaryDailyLastSateDate
+	orderByMap := map[int]string{
+		ContractBreakDownOrderByTxnsAsc:  "txn_count asc",
+		ContractBreakDownOrderByTxnsDesc: "txn_count desc",
+
+		// TODO next iter
+		// ContractBreakDownOrderByInternalTxnsAsc: "",
+		// ContractBreakDownOrderByInternalTxnsDesc: "",
+		//
+		// ContractBreakDownOrderByFilBurnedAsc: "",
+		// ContractBreakDownOrderByFilBurneDesc: "",
+
+		ContractBreakDownOrderByUserCountAsc:  "user_count asc",
+		ContractBreakDownOrderByUserCountDesc: "user_count desc",
+
+		ContractBreakDownOrderByCallInAsc: fmt.Sprintf(`
+(
+    select call_count from fvm_contract_call_count_daily
+      where fvm_contract_call_count_daily.stat_date='%s'
+        and fvm_contract_call_count_daily.contract_address=fvm_contract_summary_daily.contract_address
+      and call_direction='in'
+) asc NULLS FIRST
+`, lastDate),
+		ContractBreakDownOrderByCallInDesc: fmt.Sprintf(`
+(
+    select call_count from fvm_contract_call_count_daily
+      where fvm_contract_call_count_daily.stat_date='%s'
+        and fvm_contract_call_count_daily.contract_address=fvm_contract_summary_daily.contract_address
+      and call_direction='in'
+) desc NULLS LAST
+`, lastDate),
+
+		ContractBreakDownOrderByCallOutAsc: fmt.Sprintf(`
+(
+    select call_count from fvm_contract_call_count_daily
+      where fvm_contract_call_count_daily.stat_date='%s'
+        and fvm_contract_call_count_daily.contract_address=fvm_contract_summary_daily.contract_address
+      and call_direction='out'
+) asc NULLS FIRST
+`, lastDate),
+		ContractBreakDownOrderByCallOutDesc: fmt.Sprintf(`
+(
+    select call_count from fvm_contract_call_count_daily
+      where fvm_contract_call_count_daily.stat_date='%s'
+        and fvm_contract_call_count_daily.contract_address=fvm_contract_summary_daily.contract_address
+      and call_direction='out'
+) desc NULLS LAST
+`, lastDate),
+	}
+
+	var (
+		fvmContractSummaryDailys []*busi.FVMContractSummaryDaily
+
+		contractBreakDownDetails []*StatContractBreakdownDetail
+		contractBreakdownResp    StatContractBreakdown
+	)
+
+	contractBreakdownResp.Hits, err = utils.EngineGroup[utils.StatDB].
+		Table("fvm_contract_summary_daily").Where("stat_date=?", lastDate).Count()
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+
+	db := utils.EngineGroup[utils.StatDB].Limit(r.Limit, r.Offset).Where("stat_date=?", lastDate)
+	if r.OrderBy > 0 {
+		err = db.OrderBy(orderByMap[r.OrderBy]).Find(&fvmContractSummaryDailys)
+	} else {
+		err = db.Find(&fvmContractSummaryDailys)
+	}
+
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+			Response: utils.ErrBlockExplorerAPIServerInternal}
+	}
+	for index, fvmContractSummaryDaily := range fvmContractSummaryDailys {
+		contractBreakDownDetail := &StatContractBreakdownDetail{
+			Rank:            r.Offset + 1 + index,
+			ContractAddress: fvmContractSummaryDaily.ContractAddress,
+			TxnCount:        fvmContractSummaryDaily.TxnCount,
+			InternalTxns:    0,
+			FilBurned:       0,
+			UserCount:       fvmContractSummaryDaily.UserCount,
+		}
+		contractBreakDownDetail.CallInCount, err = getCallCount(lastDate,
+			fvmContractSummaryDaily.ContractAddress, "in")
+		if err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+		contractBreakDownDetail.CallOutCount, err = getCallCount(lastDate,
+			fvmContractSummaryDaily.ContractAddress, "out")
+		if err != nil {
+			return nil, &utils.BuErrorResponse{HttpCode: http.StatusInternalServerError,
+				Response: utils.ErrBlockExplorerAPIServerInternal}
+		}
+		contractBreakDownDetails = append(contractBreakDownDetails, contractBreakDownDetail)
+	}
+
+	contractBreakdownResp.Contracts = contractBreakDownDetails
+
+	return contractBreakdownResp, nil
+}
+
+func getCallCount(statDate, contractAddress, direction string) (int64, error) {
+	var fvmContractCallCountDaily busi.FVMContractCallCountDaily
+	exist, err := utils.EngineGroup[utils.StatDB].
+		Where("stat_date=? and contract_address=? and call_direction=?", statDate, contractAddress, direction).
+		Get(&fvmContractCallCountDaily)
+	if err != nil {
+		log.Errorf("Execute sql error: %v", err)
+		return 0, err
+	}
+	if exist {
+		return fvmContractCallCountDaily.CallCount, nil
+	}
+	return 0, nil
+}
+
+func getStatDBLastStatDate(tableName string) (string, error) {
+	var result busi.FVMStatDataIsReady
+	exist, err := utils.EngineGroup[utils.StatDB].Where("table_name=?", fmt.Sprintf("ft.%s", tableName)).Get(&result)
+	if err != nil {
+		return "", err
+	}
+	if exist {
+		return result.LatestStatDate.Format("2006-01-02"), nil
+	}
+	return "", fmt.Errorf("table %s is not ready", tableName)
 }

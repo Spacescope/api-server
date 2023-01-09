@@ -158,3 +158,101 @@ type EVMAddress struct {
 func (a *EVMAddress) TableName() string {
 	return "evm_address"
 }
+
+type FVMSummaryDaily struct {
+	StatDate                  time.Time
+	TotalContractCount        int64
+	TotalInternalTxnCount     int64
+	TotalExternalTxnCount     int64
+	TotalTxnCount             int64
+	TotalDeployerAddressCount int64
+	TotalNetworkAddressCount  int64
+	IsLatest                  bool
+	CreateAt                  time.Time
+}
+
+func (f *FVMSummaryDaily) TableName() string {
+	return "fvm_summary_daily"
+}
+
+type FVMContractSummaryDaily struct {
+	StatDate        time.Time
+	ContractAddress string
+	FilecoinAddress string
+	TxnCount        int64
+	UserCount       int64
+	IsLatest        bool
+	CreateAt        time.Time
+}
+
+func (f *FVMContractSummaryDaily) TableName() string {
+	return "fvm_contract_summary_daily"
+}
+
+type FVMContractCountDaily struct {
+	StatDate                   time.Time
+	ContractAddress            string
+	NewContractCountDaily      int
+	NewContractCountWeekly     int
+	NewContractCountMonthly    int
+	ActiveContractCountDaily   int
+	ActiveContractCountWeekly  int
+	ActiveContractCountMonthly int
+	IsLatest                   bool
+	CreateAt                   time.Time
+}
+
+func (f *FVMContractCountDaily) TableName() string {
+	return "fvm_contract_count_daily"
+}
+
+type FVMUserCountDaily struct {
+	StatDate               time.Time
+	ActiveUserCountDaily   int64
+	ActiveUserCountWeekly  int64
+	ActiveUserCountMonthly int64
+	IsLatest               bool
+	CreateAt               time.Time
+}
+
+func (f *FVMUserCountDaily) TableName() string {
+	return "fvm_user_count_daily"
+}
+
+type FVMTotalValueLockedDaily struct {
+	StatDate              time.Time
+	Fil2usd               float64 `xorm:"'fil2usd'"`
+	TotalValueLocked      float64
+	TotalValueLockedUsd   float64
+	TotalValueReceived    float64
+	TotalValueReceivedUsd float64
+	TotalValueSent        float64
+	IsLatest              bool
+	CreateAt              time.Time
+}
+
+func (f *FVMTotalValueLockedDaily) TableName() string {
+	return "fvm_total_value_locked_daily"
+}
+
+type FVMContractCallCountDaily struct {
+	StatDate        time.Time
+	ContractAddress string
+	CallDirection   string
+	CallCount       int64
+	IsLatest        bool
+	CreateAt        time.Time
+}
+
+func (f *FVMContractCallCountDaily) TableName() string {
+	return "fvm_contract_call_count_daily"
+}
+
+type FVMStatDataIsReady struct {
+	Tablename      string `xorm:"'table_name'"`
+	LatestStatDate time.Time
+}
+
+func (f *FVMStatDataIsReady) TableName() string {
+	return "fvmstat_data_is_ready"
+}
